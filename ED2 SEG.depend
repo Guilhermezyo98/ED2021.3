@@ -21,3 +21,25 @@
 
 1635217254 c:\users\arthu\documents\ed2 seg\structs.h
 
+1635406971 source:d:\ed2 trabalho\ed2021.3\main.cpp
+	"includes.h"
+	"leitura.h"
+	"structs.h"
+
+1635217033 d:\ed2 trabalho\ed2021.3\includes.h
+	<iostream>
+	<string>
+	<fstream>
+	<string.h>
+	<vector>
+	<cmath>
+	<math.h>
+	<time.h>
+	<locale>
+
+1635454643 d:\ed2 trabalho\ed2021.3\leitura.h
+	"includes.h"
+	"structs.h"
+
+1635217254 d:\ed2 trabalho\ed2021.3\structs.h
+
