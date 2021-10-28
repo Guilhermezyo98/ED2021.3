@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1635406907 source:c:\users\arthu\documents\ed2 seg\main.cpp
+	"includes.h"
+	"leitura.h"
+	"structs.h"
+
+1635217033 c:\users\arthu\documents\ed2 seg\includes.h
+	<iostream>
+	<string>
+	<fstream>
+	<string.h>
+	<vector>
+	<cmath>
+	<math.h>
+	<time.h>
+	<locale>
+
+1635406416 c:\users\arthu\documents\ed2 seg\leitura.h
+	"includes.h"
+	"structs.h"
+
+1635217254 c:\users\arthu\documents\ed2 seg\structs.h
+
