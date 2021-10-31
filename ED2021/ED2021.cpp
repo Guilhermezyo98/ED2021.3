@@ -14,8 +14,8 @@ struct Review;
 void eraseSubStr();
 void lerArquivoCSV();
 void imprimeReviewEspecifica();
-int _TAM_LINHAS = 3'660'725;
-auto reviews = make_unique<Review[]>(_TAM_LINHAS);
+int TAM_LINHAS = 3'660'725;
+auto reviews = make_unique<Review[]>(TAM_LINHAS);
 
 struct Review
 {
@@ -37,6 +37,50 @@ void eraseSubStr(std::string& mainStr, const std::string& toErase)
 	}
 }
 
+void peekline(fstream& is, string& s)
+{
+	streampos sp = is.tellg();
+	getline(is, s);
+	is.seekg(sp);
+}
+
+void trataLinhasQuebradas(fstream& arquivo, string& str, long long &i)
+{
+	string novaLinha;
+	peekline(arquivo, novaLinha);
+
+	if (novaLinha.find("p:") != string::npos)
+	{
+		auto pos = str.find_last_of(',');
+		if (pos != string::npos)
+		{
+			auto date = str.substr(pos);
+			eraseSubStr(str, date);
+			reviews[i].posted_date = date;
+		}
+		pos = str.find_last_of(',');
+		if (pos != string::npos)
+		{
+			auto version = str.substr(pos);
+			eraseSubStr(str, version);
+			reviews[i].app_version = version;
+		}
+		pos = str.find_last_of(',');
+		if (pos != string::npos)
+		{
+			auto upvotes = str.substr(pos);
+			eraseSubStr(str, upvotes);
+			reviews[i].upvotes = upvotes;
+		}
+		reviews[i].review_text += str;
+		++i;
+		return;
+
+	}
+	reviews[i].review_text += str;
+}
+
+
 void lerArquivoCSV(const char* path)
 {
 	fstream arquivo;
@@ -49,12 +93,15 @@ void lerArquivoCSV(const char* path)
 
 	string str;
 	arquivo.seekg(54, ios::cur); // pula primeira linha
-	int i = 0;
+	long long i = 0;
 
 	while (getline(arquivo, str))
 	{
-		if (str.find("gp:") != string::npos)
-			// evita linhas ferradas,com quebra no meio do comentario, etc. Mas n ignora todas as ferradas
+		if (str.find("AOqpTOGrJIWv7NsklmBXxqGDF0f5cUdzp2sHRrcpLLuFAshry5Rrn6bFadGFYEJ9mzZ8SJFFg_247X7x-ycp6g") != string::npos)
+		{
+			//__debugbreak();
+		}
+		if (str.find("p:") != string::npos)
 		{
 			auto pos = str.find_first_of(',');
 			if (pos != string::npos)
@@ -62,69 +109,43 @@ void lerArquivoCSV(const char* path)
 				auto id = str.substr(0, pos);
 				eraseSubStr(str, id);
 				reviews[i].review_id = id;
-				str.erase(0, 1); // remove virgula
-				if (id.find("AOqpTOGzIxvnB1T6rW8cQKtWDx4v4Z3SpIVlg3s_6gIYpvhFB_OX") != string::npos)
-				{
-					__debugbreak();
-				}
+				str.erase(0, 1);
 			}
 
-			pos = str.find_last_of(',');
-			if (pos != string::npos)
-			{
-				auto date = str.substr(pos);
-				eraseSubStr(str, date);
-				reviews[i].posted_date = date;
-			}
-			pos = str.find_last_of(',');
-			if (pos != string::npos)
-			{
-				auto version = str.substr(pos);
-				eraseSubStr(str, version);
-				reviews[i].app_version = version;
-			}
-			pos = str.find_last_of(',');
-			if (pos != string::npos)
-			{
-				auto upvotes = str.substr(pos);
-				eraseSubStr(str, upvotes);
-				reviews[i].upvotes = upvotes;
-			}
-			reviews[i].review_text = str;
-
-			i++;
-		}
-		else
-		{
-			auto atual = ios::cur;
 			string novaLinha;
-			getline(arquivo, novaLinha);
-			if (novaLinha.find("gp:") != string::npos)
+			peekline(arquivo, novaLinha);
+			if (novaLinha.find("p:") != string::npos)
 			{
-				auto pos = str.find_last_of(',');
+				pos = str.find_last_of(',');
 				if (pos != string::npos)
 				{
 					auto date = str.substr(pos);
 					eraseSubStr(str, date);
-					reviews[--i].posted_date = date;
+					reviews[i].posted_date = date;
 				}
 				pos = str.find_last_of(',');
 				if (pos != string::npos)
 				{
 					auto version = str.substr(pos);
 					eraseSubStr(str, version);
-					reviews[--i].app_version = version;
+					reviews[i].app_version = version;
 				}
 				pos = str.find_last_of(',');
 				if (pos != string::npos)
 				{
-					auto version = str.substr(pos);
-					eraseSubStr(str, version);
-					reviews[--i].app_version = version;
+					auto upvotes = str.substr(pos);
+					eraseSubStr(str, upvotes);
+					reviews[i].upvotes = upvotes;
 				}
+				reviews[i].review_text = str;
+				++i;
 			}
-			reviews[--i].review_text += str;
-			arquivo.seekg(0, atual);
+			else
+				trataLinhasQuebradas(arquivo, str, i);
+		}
+		else
+		{
+			trataLinhasQuebradas(arquivo, str, i);
 		}
 	}
 }
