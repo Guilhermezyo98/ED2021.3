@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/workspace/DCC012/ED2021/Timer.h
+memory
+-
+chrono
+-
+
+C:/workspace/DCC012/ED2021/main.cpp
+cassert
+-
+fstream
+-
+memory
+-
+string
+-
+iostream
+-
+vector
+-
+Timer.h
+C:/workspace/DCC012/ED2021/Timer.h
+
