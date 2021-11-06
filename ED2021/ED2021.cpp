@@ -17,8 +17,12 @@ void apagar_sub_str(std::string& main_str, const std::string& apagar);
 void lerArquivoCSV(const char* path, Review* reviews);
 void trataLinhasQuebradas(fstream& arquivo, Review* reviews, string& str, long& i);
 void imprimeReviewEspecifica(int n, Review* reviews);
+void escreveBin(Review* reviews);
+void leBin(Review* reviews);
+vector<Review>* importarReviewsAleatorios(int qtd);
 //
-int constexpr tam_linhas = 3'646'294;
+int const tam_linhas = 3'646'294;
+const auto arquivo_path = "C:/workspace/DCC012/ED2/input/tiktok_app_reviews.csv";
 const std::string
 ultima_linha("AOqpTOEbcTyAsdBIJDmV9AgErmyPYiIHOp4QtLrq9qtudVW7DT25WgSfIc35DWSe7BSBPqwDnCjG8wfjL4LBkQ");
 
@@ -189,6 +193,36 @@ void lerArquivoCSV(const char* path, vector<Review>& reviews)
 	}
 }
 
+void escreveBin(Review* reviews)
+{
+	fstream arqBin;
+	arqBin.open(arquivo_path, ios::out | ios::binary | ios::app);
+	//Abrir arquivo out: saída, binário, app:add no final
+	if (!arqBin.good())
+	{
+		cerr << "ERRO: arquivo nao pode ser aberto";
+		assert(false);
+	}
+
+	arqBin.write((char*)&reviews, sizeof(Review));
+
+	//arqBin.flush(); //Encerrar inserção. 
+	arqBin.close(); //Fechar arquivo
+}
+
+void leBin(Review* reviews)
+{
+	fstream arqBin;
+	arqBin.open(arquivo_path, ios::binary); //Abrir arquivo
+	if (!arqBin.good())
+	{
+		cerr << "ERRO: arquivo nao pode ser aberto";
+		assert(false);
+	}
+	arqBin.read(reinterpret_cast<char*>(&reviews), sizeof(Review));
+	arqBin.close(); //Fechar arquivo
+}
+
 void imprimeReviewEspecifica(int n, vector<Review>& reviews)
 {
 	if (n < 0 || n >= tam_linhas)
@@ -203,14 +237,44 @@ void imprimeReviewEspecifica(int n, vector<Review>& reviews)
 	cout << "posted_date: " << reviews[n].posted_date << endl;
 }
 
+vector<Review>* importarReviewsAleatorios(int qtd)
+{
+	// TODO: otimar para ler de maneira aleatoria a qtd necessaria do arquivo bin
+
+	fstream arqBin;
+	arqBin.open(arquivo_path, ios::binary); //Abrir arquivo
+	if (!arqBin.good())
+	{
+		cerr << "ERRO: arquivo nao pode ser aberto";
+		assert(false);
+	}
+	vector<Review> aux;
+	aux.resize(tam_linhas);
+
+	vector<Review> aleatorio;
+	aleatorio.resize(qtd);
+
+	string str;
+	while (std::getline(arqBin, str))
+	{
+		arqBin.read(reinterpret_cast<char*>(&aux), sizeof(Review)); //ler arquivo e armazenar no vetor auxiliar
+	}
+	for (int i = 0; i < qtd; i++)
+	{
+		int numAleatorio = (rand() % tam_linhas); // Gerando numeros aleatorios
+		aleatorio[i] = aux[numAleatorio];
+		//vetor de reviews aleatorios recebe reviews das posições sorteadas                  
+	}
+	arqBin.close(); //Fechar arquivo
+	return &aleatorio;
+}
+
 int main()
 {
-	const auto arquivo_path = "C:/workspace/DCC012/ED2/input/tiktok_app_reviews.csv";
+	
 	vector<Review> reviews;
 	reviews.resize(tam_linhas);
-
-	// Review* reviews = new Review[tam_linhas];
-
+	
 	{
 		Timer timer;
 		lerArquivoCSV(arquivo_path, reviews);
@@ -228,5 +292,4 @@ int main()
 		}
 		imprimeReviewEspecifica(entrada, reviews);
 	}
-	// delete[] reviews;
 }
