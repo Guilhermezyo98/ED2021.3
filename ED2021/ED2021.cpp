@@ -7,16 +7,21 @@
 #include <memory>
 #include <string>
 #include <iostream>
+#include <vector>
+#include "Timer.h"
 
 using namespace std;
-
+//
 struct Review;
-void eraseSubStr();
-void lerArquivoCSV();
-void imprimeReviewEspecifica();
-int TAM_LINHAS = 3'660'725;
-auto reviews = make_unique<Review[]>(TAM_LINHAS);
+void apagar_sub_str(std::string& main_str, const std::string& apagar);
+void lerArquivoCSV(const char* path, Review* reviews);
+void trataLinhasQuebradas(fstream& arquivo, Review* reviews, string& str, long& i);
+void imprimeReviewEspecifica(int n, Review* reviews);
+//
+int constexpr tam_linhas = 3'646'294;
+const std::string ultima_linha("AOqpTOEbcTyAsdBIJDmV9AgErmyPYiIHOp4QtLrq9qtudVW7DT25WgSfIc35DWSe7BSBPqwDnCjG8wfjL4LBkQ");
 
+//
 struct Review
 {
 	string review_id;
@@ -26,89 +31,125 @@ struct Review
 	string posted_date;
 };
 
-void eraseSubStr(std::string& mainStr, const std::string& toErase)
+void apagar_sub_str(std::string& main_str, const std::string& apagar)
 {
-	// Search for the substring in string
-	size_t pos = mainStr.find(toErase);
+	auto pos = string::npos;
+	if (apagar == ",")
+	{
+		pos = main_str.find_last_of(apagar);
+	}
+	else
+	{
+		pos = main_str.find(apagar);
+	}
+
 	if (pos != std::string::npos)
 	{
-		// If found then erase it from string
-		mainStr.erase(pos, toErase.length());
+		main_str.erase(pos, apagar.length());
 	}
 }
 
-void peekline(fstream& is, string& s)
+void peekline(fstream& arquivo, string& str)
 {
-	streampos sp = is.tellg();
-	getline(is, s);
-	is.seekg(sp);
+	auto pos = arquivo.tellg();
+	getline(arquivo, str);
+	arquivo.seekg(pos);
 }
 
-void trataLinhasQuebradas(fstream& arquivo, string& str, long long &i)
+void trataLinhasQuebradas(fstream& arquivo, vector<Review>& reviews, string& str, long& i)
 {
-	string novaLinha;
-	peekline(arquivo, novaLinha);
+	string nova_linha;
+	peekline(arquivo, nova_linha);
 
-	if (novaLinha.find("p:") != string::npos)
+	if (nova_linha.find("p:") != string::npos)
 	{
 		auto pos = str.find_last_of(',');
 		if (pos != string::npos)
 		{
-			auto date = str.substr(pos);
-			eraseSubStr(str, date);
-			reviews[i].posted_date = date;
+			reviews[i].posted_date = move(str.substr(pos));
+			apagar_sub_str(str, reviews[i].posted_date);
 		}
 		pos = str.find_last_of(',');
 		if (pos != string::npos)
 		{
-			auto version = str.substr(pos);
-			eraseSubStr(str, version);
-			reviews[i].app_version = version;
+			reviews[i].app_version = move(str.substr(pos));
+			apagar_sub_str(str, reviews[i].app_version);
 		}
 		pos = str.find_last_of(',');
 		if (pos != string::npos)
 		{
-			auto upvotes = str.substr(pos);
-			eraseSubStr(str, upvotes);
-			reviews[i].upvotes = upvotes;
+			reviews[i].upvotes = move(str.substr(pos));
+			apagar_sub_str(str, reviews[i].upvotes);
 		}
 		reviews[i].review_text += str;
 		++i;
 		return;
-
 	}
 	reviews[i].review_text += str;
 }
 
 
-void lerArquivoCSV(const char* path)
+void trataUltimaLinha(const fstream& fstream, vector<Review>& reviews, string& str, long i)
+{
+	auto pos = str.find_first_of(',');
+	if (pos != string::npos)
+	{
+		reviews[i].review_id = str.substr(0, pos);
+		apagar_sub_str(str, reviews[i].review_id);
+		str.erase(0, 1);
+	}
+	pos = str.find_last_of(',');
+	if (pos != string::npos)
+	{
+		reviews[i].posted_date = str.substr(pos);
+		apagar_sub_str(str, reviews[i].posted_date);
+	}
+	pos = str.find_last_of(',');
+	if (pos != string::npos)
+	{
+		reviews[i].app_version = str.substr(pos);
+		apagar_sub_str(str, reviews[i].app_version);
+	}
+	pos = str.find_last_of(',');
+	if (pos != string::npos)
+	{
+		reviews[i].upvotes = str.substr(pos);
+		apagar_sub_str(str, reviews[i].upvotes);
+	}
+	reviews[i].review_text = move(str);
+}
+
+void lerArquivoCSV(const char* path, vector<Review>& reviews)
 {
 	fstream arquivo;
 	arquivo.open(path, ios::in);
-	if (!arquivo.good())
+	if (!arquivo.is_open())
 	{
 		cerr << "ERRO: arquivo nao pode ser aberto";
 		assert(false);
 	}
 
+	long i = 0;
 	string str;
-	arquivo.seekg(54, ios::cur); // pula primeira linha
-	long long i = 0;
+	size_t pos;
 
+	arquivo.seekg(54, ios::beg); // pula primeira linha
 	while (getline(arquivo, str))
 	{
-		if (str.find("AOqpTOGrJIWv7NsklmBXxqGDF0f5cUdzp2sHRrcpLLuFAshry5Rrn6bFadGFYEJ9mzZ8SJFFg_247X7x-ycp6g") != string::npos)
+		// cout << str << "\n";
+
+		if (str.find(ultima_linha) != string::npos)
 		{
-			//__debugbreak();
+			trataUltimaLinha(arquivo, reviews, str, i);
+			break;
 		}
 		if (str.find("p:") != string::npos)
 		{
-			auto pos = str.find_first_of(',');
+			pos = str.find_first_of(',');
 			if (pos != string::npos)
 			{
-				auto id = str.substr(0, pos);
-				eraseSubStr(str, id);
-				reviews[i].review_id = id;
+				reviews[i].review_id = move(str.substr(0, pos));
+				apagar_sub_str(str, reviews[i].review_id);
 				str.erase(0, 1);
 			}
 
@@ -116,43 +157,40 @@ void lerArquivoCSV(const char* path)
 			peekline(arquivo, novaLinha);
 			if (novaLinha.find("p:") != string::npos)
 			{
-				pos = str.find_last_of(',');
+				auto pos = str.find_last_of(',');
 				if (pos != string::npos)
 				{
-					auto date = str.substr(pos);
-					eraseSubStr(str, date);
-					reviews[i].posted_date = date;
+					reviews[i].posted_date = move(str.substr(pos));
+					apagar_sub_str(str, reviews[i].posted_date);
 				}
 				pos = str.find_last_of(',');
 				if (pos != string::npos)
 				{
-					auto version = str.substr(pos);
-					eraseSubStr(str, version);
-					reviews[i].app_version = version;
+					reviews[i].app_version = move(str.substr(pos));
+					apagar_sub_str(str, reviews[i].app_version);
 				}
 				pos = str.find_last_of(',');
 				if (pos != string::npos)
 				{
-					auto upvotes = str.substr(pos);
-					eraseSubStr(str, upvotes);
-					reviews[i].upvotes = upvotes;
+					reviews[i].upvotes = move(str.substr(pos));
+					apagar_sub_str(str, reviews[i].upvotes);
 				}
-				reviews[i].review_text = str;
+				reviews[i].review_text = move(str);
 				++i;
 			}
 			else
-				trataLinhasQuebradas(arquivo, str, i);
+				trataLinhasQuebradas(arquivo, reviews, str, i);
 		}
 		else
 		{
-			trataLinhasQuebradas(arquivo, str, i);
+			trataLinhasQuebradas(arquivo, reviews, str, i);
 		}
 	}
 }
 
-void imprimeReviewEspecifica(int n)
+void imprimeReviewEspecifica(int n, vector<Review>& reviews)
 {
-	if (n < 0 || n > 3660725)
+	if (n < 0 || n >= tam_linhas)
 	{
 		cout << endl << "fora do vetor" << endl;
 		return;
@@ -166,9 +204,16 @@ void imprimeReviewEspecifica(int n)
 
 int main()
 {
-	auto arquivoPath = "C:/workspace/DCC012/ED2/input/tiktok_app_reviews.csv";
+	const auto arquivo_path = "C:/workspace/DCC012/ED2/input/tiktok_app_reviews.csv";
+	vector<Review> reviews;
+	reviews.resize(tam_linhas);
 
-	lerArquivoCSV(arquivoPath);
+	// Review* reviews = new Review[tam_linhas];
+
+	{
+		Timer timer;
+		lerArquivoCSV(arquivo_path, reviews);
+	}
 
 	int entrada = 0;
 	while (true)
@@ -180,6 +225,7 @@ int main()
 		{
 			break;
 		}
-		imprimeReviewEspecifica(entrada);
+		imprimeReviewEspecifica(entrada, reviews);
 	}
+	// delete[] reviews;
 }
