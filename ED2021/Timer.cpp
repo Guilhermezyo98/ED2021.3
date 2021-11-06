@@ -11,6 +11,7 @@ Timer::~Timer()
 {
 	Stop();
 }
+
 void Timer::Stop()
 {
 	auto fimTempo = std::chrono::high_resolution_clock::now();

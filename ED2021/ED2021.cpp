@@ -19,7 +19,8 @@ void trataLinhasQuebradas(fstream& arquivo, Review* reviews, string& str, long& 
 void imprimeReviewEspecifica(int n, Review* reviews);
 //
 int constexpr tam_linhas = 3'646'294;
-const std::string ultima_linha("AOqpTOEbcTyAsdBIJDmV9AgErmyPYiIHOp4QtLrq9qtudVW7DT25WgSfIc35DWSe7BSBPqwDnCjG8wfjL4LBkQ");
+const std::string
+ultima_linha("AOqpTOEbcTyAsdBIJDmV9AgErmyPYiIHOp4QtLrq9qtudVW7DT25WgSfIc35DWSe7BSBPqwDnCjG8wfjL4LBkQ");
 
 //
 struct Review
