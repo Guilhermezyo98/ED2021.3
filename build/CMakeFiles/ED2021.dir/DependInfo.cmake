@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/mnt/c/Users/Daniel/Desktop/testes/Leitura.cpp" "/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles/ED2021.dir/Leitura.cpp.o"
-  "/mnt/c/Users/Daniel/Desktop/testes/Timer.cpp" "/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles/ED2021.dir/Timer.cpp.o"
-  "/mnt/c/Users/Daniel/Desktop/testes/main.cpp" "/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles/ED2021.dir/main.cpp.o"
+  "/mnt/c/Users/Daniel/Desktop/testes/src/Leitura.cpp" "/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles/ED2021.dir/src/Leitura.cpp.o"
+  "/mnt/c/Users/Daniel/Desktop/testes/src/Timer.cpp" "/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles/ED2021.dir/src/Timer.cpp.o"
+  "/mnt/c/Users/Daniel/Desktop/testes/src/main.cpp" "/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles/ED2021.dir/src/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

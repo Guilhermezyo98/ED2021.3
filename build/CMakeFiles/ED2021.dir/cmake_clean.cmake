@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/ED2021.dir/Leitura.cpp.o"
-  "CMakeFiles/ED2021.dir/Timer.cpp.o"
-  "CMakeFiles/ED2021.dir/main.cpp.o"
+  "CMakeFiles/ED2021.dir/src/Leitura.cpp.o"
+  "CMakeFiles/ED2021.dir/src/Timer.cpp.o"
+  "CMakeFiles/ED2021.dir/src/main.cpp.o"
   "ED2021"
   "ED2021.pdb"
 )

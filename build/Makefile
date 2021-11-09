@@ -123,86 +123,86 @@ ED2021/fast:
 	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/build
 .PHONY : ED2021/fast
 
-Leitura.o: Leitura.cpp.o
+src/Leitura.o: src/Leitura.cpp.o
 
-.PHONY : Leitura.o
-
-# target to build an object file
-Leitura.cpp.o:
-	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/Leitura.cpp.o
-.PHONY : Leitura.cpp.o
-
-Leitura.i: Leitura.cpp.i
-
-.PHONY : Leitura.i
-
-# target to preprocess a source file
-Leitura.cpp.i:
-	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/Leitura.cpp.i
-.PHONY : Leitura.cpp.i
-
-Leitura.s: Leitura.cpp.s
-
-.PHONY : Leitura.s
-
-# target to generate assembly for a file
-Leitura.cpp.s:
-	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/Leitura.cpp.s
-.PHONY : Leitura.cpp.s
-
-Timer.o: Timer.cpp.o
-
-.PHONY : Timer.o
+.PHONY : src/Leitura.o
 
 # target to build an object file
-Timer.cpp.o:
-	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/Timer.cpp.o
-.PHONY : Timer.cpp.o
+src/Leitura.cpp.o:
+	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/src/Leitura.cpp.o
+.PHONY : src/Leitura.cpp.o
 
-Timer.i: Timer.cpp.i
+src/Leitura.i: src/Leitura.cpp.i
 
-.PHONY : Timer.i
+.PHONY : src/Leitura.i
 
 # target to preprocess a source file
-Timer.cpp.i:
-	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/Timer.cpp.i
-.PHONY : Timer.cpp.i
+src/Leitura.cpp.i:
+	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/src/Leitura.cpp.i
+.PHONY : src/Leitura.cpp.i
 
-Timer.s: Timer.cpp.s
+src/Leitura.s: src/Leitura.cpp.s
 
-.PHONY : Timer.s
+.PHONY : src/Leitura.s
 
 # target to generate assembly for a file
-Timer.cpp.s:
-	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/Timer.cpp.s
-.PHONY : Timer.cpp.s
+src/Leitura.cpp.s:
+	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/src/Leitura.cpp.s
+.PHONY : src/Leitura.cpp.s
 
-main.o: main.cpp.o
+src/Timer.o: src/Timer.cpp.o
 
-.PHONY : main.o
+.PHONY : src/Timer.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/main.cpp.o
-.PHONY : main.cpp.o
+src/Timer.cpp.o:
+	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/src/Timer.cpp.o
+.PHONY : src/Timer.cpp.o
 
-main.i: main.cpp.i
+src/Timer.i: src/Timer.cpp.i
 
-.PHONY : main.i
+.PHONY : src/Timer.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/Timer.cpp.i:
+	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/src/Timer.cpp.i
+.PHONY : src/Timer.cpp.i
 
-main.s: main.cpp.s
+src/Timer.s: src/Timer.cpp.s
 
-.PHONY : main.s
+.PHONY : src/Timer.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/Timer.cpp.s:
+	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/src/Timer.cpp.s
+.PHONY : src/Timer.cpp.s
+
+src/main.o: src/main.cpp.o
+
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) -f CMakeFiles/ED2021.dir/build.make CMakeFiles/ED2021.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 # Help Target
 help:
@@ -213,15 +213,15 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... ED2021"
-	@echo "... Leitura.o"
-	@echo "... Leitura.i"
-	@echo "... Leitura.s"
-	@echo "... Timer.o"
-	@echo "... Timer.i"
-	@echo "... Timer.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... src/Leitura.o"
+	@echo "... src/Leitura.i"
+	@echo "... src/Leitura.s"
+	@echo "... src/Timer.o"
+	@echo "... src/Timer.i"
+	@echo "... src/Timer.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 .PHONY : help
 
 

@@ -57,57 +57,57 @@ include CMakeFiles/ED2021.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/ED2021.dir/flags.make
 
-CMakeFiles/ED2021.dir/main.cpp.o: CMakeFiles/ED2021.dir/flags.make
-CMakeFiles/ED2021.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ED2021.dir/main.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ED2021.dir/main.cpp.o -c /mnt/c/Users/Daniel/Desktop/testes/main.cpp
+CMakeFiles/ED2021.dir/src/main.cpp.o: CMakeFiles/ED2021.dir/flags.make
+CMakeFiles/ED2021.dir/src/main.cpp.o: ../src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ED2021.dir/src/main.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ED2021.dir/src/main.cpp.o -c /mnt/c/Users/Daniel/Desktop/testes/src/main.cpp
 
-CMakeFiles/ED2021.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ED2021.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/Daniel/Desktop/testes/main.cpp > CMakeFiles/ED2021.dir/main.cpp.i
+CMakeFiles/ED2021.dir/src/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ED2021.dir/src/main.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/Daniel/Desktop/testes/src/main.cpp > CMakeFiles/ED2021.dir/src/main.cpp.i
 
-CMakeFiles/ED2021.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ED2021.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/Daniel/Desktop/testes/main.cpp -o CMakeFiles/ED2021.dir/main.cpp.s
+CMakeFiles/ED2021.dir/src/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ED2021.dir/src/main.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/Daniel/Desktop/testes/src/main.cpp -o CMakeFiles/ED2021.dir/src/main.cpp.s
 
-CMakeFiles/ED2021.dir/Timer.cpp.o: CMakeFiles/ED2021.dir/flags.make
-CMakeFiles/ED2021.dir/Timer.cpp.o: ../Timer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ED2021.dir/Timer.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ED2021.dir/Timer.cpp.o -c /mnt/c/Users/Daniel/Desktop/testes/Timer.cpp
+CMakeFiles/ED2021.dir/src/Timer.cpp.o: CMakeFiles/ED2021.dir/flags.make
+CMakeFiles/ED2021.dir/src/Timer.cpp.o: ../src/Timer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ED2021.dir/src/Timer.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ED2021.dir/src/Timer.cpp.o -c /mnt/c/Users/Daniel/Desktop/testes/src/Timer.cpp
 
-CMakeFiles/ED2021.dir/Timer.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ED2021.dir/Timer.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/Daniel/Desktop/testes/Timer.cpp > CMakeFiles/ED2021.dir/Timer.cpp.i
+CMakeFiles/ED2021.dir/src/Timer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ED2021.dir/src/Timer.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/Daniel/Desktop/testes/src/Timer.cpp > CMakeFiles/ED2021.dir/src/Timer.cpp.i
 
-CMakeFiles/ED2021.dir/Timer.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ED2021.dir/Timer.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/Daniel/Desktop/testes/Timer.cpp -o CMakeFiles/ED2021.dir/Timer.cpp.s
+CMakeFiles/ED2021.dir/src/Timer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ED2021.dir/src/Timer.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/Daniel/Desktop/testes/src/Timer.cpp -o CMakeFiles/ED2021.dir/src/Timer.cpp.s
 
-CMakeFiles/ED2021.dir/Leitura.cpp.o: CMakeFiles/ED2021.dir/flags.make
-CMakeFiles/ED2021.dir/Leitura.cpp.o: ../Leitura.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ED2021.dir/Leitura.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ED2021.dir/Leitura.cpp.o -c /mnt/c/Users/Daniel/Desktop/testes/Leitura.cpp
+CMakeFiles/ED2021.dir/src/Leitura.cpp.o: CMakeFiles/ED2021.dir/flags.make
+CMakeFiles/ED2021.dir/src/Leitura.cpp.o: ../src/Leitura.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ED2021.dir/src/Leitura.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ED2021.dir/src/Leitura.cpp.o -c /mnt/c/Users/Daniel/Desktop/testes/src/Leitura.cpp
 
-CMakeFiles/ED2021.dir/Leitura.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ED2021.dir/Leitura.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/Daniel/Desktop/testes/Leitura.cpp > CMakeFiles/ED2021.dir/Leitura.cpp.i
+CMakeFiles/ED2021.dir/src/Leitura.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ED2021.dir/src/Leitura.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/Users/Daniel/Desktop/testes/src/Leitura.cpp > CMakeFiles/ED2021.dir/src/Leitura.cpp.i
 
-CMakeFiles/ED2021.dir/Leitura.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ED2021.dir/Leitura.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/Daniel/Desktop/testes/Leitura.cpp -o CMakeFiles/ED2021.dir/Leitura.cpp.s
+CMakeFiles/ED2021.dir/src/Leitura.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ED2021.dir/src/Leitura.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/Users/Daniel/Desktop/testes/src/Leitura.cpp -o CMakeFiles/ED2021.dir/src/Leitura.cpp.s
 
 # Object files for target ED2021
 ED2021_OBJECTS = \
-"CMakeFiles/ED2021.dir/main.cpp.o" \
-"CMakeFiles/ED2021.dir/Timer.cpp.o" \
-"CMakeFiles/ED2021.dir/Leitura.cpp.o"
+"CMakeFiles/ED2021.dir/src/main.cpp.o" \
+"CMakeFiles/ED2021.dir/src/Timer.cpp.o" \
+"CMakeFiles/ED2021.dir/src/Leitura.cpp.o"
 
 # External object files for target ED2021
 ED2021_EXTERNAL_OBJECTS =
 
-ED2021: CMakeFiles/ED2021.dir/main.cpp.o
-ED2021: CMakeFiles/ED2021.dir/Timer.cpp.o
-ED2021: CMakeFiles/ED2021.dir/Leitura.cpp.o
+ED2021: CMakeFiles/ED2021.dir/src/main.cpp.o
+ED2021: CMakeFiles/ED2021.dir/src/Timer.cpp.o
+ED2021: CMakeFiles/ED2021.dir/src/Leitura.cpp.o
 ED2021: CMakeFiles/ED2021.dir/build.make
 ED2021: CMakeFiles/ED2021.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/Daniel/Desktop/testes/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable ED2021"
