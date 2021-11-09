@@ -78,21 +78,21 @@ void trataLinhasQuebradas(fstream& arquivo, vector<Review>& reviews, string& str
 		auto pos = str.find_last_of(',');
 		if (pos != string::npos)
 		{
-			reviews[i].posted_date = move(str.substr(pos));
+			reviews[i].posted_date = str.substr(pos);
 			apagar_sub_str(str, reviews[i].posted_date);
 			reviews[i].posted_date.erase(0, 1);
 		}
 		pos = str.find_last_of(',');
 		if (pos != string::npos)
 		{
-			reviews[i].app_version = move(str.substr(pos));
+			reviews[i].app_version = str.substr(pos);
 			apagar_sub_str(str, reviews[i].app_version);
 			reviews[i].app_version.erase(0, 1);
 		}
 		pos = str.find_last_of(',');
 		if (pos != string::npos)
 		{
-			reviews[i].upvotes = move(str.substr(pos));
+			reviews[i].upvotes = str.substr(pos);
 			apagar_sub_str(str, reviews[i].upvotes);
 			reviews[i].upvotes.erase(0, 1);
 		}
@@ -168,7 +168,7 @@ void lerArquivoCSV(const char* path, vector<Review>& reviews)
 			pos = str.find_first_of(',');
 			if (pos != string::npos)
 			{
-				reviews[i].review_id = move(str.substr(0, pos));
+				reviews[i].review_id = str.substr(0, pos);
 				apagar_sub_str(str, reviews[i].review_id);
 				reviews[i].review_id.erase(0, 1);
 			}
@@ -180,21 +180,21 @@ void lerArquivoCSV(const char* path, vector<Review>& reviews)
 				auto pos = str.find_last_of(',');
 				if (pos != string::npos)
 				{
-					reviews[i].posted_date = move(str.substr(pos));
+					reviews[i].posted_date = str.substr(pos);
 					apagar_sub_str(str, reviews[i].posted_date);
 					reviews[i].posted_date.erase(0, 1);
 				}
 				pos = str.find_last_of(',');
 				if (pos != string::npos)
 				{
-					reviews[i].app_version = move(str.substr(pos));
+					reviews[i].app_version = str.substr(pos);
 					apagar_sub_str(str, reviews[i].app_version);
 					reviews[i].app_version.erase(0, 1);
 				}
 				pos = str.find_last_of(',');
 				if (pos != string::npos)
 				{
-					reviews[i].upvotes = move(str.substr(pos));
+					reviews[i].upvotes = str.substr(pos);
 					apagar_sub_str(str, reviews[i].upvotes);
 					reviews[i].upvotes.erase(0, 1);
 				}
