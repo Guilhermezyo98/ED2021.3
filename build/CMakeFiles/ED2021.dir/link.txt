@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/ED2021.dir/src/main.cpp.o CMakeFiles/ED2021.dir/src/Timer.cpp.o CMakeFiles/ED2021.dir/src/Leitura.cpp.o  -o ED2021 
