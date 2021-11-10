@@ -8,16 +8,18 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
-	vector<Review> reviews;
-	reviews.resize(tam_linhas);
 
+	vector<Review> reviews;
+	reviews.resize(120);
 	{
 		Timer timer;
-		lerArquivoCSV(arquivo_path, reviews);
+		lerArquivoCSV(argv[1],argv[2]);
 	}
 
+    //reviews = importarReviewsAleatorios(100,argv[2]);
+	
 	int entrada = 0;
 	while (true)
 	{
@@ -28,6 +30,6 @@ int main()
 		{
 			break;
 		}
-		imprimeReviewEspecifica(entrada, reviews);
+		//imprimeReviewEspecifica(entrada, *reviews);
 	}
 }

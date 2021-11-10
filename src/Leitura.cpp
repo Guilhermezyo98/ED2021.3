@@ -26,7 +26,7 @@ void peekline(fstream& arquivo, string& str)
 	arquivo.seekg(pos);
 }
 
-void trataLinhasQuebradas(fstream& arquivo, vector<Review>& reviews, string& str, long& i)
+void trataLinhasQuebradas(fstream& arquivo, Review *reviews, string& str, long& i)
 {
 	string nova_linha;
 	peekline(arquivo, nova_linha);
@@ -36,69 +36,75 @@ void trataLinhasQuebradas(fstream& arquivo, vector<Review>& reviews, string& str
 		auto pos = str.find_last_of(',');
 		if (pos != string::npos)
 		{
-			reviews[i].posted_date = str.substr(pos);
-			apagar_sub_str(str, reviews[i].posted_date);
-			reviews[i].posted_date.erase(0, 1);
+			reviews->posted_date = str.substr(pos);
+			apagar_sub_str(str, reviews->posted_date);
+			reviews->posted_date.erase(0, 1);
 		}
 		pos = str.find_last_of(',');
 		if (pos != string::npos)
 		{
-			reviews[i].app_version = str.substr(pos);
-			apagar_sub_str(str, reviews[i].app_version);
-			reviews[i].app_version.erase(0, 1);
+			reviews->app_version = str.substr(pos);
+			apagar_sub_str(str, reviews->app_version);
+			reviews->app_version.erase(0, 1);
 		}
 		pos = str.find_last_of(',');
 		if (pos != string::npos)
 		{
-			reviews[i].upvotes = str.substr(pos);
-			apagar_sub_str(str, reviews[i].upvotes);
-			reviews[i].upvotes.erase(0, 1);
+			reviews->upvotes = str.substr(pos);
+			apagar_sub_str(str, reviews->upvotes);
+			reviews->upvotes.erase(0, 1);
 		}
-		reviews[i].review_text += str;
-		reviews[i].review_text.erase(0, 1);
+		reviews->review_text += str;
+		reviews->review_text.erase(0, 1);
 
 		++i;
 		return;
 	}
-	reviews[i].review_text += str;
+	reviews->review_text += str;
 }
 
 
-void trataUltimaLinha(const fstream& fstream, vector<Review>& reviews, string& str, long i)
+void trataUltimaLinha(const fstream& fstream, Review *reviews, string& str, long i)
 {
 	auto pos = str.find_first_of(',');
 	if (pos != string::npos)
 	{
-		reviews[i].review_id = str.substr(0, pos);
-		apagar_sub_str(str, reviews[i].review_id);
+		reviews->review_id = str.substr(0, pos);
+		apagar_sub_str(str, reviews->review_id);
 
 	}
 	pos = str.find_last_of(',');
 	if (pos != string::npos)
 	{
-		reviews[i].posted_date = str.substr(pos);
-		apagar_sub_str(str, reviews[i].posted_date);
-		reviews[i].posted_date.erase(0, 1);
+		reviews->posted_date = str.substr(pos);
+		apagar_sub_str(str, reviews->posted_date);
+		reviews->posted_date.erase(0, 1);
 	}
 	pos = str.find_last_of(',');
 	if (pos != string::npos)
 	{
-		reviews[i].app_version = str.substr(pos);
-		apagar_sub_str(str, reviews[i].app_version);
-		reviews[i].app_version.erase(0, 1);
+		reviews->app_version = str.substr(pos);
+		apagar_sub_str(str, reviews->app_version);
+		reviews->app_version.erase(0, 1);
 	}
 	pos = str.find_last_of(',');
 	if (pos != string::npos)
 	{
-		reviews[i].upvotes = str.substr(pos);
-		apagar_sub_str(str, reviews[i].upvotes);
-		reviews[i].upvotes.erase(0, 1);
+		reviews->upvotes = str.substr(pos);
+		apagar_sub_str(str, reviews->upvotes);
+		reviews->upvotes.erase(0, 1);
 	}
-	reviews[i].review_text = move(str);
+	reviews->review_text = move(str);
 }
 
-void lerArquivoCSV(const char* path, vector<Review>& reviews)
-{
+void lerArquivoCSV(string path,string caminhoSaida)
+{	
+	fstream arquivoSaida;
+	arquivoSaida.open(caminhoSaida, ios::out | ios::binary | ios::trunc);
+	arquivoSaida.close();
+	fstream arqBin;
+	arqBin.open(caminhoSaida, ios::out | ios::binary | ios::app);
+	Review auxAlocacao;	
 	fstream arquivo;
 	arquivo.open(path, ios::in);
 	if (!arquivo.is_open())
@@ -118,7 +124,7 @@ void lerArquivoCSV(const char* path, vector<Review>& reviews)
 
 		if (str.find(ultima_linha) != string::npos)
 		{
-			trataUltimaLinha(arquivo, reviews, str, i);
+			trataUltimaLinha(arquivo, &auxAlocacao, str, i);
 			break;
 		}
 		if (str.find("p:") != string::npos)
@@ -126,8 +132,8 @@ void lerArquivoCSV(const char* path, vector<Review>& reviews)
 			pos = str.find_first_of(',');
 			if (pos != string::npos)
 			{
-				reviews[i].review_id = str.substr(0, pos);
-				apagar_sub_str(str, reviews[i].review_id);
+				auxAlocacao.review_id = str.substr(0, pos);
+				apagar_sub_str(str, auxAlocacao.review_id);
 			}
 
 			string novaLinha;
@@ -137,54 +143,58 @@ void lerArquivoCSV(const char* path, vector<Review>& reviews)
 				auto pos = str.find_last_of(',');
 				if (pos != string::npos)
 				{
-					reviews[i].posted_date = str.substr(pos);
-					apagar_sub_str(str, reviews[i].posted_date);
-					reviews[i].posted_date.erase(0, 1);
+					auxAlocacao.posted_date = str.substr(pos);
+					apagar_sub_str(str, auxAlocacao.posted_date);
+					auxAlocacao.posted_date.erase(0, 1);
 				}
 				pos = str.find_last_of(',');
 				if (pos != string::npos)
 				{
-					reviews[i].app_version = str.substr(pos);
-					apagar_sub_str(str, reviews[i].app_version);
-					reviews[i].app_version.erase(0, 1);
+					auxAlocacao.app_version = str.substr(pos);
+					apagar_sub_str(str, auxAlocacao.app_version);
+					auxAlocacao.app_version.erase(0, 1);
 				}
 				pos = str.find_last_of(',');
 				if (pos != string::npos)
 				{
-					reviews[i].upvotes = str.substr(pos);
-					apagar_sub_str(str, reviews[i].upvotes);
-					reviews[i].upvotes.erase(0, 1);
+					auxAlocacao.upvotes = str.substr(pos);
+					apagar_sub_str(str, auxAlocacao.upvotes);
+					auxAlocacao.upvotes.erase(0, 1);
 				}
-				reviews[i].review_text = move(str);
-				reviews[i].review_text.erase(0, 1);
+				auxAlocacao.review_text = move(str);
+				auxAlocacao.review_text.erase(0, 1);
+				////// escreve ////////
+				escreveBin(&auxAlocacao,caminhoSaida, &arqBin);
 
+
+				//////////////////////////
 				++i;
 			}
 			else
-				trataLinhasQuebradas(arquivo, reviews, str, i);
+				trataLinhasQuebradas(arquivo, &auxAlocacao, str, i);
 		}
 		else
 		{
-			trataLinhasQuebradas(arquivo, reviews, str, i);
+			trataLinhasQuebradas(arquivo, &auxAlocacao, str, i);
 		}
 	}
+	arqBin.close();
 }
 
-void escreveBin(Review* reviews)
+void escreveBin(Review* reviews,string caminhoSaida,fstream *arqBin)
 {
-	fstream arqBin;
-	arqBin.open(arquivo_path, ios::out | ios::binary | ios::app);
-	//Abrir arquivo out: saída, binário, app:add no final
-	if (!arqBin.good())
+
+	//Abrir arquivo out: saï¿½da, binï¿½rio, app:add no final
+	if (!arqBin->good())
 	{
 		cerr << "ERRO: arquivo nao pode ser aberto";
 		assert(false);
 	}
 
-	arqBin.write((char*)&reviews, sizeof(Review));
+	arqBin->write((char*)&reviews, sizeof(Review));
 
-	//arqBin.flush(); //Encerrar inserção.
-	arqBin.close(); //Fechar arquivo
+	//arqBin.flush(); //Encerrar inserï¿½ï¿½o.
+	 //Fechar arquivo
 }
 
 void leBin(Review* reviews)
@@ -214,22 +224,22 @@ void imprimeReviewEspecifica(int n, vector<Review>& reviews)
 	cout << "posted_date: " << reviews[n].posted_date << endl;
 }
 
-vector<Review>* importarReviewsAleatorios(int qtd)
+vector<Review>* importarReviewsAleatorios(int qtd,string caminhoSaida)
 {
 	// TODO: otimar para ler de maneira aleatoria a qtd necessaria do arquivo bin
 
 	fstream arqBin;
-	arqBin.open(arquivo_path, ios::binary); //Abrir arquivo
+	arqBin.open(caminhoSaida,ios::in | ios::binary); //Abrir arquivo
 	if (!arqBin.good())
 	{
 		cerr << "ERRO: arquivo nao pode ser aberto";
 		assert(false);
 	}
 	vector<Review>* aux = new vector<Review>;
-	aux->resize(tam_linhas);
+	//aux->resize(tam_linhas);
 
 	vector<Review>* aleatorio = new vector<Review>;
-	aleatorio->resize(qtd);
+	//aleatorio->resize(qtd);
 
 	string str;
 	while (std::getline(arqBin, str))
@@ -240,8 +250,9 @@ vector<Review>* importarReviewsAleatorios(int qtd)
 	{
 		int numAleatorio = (rand() % tam_linhas); // Gerando numeros aleatorios
 		aleatorio[i] = aux[numAleatorio];
-		//vetor de reviews aleatorios recebe reviews das posições sorteadas
+		//vetor de reviews aleatorios recebe reviews das posiï¿½ï¿½es sorteadas
 	}
+	cout << "finall" << endl;
 
 	delete aux;
 	arqBin.close(); //Fechar arquivo
