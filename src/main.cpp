@@ -10,24 +10,24 @@ using namespace std;
 
 int main()
 {
-	vector<Review> reviews;
-	reviews.resize(tam_linhas);
+    vector <Review> reviews;
+    reviews.reserve(tam_linhas);
 
-	{
-		Timer timer;
-		lerArquivoCSV(arquivo_path, reviews);
-	}
+    {
+        Timer timer;
+        lerArquivoCSV(arquivo_path, reviews);
+    }
 
-	int entrada = 0;
-	while (true)
-	{
-		cout << "digite entrada, -1 interrompe" << endl;
+    int entrada = 0;
+    while (true)
+    {
+        cout << "digite entrada, -1 interrompe" << endl;
 
-		cin >> entrada;
-		if (entrada == -1)
-		{
-			break;
-		}
-		imprimeReviewEspecifica(entrada, reviews);
-	}
+        cin >> entrada;
+        if (entrada == -1)
+        {
+            break;
+        }
+        imprimeReviewEspecifica(entrada, reviews);
+    }
 }
