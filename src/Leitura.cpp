@@ -28,19 +28,42 @@ void peekline(fstream &arquivo, string &str)
     arquivo.seekg(pos);
 }
 
-void trataLinhasQuebradas(fstream &arquivo, vector<Review> &reviews, string &str, long &i)
+void trataLinhasQuebradas(fstream& arquivo, vector<Review>& reviews, string& str, long& i)
 {
     string nova_linha;
     peekline(arquivo, nova_linha);
-    while (true)
+
+    if (nova_linha.find("p:") != string::npos)
     {
-        if (nova_linha.find("p:") !=string::npos)
+        auto pos = str.find_last_of(',');
+        if (pos != string::npos)
         {
-
+            reviews[i].posted_date = str.substr(pos);
+            apagar_sub_str(str, reviews[i].posted_date);
+            reviews[i].posted_date.erase(0, 1);
         }
-    }
-}
+        pos = str.find_last_of(',');
+        if (pos != string::npos)
+        {
+            reviews[i].app_version = str.substr(pos);
+            apagar_sub_str(str, reviews[i].app_version);
+            reviews[i].app_version.erase(0, 1);
+        }
+        pos = str.find_last_of(',');
+        if (pos != string::npos)
+        {
+            reviews[i].upvotes = str.substr(pos);
+            apagar_sub_str(str, reviews[i].upvotes);
+            reviews[i].upvotes.erase(0, 1);
+        }
+        reviews[i].review_text += str;
+        reviews[i].review_text.erase(0, 1);
 
+        ++i;
+        return;
+    }
+    reviews[i].review_text += str;
+}
 
 void trataUltimaLinha(const fstream &fstream, vector<Review> &reviews, string &str, long i)
 {
