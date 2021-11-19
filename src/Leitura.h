@@ -25,7 +25,7 @@ void imprimeReviewEspecifica(int n, vector <Review> &reviews);
 //
 void escreveBin(Review *reviews,fstream *arqBin);
 //
-//void leBin(Review *reviews);
+// void leBin(string caminho);
 //
 //vector <Review> *importarReviewsAleatorios(int qtd);
 
