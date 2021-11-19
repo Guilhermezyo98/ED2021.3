@@ -98,10 +98,15 @@ void trataUltimaLinha(const fstream &fstream, vector<Review> &reviews, string &s
     reviews[i].review_text = move(str);
 }
 
-void lerArquivoCSV(const char *path, vector<Review> &reviews)
+void lerArquivoCSV(string caminho,string caminhoSaida)
 {
     fstream arquivo;
-    arquivo.open(path, ios::in);
+    fstream arquivoSaida;
+	arquivoSaida.open(caminhoSaida, ios::out | ios::binary | ios::trunc);
+	arquivoSaida.close();
+	fstream arqBin;
+	arqBin.open(caminhoSaida, ios::out | ios::binary | ios::app);
+    arquivo.open(caminho, ios::in);
     if (!arquivo.is_open())
     {
         cerr << "ERRO: arquivo nao pode ser aberto";
@@ -151,10 +156,14 @@ void lerArquivoCSV(const char *path, vector<Review> &reviews)
 
         getline(lines, linha);
         review.posted_date = linha;
+        //////////// escrita/////////////////
+        //reviews.push_back(review);
+        escreveBin(&review ,&arqBin);
 
-        reviews.push_back(review);
+
+        ////////////////////////////
     }
-
+    arqBin.close();
 }
 
 
@@ -168,7 +177,8 @@ void lerArquivoCSV(const char *path, vector<Review> &reviews)
 /// <param name="path"></param>
 /// <param name="reviews"></param>
 void lerArquivoCSV_Legacy(const char* path, vector<Review>& reviews) 
-{
+{   
+    
     fstream arquivo;
     arquivo.open(path, ios::in);
     if (!arquivo.is_open())
@@ -239,21 +249,20 @@ void lerArquivoCSV_Legacy(const char* path, vector<Review>& reviews)
         }
     }
 }
-void escreveBin(Review *reviews)
+void escreveBin(Review* review,fstream *arqBin)
 {
-    fstream arqBin;
-    arqBin.open(arquivo_path, ios::out | ios::binary | ios::app);
-    //Abrir arquivo out: saída, binário, app:add no final
-    if (!arqBin.good())
-    {
-        cerr << "ERRO: arquivo nao pode ser aberto";
-        assert(false);
-    }
 
-    arqBin.write((char *) &reviews, sizeof(Review));
+	//Abrir arquivo out: saï¿½da, binï¿½rio, app:add no final
+	if (!arqBin->good())
+	{
+		cerr << "ERRO: arquivo nao pode ser aberto";
+		assert(false);
+	}
 
-    //arqBin.flush(); //Encerrar inserção.
-    arqBin.close(); //Fechar arquivo
+	arqBin->write((char*)&review, sizeof(Review));
+
+	//arqBin.flush(); //Encerrar inserï¿½ï¿½o.
+	 //Fechar arquivo
 }
 
 void leBin(Review *reviews)
@@ -309,7 +318,7 @@ vector<Review> *importarReviewsAleatorios(int qtd)
     {
         int numAleatorio = (rand() % tam_linhas); // Gerando numeros aleatorios
         aleatorio[i] = aux[numAleatorio];
-        //vetor de reviews aleatorios recebe reviews das posições sorteadas
+        //vetor de reviews aleatorios recebe reviews das posiï¿½ï¿½es sorteadas
     }
 
     delete aux;

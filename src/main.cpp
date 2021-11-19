@@ -8,14 +8,14 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
     vector <Review> reviews;
     reviews.reserve(tam_linhas);
 
     {
         Timer timer;
-        lerArquivoCSV(arquivo_path, reviews);
+        lerArquivoCSV(argv[1],argv[2]);
     }
 
     int entrada = 0;

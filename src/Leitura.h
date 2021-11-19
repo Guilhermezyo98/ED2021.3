@@ -17,13 +17,13 @@ struct Review;
 //
 //void apagar_sub_str(std::string &main_str, const std::string &apagar);
 //
-void lerArquivoCSV(const char *path, vector <Review> &reviews);
+void lerArquivoCSV(string caminho,string caminhoSaida);
 //
 //void trataLinhasQuebradas(fstream &arquivo, vector <Review> &reviews, string &str, long &i);
 //
 void imprimeReviewEspecifica(int n, vector <Review> &reviews);
 //
-//void escreveBin(Review *reviews);
+void escreveBin(Review *reviews,fstream *arqBin);
 //
 //void leBin(Review *reviews);
 //
