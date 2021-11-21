@@ -179,8 +179,8 @@ enum Saidas
 void testeImportacao()
 {
     cout << "Digite a saida preferida para exportar N registros do arquivo binario:" << endl;
-    cout << "Digitar 1 para exporta 10 registros para o console" << endl;
-    cout << "Digitar 2 para exportar 100 registros para arquivo texto" << endl;
+    cout << "Digite 1 para exporta 10 registros para o console," << endl;
+    cout << "Digite 2 para exportar 100 registros para arquivo texto" << endl;
     int n = -1;
     cin >> n;
 
@@ -191,7 +191,7 @@ void testeImportacao()
         for (size_t i = 0; i < 10; i++)
         {
             Review review = retornaReviewEspecifica(getRandomNumber(0, reviews_totais));
-            imprimeReviewEspecifica(review);
+            // imprimeReviewEspecifica(review);
         }
         break;
     }
