@@ -20,7 +20,7 @@ void lerArquivoCSV(const char* path, vector<Review>& reviews)
 
     if (!arquivo.is_open())
     {
-        cerr << "ERRO: arquivo nao pode ser aberto";
+        cerr << "ERRO: arquivo nao pode ser aberto \n\t lerArquivoCSV";
         assert(false);
     }
     auto bufferSize = tamanhoArquivo(arquivo);
@@ -74,22 +74,29 @@ void lerArquivoCSV(const char* path, vector<Review>& reviews)
 
 void escreveBin(vector<Review>& reviews)
 {
-    fstream arqbin(saidaBinaria_path, ios::out | ios::binary | ios::trunc);
+    fstream arqBin;
+    arqBin.open(saidaBinaria_path, ios::out | ios::binary | ios::trunc);
+    if (!arqBin.is_open())
+    {
+        cerr << "ERRO: arquivo nao pode ser aberto \n\t escreveBin()";
+        assert(false);
+    }
 
     for (size_t i = 0; i < reviews.size(); i++)
     {
-        arqbin.write(reinterpret_cast<char*>(&reviews[i]), sizeof(Review));
+        arqBin.write(reinterpret_cast<char*>(&reviews[i]), sizeof(Review));
     }
-
 }
 
 
 void imprimeReviewEspecifica(int reviewN)
 {
-    fstream arqBin(saidaBinaria_path, ios::in | ios::binary);
+    ifstream arqBin;
+	arqBin.open(saidaBinaria_path, ios::in | ios::binary);
     if (!arqBin.is_open())
     {
-        cerr << "erro";
+        cerr << "ERRO: arquivo nao pode ser aberto \n\t imprimeReviewEspecifica()";
+        assert(false);
 
     }
 
@@ -120,8 +127,8 @@ Review retornaReviewEspecifica(int reviewN)
     fstream arqBin(saidaBinaria_path, ios::in | ios::binary);
     if (!arqBin.is_open())
     {
-        cerr << "erro";
-
+        cerr << "ERRO: arquivo nao pode ser aberto \n\t retornaReviewEspecifica()";
+        assert(false);
     }
 
     auto pos = (reviewN - 1) * sizeof(Review);
@@ -162,7 +169,7 @@ void imprimeReviewEspecifica(Review review)
 
 void escreveTexto(vector<Review> reviews)
 {
-    fstream arquivo(saidaTexto_path, ios::out | ios::in);
+    ofstream arquivo(saidaTexto_path, ios::out | ios::trunc);
 
     for (size_t i = 0; i < reviews.size(); i++)
     {

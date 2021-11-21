@@ -51,12 +51,12 @@ int main(int argc, char* argv[])
 
     {
         Timer timer;
-        lerArquivoCSV(arquivo_path, reviews);
+    	lerArquivoCSV(arquivo_path, reviews);
     }
 
     {
         Timer timer;
-		escreveBin(reviews);
+    	escreveBin(reviews);
     }
 
     menu();
