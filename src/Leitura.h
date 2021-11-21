@@ -16,15 +16,15 @@ struct Review
 struct Review;
 
 
-void lerArquivoCSV(const char* path, vector<Review>& reviews);
+void lerArquivoCSV(string path, vector<Review>& reviews);
 int getRandomNumber(int min, int max);
 void imprimeReviewEspecifica(int reviewN);
 Review retornaReviewEspecifica(int reviewN);
 void imprimeReviewEspecifica(Review review);
-void testeImportacao();
+void testeImportacao(string caminhoTexto);
 
-void escreveBin(vector<Review>& reviews);
-void escreveTexto(vector<Review> reviews);
+void escreveBin(string caminhoSaida,vector<Review>& reviews);
+void escreveTexto(string caminhoTexto,vector<Review> reviews);
 
 
 void leBin(string caminho);

@@ -13,7 +13,7 @@ streampos tamanhoArquivo(fstream& arq)
     return tam;
 }
 
-void lerArquivoCSV(const char* path, vector<Review>& reviews)
+void lerArquivoCSV(string path, vector<Review>& reviews)
 {
     fstream arquivo(path, ios::in);
 
@@ -71,10 +71,10 @@ void lerArquivoCSV(const char* path, vector<Review>& reviews)
     }
 }
 
-void escreveBin(vector<Review>& reviews)
+void escreveBin(string caminhoSaida,vector<Review>& reviews)
 {
     fstream arqBin;
-    arqBin.open(saidaBinaria_path, ios::out | ios::binary | ios::trunc);
+    arqBin.open(caminhoSaida, ios::out | ios::binary | ios::trunc);
     if (!arqBin.is_open())
     {
         cerr << "ERRO: arquivo nao pode ser aberto \n\t escreveBin()";
@@ -126,7 +126,14 @@ void imprimeReviewEspecifica(int reviewN)
 
 }
 
-
+void imprimeReviewEspecifica(Review review)
+{
+    cout << "review_id: " << review.review_id << endl;
+    cout << "review_text: " << review.review_text << endl;
+    cout << "upvotes: " << review.upvotes << endl;
+    cout << "app_version: " << review.app_version << endl;
+    cout << "posted_date: " << review.posted_date << endl;
+}
 
 Review retornaReviewEspecifica(int reviewN)
 {
@@ -164,18 +171,11 @@ int getRandomNumber(int min, int max)
     return min + static_cast<int>((max - min + 1) * (std::rand() * fraction));
 }
 
-void imprimeReviewEspecifica(Review review)
-{
-    cout << "review_id: " << review.review_id << endl;
-    cout << "review_text: " << review.review_text << endl;
-    cout << "upvotes: " << review.upvotes << endl;
-    cout << "app_version: " << review.app_version << endl;
-    cout << "posted_date: " << review.posted_date << endl;
-}
 
-void escreveTexto(vector<Review> reviews)
+
+void escreveTexto(string caminhoTexto,vector<Review> reviews)
 {
-    ofstream arquivo(saidaTexto_path, ios::out | ios::trunc);
+    ofstream arquivo(caminhoTexto, ios::out | ios::trunc);
 
     for (size_t i = 0; i < reviews.size(); i++)
     {
@@ -199,11 +199,11 @@ enum Saidas
 // Para essa importação, a função deve perguntar ao usuário se ele deseja exibir a saída no console
  // ou salvá - la em um arquivo texto.
 
-void testeImportacao()
+void testeImportacao(string caminhoTexto)
 {
     cout << "Digite a saida preferida para exportar N registros do arquivo binario:" << endl;
-    cout << "Digite 1 para exporta 10 registros para o console," << endl;
-    cout << "Digite 2 para exporta N registros para o console," << endl;
+    cout << "Digite 1 para exporta 10 registros para o console" << endl;
+    cout << "Digite 2 para exporta N registros para o console" << endl;
     cout << "Digite 3 para exportar 100 registros para arquivo texto" << endl;
     cout << "Digite 4 para exportar N registros para arquivo texto" << endl;
 
@@ -223,7 +223,7 @@ void testeImportacao()
     }
     case consoleN:
     {
-        cout << "\n Digite o valor para N";
+        cout << "\n Digite o valor para N: ";
         int N = -1;
         cin >> N;
         for (size_t i = 0; i < N; i++)
@@ -240,13 +240,13 @@ void testeImportacao()
         {
             reviews.push_back(retornaReviewEspecifica(getRandomNumber(0, reviews_totais)));
         }
-        escreveTexto(reviews);
-        cout << "\n\n\tExportacao finalizada!";
+        escreveTexto(caminhoTexto,reviews);
+        cout << "\n\n\tExportacao finalizada!"<<endl;
         break;
     }
     case arquivoN:
     {
-        cout << "\n Digite o valor para N";
+        cout << "\n Digite o valor para N: ";
         int N = -1;
         cin >> N;
         vector<Review> reviews;
@@ -254,8 +254,8 @@ void testeImportacao()
         {
             reviews.push_back(retornaReviewEspecifica(getRandomNumber(0, reviews_totais)));
         }
-        escreveTexto(reviews);
-        cout << "\n\n\tExportacao finalizada!";
+        escreveTexto(caminhoTexto,reviews);
+        cout << "\n\n\tExportacao finalizada!"<<endl;
         break;
     }
 

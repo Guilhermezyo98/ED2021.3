@@ -4,9 +4,9 @@
 int const tam_linhas = 3'660'724;
 int const reviews_totais = 3'646'475;
 
-const auto arquivo_path = "D:/Users/DANIEL/Downloads/Tiktok/tiktok_app_reviews.csv";
-const auto saidaBinaria_path = "C:/Users/Daniel/Desktop/vs/src/saida.bin";
-const auto saidaTexto_path = "C:/Users/Daniel/Desktop/vs/src/saidaTxt.txt";
+const auto arquivo_path = "tiktok_app_reviews.csv";
+const auto saidaBinaria_path = "saida.bin";
+const auto saidaTexto_path = "saidaTxt.txt";
 
 
 const std::string ultima_linha(
