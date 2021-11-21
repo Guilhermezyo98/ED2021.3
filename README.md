@@ -21,7 +21,10 @@ make && ./ED2021
 > https://github.com/ArthurMonteiroPereira/ED2021.3.git
 
 # Integrantes:
->Andressa Augusta Ferrugini de Oliveira - 201665251AC
->Arthur Monteiro Pereira - 201865552C
->Daniel Fagundes Portes Fernandes - 201965574C
->Guilherme Gonçalves de Souza Alves - 201665503B
+> Andressa Augusta Ferrugini de Oliveira - 201665251AC
+  
+> Arthur Monteiro Pereira - 201865552C
+  
+> Daniel Fagundes Portes Fernandes - 201965574C
+  
+> Guilherme Gonçalves de Souza Alves - 201665503B
