@@ -35,9 +35,8 @@ void lerArquivoCSV(const char* path, vector<Review>& reviews)
 
     Review review;
     string linha;
-    for (unsigned long i = 0; i < tam_linhas; ++i)
+    while(getline(lines, linha, ','))
     {
-        getline(lines, linha, ',');
         review.review_id = linha;
 
         if (lines.get() == '"')
@@ -165,7 +164,15 @@ void escreveTexto(vector<Review> reviews)
 {
     fstream arquivo("C:/Users/Daniel/Desktop/vs/src/saidaTxt.txt", ios::out | ios::in);
 
-    arquivo << reviews.data();
+    for (size_t i = 0; i < reviews.size(); i++)
+    {
+        arquivo << reviews[i].review_id;
+        arquivo << reviews[i].review_text;
+        arquivo << reviews[i].upvotes;
+        arquivo << reviews[i].app_version;
+        arquivo << reviews[i].posted_date;
+        arquivo << "\n";
+    }
 }
 
 enum Saidas
@@ -176,6 +183,7 @@ enum Saidas
 // importa N registros aleatórios do arquivo binário.
 // Para essa importação, a função deve perguntar ao usuário se ele deseja exibir a saída no console
  // ou salvá - la em um arquivo texto.
+
 void testeImportacao()
 {
     cout << "Digite a saida preferida para exportar N registros do arquivo binario:" << endl;
@@ -191,22 +199,24 @@ void testeImportacao()
         for (size_t i = 0; i < 10; i++)
         {
             Review review = retornaReviewEspecifica(getRandomNumber(0, reviews_totais));
-            // imprimeReviewEspecifica(review);
+            imprimeReviewEspecifica(review);
         }
-        break;
+			break;
     }
     case arquivo:
     {
         vector<Review> reviews;
         for (size_t i = 0; i < 100; i++)
         {
-            reviews.push_back(retornaReviewEspecifica(getRandomNumber(1, reviews_totais)));
+            reviews.push_back(retornaReviewEspecifica(getRandomNumber(0, reviews_totais)));
         }
         escreveTexto(reviews);
         break;
     }
     default:
+	    {
+		    
         break;
+	    }
     }
-
 }
