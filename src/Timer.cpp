@@ -1,8 +1,12 @@
 #include "Timer.h"
+
+#include <chrono>
 #include <iostream>
 
-Timer::Timer()
+
+Timer::Timer(std::string legenda)
 {
+    m_legenda = legenda;
     m_tempoInicio = std::chrono::high_resolution_clock::now();
 }
 
@@ -21,5 +25,5 @@ void Timer::Stop()
     auto duracao = fim - inicio;
     double ms = duracao * 0.001;
 
-    std::cout << duracao << "us (" << ms << "ms)\n";
+    std::cout << m_legenda << ": " << duracao << "us (" << ms << "ms)\n";
 }

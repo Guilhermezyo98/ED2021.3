@@ -21,7 +21,7 @@ void menu ()
     cout << "**************";
 
     cout << "\nEscolhe entre usar as funcoes:\n";
-    cout << "\tDigite 1 para: testeImportacao()\n\tDigite 2 para: imprimeReviewEspecifica()\n";
+    cout << "\tDigite 1 para: testeImportacao() \n\t Digite 2 para: imprimeReviewEspecifica()\n";
     int entrada = -1;
     cin >> entrada;
 
@@ -46,20 +46,24 @@ void menu ()
 
 int main(int argc, char* argv[])
 {
+
     vector <Review> reviews;
     reviews.reserve(tam_linhas);
 
     {
-        Timer timer;
+        Timer timer("Tempo para lerArquivoCSV(): ");
     	lerArquivoCSV(arquivo_path, reviews);
     }
 
     {
-        Timer timer;
+        Timer timer("Tempo para escreveBin(): ");
     	escreveBin(reviews);
     }
 
-    menu();
+    while (true)
+    {
+        menu();
+    }
     
     
     return 0;

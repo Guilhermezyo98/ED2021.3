@@ -4,7 +4,6 @@
 #include <sstream>
 #include <strstream>
 #include <cstdlib> 
-#include <ctime> 
 
 streampos tamanhoArquivo(fstream& arq)
 {
@@ -118,6 +117,13 @@ void imprimeReviewEspecifica(int reviewN)
     {
 
     }
+
+    cout << "review_id: " << review.review_id << endl;
+    cout << "review_text: " << review.review_text << endl;
+    cout << "upvotes: " << review.upvotes << endl;
+    cout << "app_version: " << review.app_version << endl;
+    cout << "posted_date: " << review.posted_date << endl;
+
 }
 
 
@@ -184,8 +190,10 @@ void escreveTexto(vector<Review> reviews)
 
 enum Saidas
 {
-    console = 1,
-    arquivo = 2
+    console10 = 1,
+    consoleN = 2,
+    arquivo100 = 3,
+    arquivoN = 4
 };
 // importa N registros aleatórios do arquivo binário.
 // Para essa importação, a função deve perguntar ao usuário se ele deseja exibir a saída no console
@@ -195,13 +203,16 @@ void testeImportacao()
 {
     cout << "Digite a saida preferida para exportar N registros do arquivo binario:" << endl;
     cout << "Digite 1 para exporta 10 registros para o console," << endl;
-    cout << "Digite 2 para exportar 100 registros para arquivo texto" << endl;
+    cout << "Digite 2 para exporta N registros para o console," << endl;
+    cout << "Digite 3 para exportar 100 registros para arquivo texto" << endl;
+    cout << "Digite 4 para exportar N registros para arquivo texto" << endl;
+
     int n = -1;
     cin >> n;
 
     switch (n)
     {
-    case console:
+    case console10:
     {
         for (size_t i = 0; i < 10; i++)
         {
@@ -210,7 +221,19 @@ void testeImportacao()
         }
 			break;
     }
-    case arquivo:
+    case consoleN:
+    {
+        cout << "\n Digite o valor para N";
+        int N = -1;
+        cin >> N;
+        for (size_t i = 0; i < N; i++)
+        {
+            Review review = retornaReviewEspecifica(getRandomNumber(0, reviews_totais));
+            imprimeReviewEspecifica(review);
+        }
+        break;
+    }
+    case arquivo100:
     {
         vector<Review> reviews;
         for (size_t i = 0; i < 100; i++)
@@ -218,8 +241,24 @@ void testeImportacao()
             reviews.push_back(retornaReviewEspecifica(getRandomNumber(0, reviews_totais)));
         }
         escreveTexto(reviews);
+        cout << "\n\n\tExportacao finalizada!";
         break;
     }
+    case arquivoN:
+    {
+        cout << "\n Digite o valor para N";
+        int N = -1;
+        cin >> N;
+        vector<Review> reviews;
+        for (size_t i = 0; i < N; i++)
+        {
+            reviews.push_back(retornaReviewEspecifica(getRandomNumber(0, reviews_totais)));
+        }
+        escreveTexto(reviews);
+        cout << "\n\n\tExportacao finalizada!";
+        break;
+    }
+
     default:
 	    {
 		    
