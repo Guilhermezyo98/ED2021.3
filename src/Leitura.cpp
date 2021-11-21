@@ -1,32 +1,37 @@
 #include "Leitura.h"
 #include "Parametros_constantes.h"
 
+#include <sstream>
 #include <strstream>
+#include <cstdlib> 
+#include <ctime> 
 
-
-void lerArquivoCSV(string caminho,string caminhoSaida)
+streampos tamanhoArquivo(fstream& arq)
 {
-    fstream arquivo;
-    fstream arquivoSaida;
-	arquivoSaida.open(caminhoSaida, ios::out | ios::binary | ios::trunc);
-	arquivoSaida.close();
-	fstream arqBin;
-	arqBin.open(caminhoSaida, ios::out | ios::binary | ios::app);
-    arquivo.open(caminho, ios::in);
+    arq.seekg(0, arq.end);
+    streampos tam = arq.tellg();
+    arq.seekg(0);
+    return tam;
+}
+
+void lerArquivoCSV(const char* path, vector<Review>& reviews)
+{
+    fstream arquivo(path, ios::in);
+
     if (!arquivo.is_open())
     {
         cerr << "ERRO: arquivo nao pode ser aberto";
         assert(false);
     }
-    constexpr size_t bufferSize = 543'022'558;
+    auto bufferSize = tamanhoArquivo(arquivo);
 
-    arquivo.seekg(54, ios::beg); // pula primeira linha
-	unique_ptr<char[]> buffer(new char[bufferSize]);
+    arquivo.seekg(54, ios::beg);    // pula primeira linha
+    unique_ptr<char[]> buffer(new char[bufferSize]);
 
-    arquivo.read(buffer.get(), bufferSize);
-    istrstream lines(const_cast<char*>(buffer.get()), bufferSize);
-
+    arquivo.read(buffer.get(), bufferSize); // leitura para buffer
+    istrstream lines(const_cast<char*>(buffer.get()), (int)bufferSize);
     arquivo.close();
+    // // // // // //
 
     Review review;
     string linha;
@@ -34,7 +39,7 @@ void lerArquivoCSV(string caminho,string caminhoSaida)
     {
         getline(lines, linha, ',');
         review.review_id = linha;
-        
+
         if (lines.get() == '"')
         {
             review.review_text.clear();
@@ -47,13 +52,14 @@ void lerArquivoCSV(string caminho,string caminhoSaida)
                     break;
                 }
             }
-        } else
+        }
+        else
         {
             lines.seekg(-1, ios::cur);
             getline(lines, linha, ',');
             review.review_text = linha;
         }
-        
+
         getline(lines, linha, ',');
         review.upvotes = linha;
 
@@ -63,87 +69,144 @@ void lerArquivoCSV(string caminho,string caminhoSaida)
         getline(lines, linha);
         review.posted_date = linha;
 
-        //////////// escrita/////////////////
-        //reviews.push_back(review);
-        escreveBin(&review ,&arqBin);
-        ////////////////////////////
+        reviews.push_back(review);
     }
-    arqBin.close();
 }
 
-void escreveBin(Review* review,fstream *arqBin)
+void escreveBin(vector<Review>& reviews)
 {
+    fstream arqbin("C:/Users/Daniel/Desktop/vs/src/saida.bin", ios::out | ios::binary | ios::trunc);
 
-	//Abrir arquivo out: sa�da, bin�rio, app:add no final
-	if (!arqBin->is_open())
-	{
-		cerr << "ERRO: arquivo nao pode ser aberto";
-		assert(false);
-	}
+    for (size_t i = 0; i < reviews.size(); i++)
+    {
+        arqbin.write(reinterpret_cast<char*>(&reviews[i]), sizeof(Review));
+    }
 
-	arqBin->write((char*)&review, sizeof(Review));
-
-	//arqBin.flush(); //Encerrar inser��o.
-	 //Fechar arquivo
 }
 
-void leBin(string caminho)
+
+void imprimeReviewEspecifica(int reviewN)
 {
-    fstream arqBin;
-    arqBin.open(caminho, ios::binary); //Abrir arquivo
-    if (!arqBin.good())
+    fstream arqBin("C:/Users/Daniel/Desktop/vs/src/saida.bin", ios::in | ios::binary);
+    if (!arqBin.is_open())
     {
-        cerr << "ERRO: arquivo nao pode ser aberto";
-        assert(false);
+        cerr << "erro";
+
     }
-    // arqBin.read(reinterpret_cast<char *>(&reviews), sizeof(Review));
-    arqBin.close(); //Fechar arquivo
+
+    auto pos = (reviewN - 1) * sizeof(Review);
+    arqBin.seekg(pos);
+
+    unique_ptr<char[]> buffer(new char[sizeof(Review)]);
+    arqBin.read(buffer.get(), sizeof(Review)); // leitura para buffer*
+    istrstream lines(const_cast<char*>(buffer.get()), sizeof(Review));
+
+    Review review;
+    review.review_id.resize(90);
+    review.review_text.resize(4096);
+    review.upvotes.resize(50);
+    review.app_version.resize(20);
+    review.posted_date.resize(20);
+
+    while (lines.read(reinterpret_cast<char*>(&review), sizeof(Review)))
+    {
+
+    }
 }
 
-void imprimeReviewEspecifica(int n, vector<Review> &reviews)
+
+
+Review retornaReviewEspecifica(int reviewN)
 {
-    if (n < 0 || n >= tam_linhas)
+    fstream arqBin("C:/Users/Daniel/Desktop/vs/src/saida.bin", ios::in | ios::binary);
+    if (!arqBin.is_open())
     {
-        cout << endl << "fora do vetor" << endl;
-        return;
+        cerr << "erro";
+
     }
-    cout << "review_id: " << reviews[n].review_id << endl;
-    cout << "review_text: " << reviews[n].review_text << endl;
-    cout << "upvotes: " << reviews[n].upvotes << endl;
-    cout << "app_version: " << reviews[n].app_version << endl;
-    cout << "posted_date: " << reviews[n].posted_date << endl;
+
+    auto pos = (reviewN - 1) * sizeof(Review);
+    arqBin.seekg(pos);
+
+    unique_ptr<char[]> buffer(new char[sizeof(Review)]);
+    arqBin.read(buffer.get(), sizeof(Review)); // leitura para buffer*
+    istrstream lines(const_cast<char*>(buffer.get()), sizeof(Review));
+
+    Review review;
+    review.review_id.resize(90);
+    review.review_text.resize(4096);
+    review.upvotes.resize(50);
+    review.app_version.resize(20);
+    review.posted_date.resize(20);
+
+    while (lines.read(reinterpret_cast<char*>(&review), sizeof(Review)))
+    {
+    }
+
+    return review;
 }
 
-vector<Review> *importarReviewsAleatorios(int qtd)
+int getRandomNumber(int min, int max)
 {
-    // TODO: otimar para ler de maneira aleatoria a qtd necessaria do arquivo bin
+    static constexpr double fraction{ 1.0 / (RAND_MAX + 1.0) };
+    return min + static_cast<int>((max - min + 1) * (std::rand() * fraction));
+}
 
-    fstream arqBin;
-    arqBin.open(arquivo_path, ios::binary); //Abrir arquivo
-    if (!arqBin.good())
+void imprimeReviewEspecifica(Review review)
+{
+    cout << "review_id: " << review.review_id << endl;
+    cout << "review_text: " << review.review_text << endl;
+    cout << "upvotes: " << review.upvotes << endl;
+    cout << "app_version: " << review.app_version << endl;
+    cout << "posted_date: " << review.posted_date << endl;
+}
+
+void escreveTexto(vector<Review> reviews)
+{
+    fstream arquivo("C:/Users/Daniel/Desktop/vs/src/saidaTxt.txt", ios::out | ios::in);
+
+    arquivo << reviews.data();
+}
+
+enum Saidas
+{
+    console = 1,
+    arquivo = 2
+};
+// importa N registros aleatórios do arquivo binário.
+// Para essa importação, a função deve perguntar ao usuário se ele deseja exibir a saída no console
+ // ou salvá - la em um arquivo texto.
+void testeImportacao()
+{
+    cout << "Digite a saida preferida para exportar N registros do arquivo binario:" << endl;
+    cout << "Digitar 1 para exporta 10 registros para o console" << endl;
+    cout << "Digitar 2 para exportar 100 registros para arquivo texto" << endl;
+    int n = -1;
+    cin >> n;
+
+    switch (n)
     {
-        cerr << "ERRO: arquivo nao pode ser aberto";
-        assert(false);
-    }
-    auto *aux = new vector<Review>;
-    aux->resize(tam_linhas);
-
-    auto *aleatorio = new vector<Review>;
-    aleatorio->resize(qtd);
-
-    string str;
-    while (std::getline(arqBin, str))
+    case console:
     {
-        arqBin.read(reinterpret_cast<char *>(&aux), sizeof(Review)); //ler arquivo e armazenar no vetor auxiliar
+        for (size_t i = 0; i < 10; i++)
+        {
+            Review review = retornaReviewEspecifica(getRandomNumber(0, reviews_totais));
+            imprimeReviewEspecifica(review);
+        }
+        break;
     }
-    for (int i = 0; i < qtd; i++)
+    case arquivo:
     {
-        int numAleatorio = (rand() % tam_linhas); // Gerando numeros aleatorios
-        aleatorio[i] = aux[numAleatorio];
-        //vetor de reviews aleatorios recebe reviews das posi��es sorteadas
+        vector<Review> reviews;
+        for (size_t i = 0; i < 100; i++)
+        {
+            reviews.push_back(retornaReviewEspecifica(getRandomNumber(1, reviews_totais)));
+        }
+        escreveTexto(reviews);
+        break;
+    }
+    default:
+        break;
     }
 
-    delete aux;
-    arqBin.close(); //Fechar arquivo
-    return aleatorio;
 }

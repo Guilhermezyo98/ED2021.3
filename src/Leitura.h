@@ -14,19 +14,19 @@ struct Review
     string posted_date;
 };
 struct Review;
-//
-//void apagar_sub_str(std::string &main_str, const std::string &apagar);
-//
-void lerArquivoCSV(string caminho,string caminhoSaida);
-//
-//void trataLinhasQuebradas(fstream &arquivo, vector <Review> &reviews, string &str, long &i);
-//
-void imprimeReviewEspecifica(int n, vector <Review> &reviews);
-//
-void escreveBin(Review *reviews,fstream *arqBin);
-//
-// void leBin(string caminho);
-//
-//vector <Review> *importarReviewsAleatorios(int qtd);
+
+
+void lerArquivoCSV(const char* path, vector<Review>& reviews);
+int getRandomNumber(int min, int max);
+void imprimeReviewEspecifica(int reviewN);
+Review retornaReviewEspecifica(int reviewN);
+void imprimeReviewEspecifica(Review review);
+void testeImportacao();
+
+void escreveBin(vector<Review>& reviews);
+void escreveTexto(vector<Review> reviews);
+
+
+void leBin(string caminho);
 
 #endif // !LEITURA_H

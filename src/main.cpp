@@ -15,19 +15,12 @@ int main(int argc, char* argv[])
 
     {
         Timer timer;
-        lerArquivoCSV(argv[1],argv[2]);
+        lerArquivoCSV(arquivo_path, reviews);
     }
 
-    int entrada = 0;
-    while (true)
-    {
-        cout << "digite entrada, -1 interrompe" << endl;
 
-        cin >> entrada;
-        if (entrada == -1)
-        {
-            break;
-        }
-        imprimeReviewEspecifica(entrada, reviews);
-    }
+    escreveBin(reviews);
+
+    testeImportacao();
+    return 0;
 }
