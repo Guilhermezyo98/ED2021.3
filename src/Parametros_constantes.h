@@ -3,8 +3,12 @@
 
 int const tam_linhas = 3'660'724;
 int const reviews_totais = 3'646'475;
+
 const auto arquivo_path = "D:/Users/DANIEL/Downloads/Tiktok/tiktok_app_reviews.csv";
+const auto saidaBinaria_path = "C:/Users/Daniel/Desktop/vs/src/saida.bin";
+const auto saidaTexto_path = "C:/Users/Daniel/Desktop/vs/src/saidaTxt.txt";
+
+
 const std::string ultima_linha(
     "AOqpTOEbcTyAsdBIJDmV9AgErmyPYiIHOp4QtLrq9qtudVW7DT25WgSfIc35DWSe7BSBPqwDnCjG8wfjL4LBkQ");
-
 #endif // !PARAMETROS_H

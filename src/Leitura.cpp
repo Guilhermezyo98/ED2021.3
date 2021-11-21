@@ -74,7 +74,7 @@ void lerArquivoCSV(const char* path, vector<Review>& reviews)
 
 void escreveBin(vector<Review>& reviews)
 {
-    fstream arqbin("C:/Users/Daniel/Desktop/vs/src/saida.bin", ios::out | ios::binary | ios::trunc);
+    fstream arqbin(saidaBinaria_path, ios::out | ios::binary | ios::trunc);
 
     for (size_t i = 0; i < reviews.size(); i++)
     {
@@ -86,7 +86,7 @@ void escreveBin(vector<Review>& reviews)
 
 void imprimeReviewEspecifica(int reviewN)
 {
-    fstream arqBin("C:/Users/Daniel/Desktop/vs/src/saida.bin", ios::in | ios::binary);
+    fstream arqBin(saidaBinaria_path, ios::in | ios::binary);
     if (!arqBin.is_open())
     {
         cerr << "erro";
@@ -117,7 +117,7 @@ void imprimeReviewEspecifica(int reviewN)
 
 Review retornaReviewEspecifica(int reviewN)
 {
-    fstream arqBin("C:/Users/Daniel/Desktop/vs/src/saida.bin", ios::in | ios::binary);
+    fstream arqBin(saidaBinaria_path, ios::in | ios::binary);
     if (!arqBin.is_open())
     {
         cerr << "erro";
@@ -162,7 +162,7 @@ void imprimeReviewEspecifica(Review review)
 
 void escreveTexto(vector<Review> reviews)
 {
-    fstream arquivo("C:/Users/Daniel/Desktop/vs/src/saidaTxt.txt", ios::out | ios::in);
+    fstream arquivo(saidaTexto_path, ios::out | ios::in);
 
     for (size_t i = 0; i < reviews.size(); i++)
     {
