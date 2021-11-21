@@ -8,6 +8,42 @@
 
 using namespace std;
 
+enum EscolhasChamada
+{
+    teste_Importacao = 1, 
+    imprime_Review_Especifica = 2
+};
+
+void menu ()
+{
+    cout << "**************";
+    cout << "\tMENU\t";
+    cout << "**************";
+
+    cout << "\nEscolhe entre usar as funcoes:\n";
+    cout << "\tDigite 1 para: testeImportacao()\n\tDigite 2 para: imprimeReviewEspecifica()\n";
+    int entrada = -1;
+    cin >> entrada;
+
+    switch (entrada)
+    {
+    case teste_Importacao:
+	    {
+			testeImportacao();
+			break;
+	    }
+    case imprime_Review_Especifica:
+	    {
+        cout << "\nDigite o numero da review a ser impressa: ";
+			int nReview = -1;
+            cin >> nReview;
+            imprimeReviewEspecifica(nReview);
+	    }
+    }
+
+}
+
+
 int main(int argc, char* argv[])
 {
     vector <Review> reviews;
@@ -18,9 +54,13 @@ int main(int argc, char* argv[])
         lerArquivoCSV(arquivo_path, reviews);
     }
 
+    {
+        Timer timer;
+		escreveBin(reviews);
+    }
 
-    escreveBin(reviews);
-
-    testeImportacao();
+    menu();
+    
+    
     return 0;
 }
