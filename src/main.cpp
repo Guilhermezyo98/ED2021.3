@@ -10,29 +10,50 @@ using namespace std;
 
 enum EscolhasChamada
 {
-    teste_Importacao = 1, 
-    imprime_Review_Especifica = 2
-
+    lerCSV = 1,
+    escreverBinario = 2,
+    teste_Importacao = 3,
+    imprime_Review_Especifica = 4,
+    sair = 5
 };
 
-void menu (string caminhoEntrada,string caminhoBinario,string caminhoTexto)
+void menu (string caminhoEntrada,string caminhoBinario,string caminhoTexto, vector<Review>& reviews)
 {
     while (true)
     {
-        cout << "**************";
-        cout << "\tMENU\t";
-        cout << "**************";
-
+        cout << "**************\tMENU\t**************";
         cout << "\nEscolhe entre usar as funcoes:\n";
-        cout << "\tDigite 1 para: testeImportacao() \n\tDigite 2 para: imprimeReviewEspecifica()\n\tDigite 0 para sair "<<endl;
+        cout << "\tDigite 1 para: lerCSV() \n";
+        cout << "\tDigite 2 para: escreverBinario()\n";
+        cout << "\tDigite 3 para: testeImportacao() \n";
+        cout << "\tDigite 4 para: imprimeReviewEspecifica()\n";
+    	cout << "\tDigite 5 para sair " << endl;
+
         int entrada = -1;
         cin >> entrada;
 
         switch (entrada)
         {
+        case lerCSV:
+        {
+            reviews.reserve(tam_linhas);
+            {
+                Timer timer("Tempo para lerArquivoCSV()");
+                lerArquivoCSV(caminhoEntrada, reviews);
+                break;
+            }
+        }
+        case escreverBinario:
+        {
+            {
+                Timer timer("Tempo para escreveBin():");
+                escreveBin(caminhoBinario, reviews);
+                break;
+            }
+        }
         case teste_Importacao:
             {
-                testeImportacao(caminhoTexto);
+                testeImportacao(caminhoEntrada,caminhoBinario,caminhoTexto);
                 break;
             }
         case imprime_Review_Especifica:
@@ -40,43 +61,25 @@ void menu (string caminhoEntrada,string caminhoBinario,string caminhoTexto)
             cout << "\nDigite o numero da review a ser impressa: ";
                 int nReview = -1;
                 cin >> nReview;
-                imprimeReviewEspecifica(nReview);
+                imprimeReviewEspecifica(nReview, caminhoBinario);
             }
-        case 0:
+        case sair:
         {
             return;
+        }
+        default:
+        {
             break;
         }
         }
     }
-
-    
-
 }
 
 
 int main(int argc, char* argv[])
-{   
-    //arquivo_path =argv[1];
-    //saidaBinaria_path =argv[2];
-    //saidaTexto_path = argv[3];
+{
     vector <Review> reviews;
-    reviews.reserve(tam_linhas);
+    menu(argv[1],argv[2],argv[3],reviews);    
 
-    {
-        Timer timer("Tempo para lerArquivoCSV(): ");
-    	lerArquivoCSV(argv[1], reviews);
-    }
-
-    {
-        Timer timer("Tempo para escreveBin(): ");
-    	escreveBin(argv[2],reviews);
-    }
-
-   
-    menu(argv[1],argv[2],argv[3]);
-    
-    
-    
     return 0;
 }

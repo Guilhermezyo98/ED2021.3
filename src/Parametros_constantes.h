@@ -2,13 +2,13 @@
 #define PARAMETROS_H
 
 int const tam_linhas = 3'660'724;
-int const reviews_totais = 3'646'475;
+int const reviews_totais = 3'646'475; // 3'646'476
 
-const auto arquivo_path = "tiktok_app_reviews.csv";
-const auto saidaBinaria_path = "saida.bin";
-const auto saidaTexto_path = "saidaTxt.txt";
+const int TAMANHO_MAX_ID = 90;
+const int TAMANHO_MAX_TEXT = 100;
+const int TAMANHO_MAX_UPVOTES = 4;
+const int TAMANHO_MAX_APP_VERSION = 7;
+const int TAMANHO_MAX_DATE = 20;
+const int TAMANHO_MAX_STRUCT = TAMANHO_MAX_ID + TAMANHO_MAX_APP_VERSION + TAMANHO_MAX_DATE + TAMANHO_MAX_UPVOTES + TAMANHO_MAX_TEXT;
 
-
-const std::string ultima_linha(
-    "AOqpTOEbcTyAsdBIJDmV9AgErmyPYiIHOp4QtLrq9qtudVW7DT25WgSfIc35DWSe7BSBPqwDnCjG8wfjL4LBkQ");
 #endif // !PARAMETROS_H

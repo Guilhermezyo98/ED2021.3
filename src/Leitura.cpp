@@ -24,29 +24,31 @@ void lerArquivoCSV(string path, vector<Review>& reviews)
     }
     auto bufferSize = tamanhoArquivo(arquivo);
 
-    arquivo.seekg(54, ios::beg);    // pula primeira linha
+    arquivo.seekg(54, ios::beg);
     unique_ptr<char[]> buffer(new char[bufferSize]);
-
-    arquivo.read(buffer.get(), bufferSize); // leitura para buffer
+    arquivo.read(buffer.get(), bufferSize);
+    // strinstrem exige duplicacao da memoria,
+    // strstream nao, eh depreciado, mas possui construtor por referencia que evita uma nova alocacao = perde de desempenho
     istrstream lines(const_cast<char*>(buffer.get()), (int)bufferSize);
+
     arquivo.close();
     // // // // // //
 
     Review review;
     string linha;
-    while(getline(lines, linha, ','))
+    for (unsigned long i = 0; i < tam_linhas; ++i)
     {
+        getline(lines, linha, ',');
         review.review_id = linha;
 
         if (lines.get() == '"')
         {
-            review.review_text.clear();
             while (true)
             {
                 getline(lines, linha, '"');
                 review.review_text += linha;
-                if (lines.get() != '"')
-                {
+                if (lines.get() != '"')     // linhas ondem o segundo parentese nao representa o fim da linha vao continuar o loop
+                {                              // caso o contrario, o while infinito se quebra
                     break;
                 }
             }
@@ -66,57 +68,111 @@ void lerArquivoCSV(string path, vector<Review>& reviews)
 
         getline(lines, linha);
         review.posted_date = linha;
+        
+        review.review_id.resize(TAMANHO_MAX_ID);
+        review.review_text.resize(TAMANHO_MAX_TEXT);
+        review.app_version.resize(TAMANHO_MAX_APP_VERSION);
+        review.upvotes.resize(TAMANHO_MAX_UPVOTES);
+        review.posted_date.resize(TAMANHO_MAX_DATE);
 
         reviews.push_back(review);
     }
 }
 
-void escreveBin(string caminhoSaida,vector<Review>& reviews)
+void escreveBin(string caminhoSaida, vector<Review>& reviews)
 {
-    fstream arqBin;
-    arqBin.open(caminhoSaida, ios::out | ios::binary | ios::trunc);
+   fstream arqBin(caminhoSaida, ios::binary | ios::trunc | ios::in | ios::out);
     if (!arqBin.is_open())
     {
-        cerr << "ERRO: arquivo nao pode ser aberto \n\t escreveBin()";
+        cerr << "ERRO: arquivo nao pode ser aberto \n\t escreveBin()\n";
         assert(false);
     }
 
     for (size_t i = 0; i < reviews.size(); i++)
     {
-        arqBin.write(reinterpret_cast<char*>(&reviews[i]), sizeof(Review));
+        // cout << i << " ";
+        arqBin.write(reinterpret_cast<const char*>(reviews[i].review_id.c_str()), TAMANHO_MAX_ID);
+        arqBin.write(reinterpret_cast<const char*>(reviews[i].review_text.c_str()), TAMANHO_MAX_TEXT);
+        arqBin.write(reinterpret_cast<const char*>(reviews[i].upvotes.c_str()), TAMANHO_MAX_UPVOTES);
+        arqBin.write(reinterpret_cast<const char*>(reviews[i].app_version.c_str()), TAMANHO_MAX_APP_VERSION);
+        arqBin.write(reinterpret_cast<const char*>(reviews[i].posted_date.c_str()), TAMANHO_MAX_DATE);
     }
 }
 
 
-void imprimeReviewEspecifica(int reviewN)
+void imprimeReviewEspecifica(int reviewN, string caminhoBinario)
 {
-    ifstream arqBin;
-	arqBin.open(saidaBinaria_path, ios::in | ios::binary);
-    if (!arqBin.is_open())
+    ifstream arquivoBinario(caminhoBinario, ios::in | ios::binary);
+    if (!arquivoBinario.is_open())
     {
         cerr << "ERRO: arquivo nao pode ser aberto \n\t imprimeReviewEspecifica()";
         assert(false);
-
     }
 
-    auto pos = (reviewN - 1) * sizeof(Review);
-    arqBin.seekg(pos);
-
-    unique_ptr<char[]> buffer(new char[sizeof(Review)]);
-    arqBin.read(buffer.get(), sizeof(Review)); // leitura para buffer*
-    istrstream lines(const_cast<char*>(buffer.get()), sizeof(Review));
+    auto pos = (reviewN)*TAMANHO_MAX_STRUCT;
+    arquivoBinario.seekg(pos);
 
     Review review;
-    review.review_id.resize(90);
-    review.review_text.resize(4096);
-    review.upvotes.resize(50);
-    review.app_version.resize(20);
-    review.posted_date.resize(20);
 
-    while (lines.read(reinterpret_cast<char*>(&review), sizeof(Review)))
+    char id[TAMANHO_MAX_ID];
+    arquivoBinario.read(id, TAMANHO_MAX_ID);
+    review.review_id = id;
+
+    char review_text[TAMANHO_MAX_TEXT];
+    arquivoBinario.read(review_text, TAMANHO_MAX_TEXT);
+    review.review_text = review_text;
+
+    char upvotes[TAMANHO_MAX_UPVOTES];
+    arquivoBinario.read(upvotes, TAMANHO_MAX_UPVOTES);
+    review.upvotes = upvotes;
+
+    char app_version[TAMANHO_MAX_APP_VERSION];
+    arquivoBinario.read(app_version, TAMANHO_MAX_APP_VERSION);
+    review.app_version = app_version;
+
+    char posted_date[TAMANHO_MAX_DATE];
+    arquivoBinario.read(posted_date, TAMANHO_MAX_DATE);
+    review.posted_date = posted_date;
+
+    cout << "review_id: " << review.review_id << endl;
+    cout << "review_text: " << review.review_text << endl;
+    cout << "upvotes: " << review.upvotes << endl;
+    cout << "app_version: " << review.app_version << endl;
+    cout << "posted_date: " << review.posted_date << endl;
+}
+
+void imprimeReviewEspecifica(int reviewN, fstream arquivoBinario)
+{
+    if (!arquivoBinario.is_open())
     {
-
+        cerr << "ERRO: arquivo nao pode ser aberto \n\t imprimeReviewEspecifica()\n";
+        assert(false);
     }
+
+    auto pos = (reviewN)*TAMANHO_MAX_STRUCT;
+    arquivoBinario.seekg(pos);
+
+    Review review;
+
+    char id[TAMANHO_MAX_ID];
+    arquivoBinario.read(id, TAMANHO_MAX_ID);
+    review.review_id = id;
+
+    char review_text[TAMANHO_MAX_TEXT];
+    arquivoBinario.read(review_text, TAMANHO_MAX_TEXT);
+    review.review_text = review_text;
+
+    char upvotes[TAMANHO_MAX_UPVOTES];
+    arquivoBinario.read(upvotes, TAMANHO_MAX_UPVOTES);
+    review.upvotes = upvotes;
+
+    char app_version[TAMANHO_MAX_APP_VERSION];
+    arquivoBinario.read(app_version, TAMANHO_MAX_APP_VERSION);
+    review.app_version = app_version;
+
+    char posted_date[TAMANHO_MAX_DATE];
+    arquivoBinario.read(posted_date, TAMANHO_MAX_DATE);
+    review.posted_date = posted_date;
 
     cout << "review_id: " << review.review_id << endl;
     cout << "review_text: " << review.review_text << endl;
@@ -135,56 +191,64 @@ void imprimeReviewEspecifica(Review review)
     cout << "posted_date: " << review.posted_date << endl;
 }
 
-Review retornaReviewEspecifica(int reviewN)
+Review retornaReviewEspecifica(int reviewN, fstream& arquivoBinario)
 {
-    fstream arqBin(saidaBinaria_path, ios::in | ios::binary);
-    if (!arqBin.is_open())
+    if (!arquivoBinario.is_open())
     {
         cerr << "ERRO: arquivo nao pode ser aberto \n\t retornaReviewEspecifica()";
         assert(false);
     }
-
-    auto pos = (reviewN - 1) * sizeof(Review);
-    arqBin.seekg(pos);
-
-    unique_ptr<char[]> buffer(new char[sizeof(Review)]);
-    arqBin.read(buffer.get(), sizeof(Review)); // leitura para buffer*
-    istrstream lines(const_cast<char*>(buffer.get()), sizeof(Review));
+    auto pos = (reviewN)*TAMANHO_MAX_STRUCT;
+    arquivoBinario.seekg(pos);
 
     Review review;
-    review.review_id.resize(90);
-    review.review_text.resize(4096);
-    review.upvotes.resize(50);
-    review.app_version.resize(20);
-    review.posted_date.resize(20);
 
-    while (lines.read(reinterpret_cast<char*>(&review), sizeof(Review)))
-    {
-    }
+    char id[TAMANHO_MAX_ID];
+    arquivoBinario.read(id, TAMANHO_MAX_ID);
+    review.review_id = id;
+
+    char review_text[TAMANHO_MAX_TEXT];
+    arquivoBinario.read(review_text, TAMANHO_MAX_TEXT);
+    review.review_text = review_text;
+
+    char upvotes[TAMANHO_MAX_UPVOTES];
+    arquivoBinario.read(upvotes, TAMANHO_MAX_UPVOTES);
+    review.upvotes = upvotes;
+
+    char app_version[TAMANHO_MAX_APP_VERSION];
+    arquivoBinario.read(app_version, TAMANHO_MAX_APP_VERSION);
+    review.app_version = app_version;
+
+    char posted_date[TAMANHO_MAX_DATE];
+    arquivoBinario.read(posted_date, TAMANHO_MAX_DATE);
+    review.posted_date = posted_date;
 
     return review;
 }
 
-int getRandomNumber(int min, int max)
+int retonaNumeroAleatorio(int min, int max)
 {
     static constexpr double fraction{ 1.0 / (RAND_MAX + 1.0) };
     return min + static_cast<int>((max - min + 1) * (std::rand() * fraction));
 }
 
 
-
-void escreveTexto(string caminhoTexto,vector<Review> reviews)
+void escreveTexto(fstream& arquivoTexto, vector<Review>& reviews)
 {
-    ofstream arquivo(caminhoTexto, ios::out | ios::trunc);
+	if (!arquivoTexto.is_open())
+	{
+        cerr << "ERRO: arquivo nao pode ser aberto \n\t escreveTexto()";
+        assert(false);
+	}
 
     for (size_t i = 0; i < reviews.size(); i++)
     {
-        arquivo << reviews[i].review_id;
-        arquivo << reviews[i].review_text;
-        arquivo << reviews[i].upvotes;
-        arquivo << reviews[i].app_version;
-        arquivo << reviews[i].posted_date;
-        arquivo << "\n";
+        arquivoTexto << reviews[i].review_id;
+        arquivoTexto << reviews[i].review_text;
+        arquivoTexto << reviews[i].upvotes;
+        arquivoTexto << reviews[i].app_version;
+        arquivoTexto << reviews[i].posted_date;
+        arquivoTexto << "\n";
     }
 }
 
@@ -199,70 +263,79 @@ enum Saidas
 // Para essa importação, a função deve perguntar ao usuário se ele deseja exibir a saída no console
  // ou salvá - la em um arquivo texto.
 
-void testeImportacao(string caminhoTexto)
+void testeImportacao(string caminhoEntrada, string caminhoBinario, string caminhoTexto)
 {
     cout << "Digite a saida preferida para exportar N registros do arquivo binario:" << endl;
-    cout << "Digite 1 para exporta 10 registros para o console" << endl;
-    cout << "Digite 2 para exporta N registros para o console" << endl;
+    cout << "Digite 1 para exporta 10 registros para o console," << endl;
+    cout << "Digite 2 para exporta N registros para o console," << endl;
     cout << "Digite 3 para exportar 100 registros para arquivo texto" << endl;
     cout << "Digite 4 para exportar N registros para arquivo texto" << endl;
 
     int n = -1;
     cin >> n;
-
+    // srand(static_cast<unsigned int>(std::time(nullptr)));
     switch (n)
     {
     case console10:
     {
+        fstream arquivoBinario(caminhoBinario, ios::in | ios::binary);
         for (size_t i = 0; i < 10; i++)
         {
-            Review review = retornaReviewEspecifica(getRandomNumber(0, reviews_totais));
-            imprimeReviewEspecifica(review);
+            imprimeReviewEspecifica(retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario));
         }
-			break;
+        break;
     }
     case consoleN:
     {
-        cout << "\n Digite o valor para N: ";
+        cout << "\n Digite o valor para N";
         int N = -1;
         cin >> N;
+        fstream arquivoBinario(caminhoBinario, ios::in | ios::binary);
         for (size_t i = 0; i < N; i++)
         {
-            Review review = retornaReviewEspecifica(getRandomNumber(0, reviews_totais));
-            imprimeReviewEspecifica(review);
+            imprimeReviewEspecifica(retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario));
         }
         break;
     }
     case arquivo100:
     {
         vector<Review> reviews;
+        fstream arquivoBinario(caminhoBinario, ios::in | ios::binary);
+        fstream arquivoTexto(caminhoTexto, ios::in | ios::binary);
+
         for (size_t i = 0; i < 100; i++)
         {
-            reviews.push_back(retornaReviewEspecifica(getRandomNumber(0, reviews_totais)));
+            reviews.push_back(retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario));
         }
-        escreveTexto(caminhoTexto,reviews);
-        cout << "\n\n\tExportacao finalizada!"<<endl;
+        escreveTexto(arquivoTexto, reviews);
+        cout << "\n\n\tExportacao finalizada!\n";
         break;
     }
     case arquivoN:
     {
-        cout << "\n Digite o valor para N: ";
+        cout << "\n Digite o valor para N";
         int N = -1;
         cin >> N;
         vector<Review> reviews;
+        fstream arquivoBinario(caminhoBinario, ios::in | ios::binary);
+        fstream arquivoTexto(caminhoTexto, ios::in | ios::binary);
+
         for (size_t i = 0; i < N; i++)
         {
-            reviews.push_back(retornaReviewEspecifica(getRandomNumber(0, reviews_totais)));
+            if (i == 348)
+            {
+                cout << " ";
+            }
+            reviews[i] = (retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario));
         }
-        escreveTexto(caminhoTexto,reviews);
-        cout << "\n\n\tExportacao finalizada!"<<endl;
+        escreveTexto(arquivoTexto, reviews);
+        cout << "\n\n\tExportacao finalizada!\n";
         break;
     }
 
     default:
-	    {
-		    
+    {
         break;
-	    }
+    }
     }
 }
