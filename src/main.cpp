@@ -62,6 +62,7 @@ void menu (string caminhoEntrada,string caminhoBinario,string caminhoTexto, vect
                 int nReview = -1;
                 cin >> nReview;
                 imprimeReviewEspecifica(nReview, caminhoBinario);
+                break;
             }
         case sair:
         {
@@ -79,7 +80,9 @@ void menu (string caminhoEntrada,string caminhoBinario,string caminhoTexto, vect
 int main(int argc, char* argv[])
 {
     vector <Review> reviews;
-    menu(argv[1],argv[2],argv[3],reviews);    
+
+    // menu(arquivo_path, saidaBinaria_path, saidaTexto_path,reviews);
+    menu(argv[1],argv[2],argv[3],reviews);
 
     return 0;
 }

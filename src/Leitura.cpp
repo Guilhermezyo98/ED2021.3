@@ -36,7 +36,7 @@ void lerArquivoCSV(string path, vector<Review>& reviews)
 
     Review review;
     string linha;
-    for (unsigned long i = 0; i < tam_linhas; ++i)
+    for (unsigned long i = 0; i < reviews_totais; ++i)
     {
         getline(lines, linha, ',');
         review.review_id = linha;
@@ -68,7 +68,8 @@ void lerArquivoCSV(string path, vector<Review>& reviews)
 
         getline(lines, linha);
         review.posted_date = linha;
-        
+
+        // Para garantir que todas reviews tenham o mesmo tamanho no final
         review.review_id.resize(TAMANHO_MAX_ID);
         review.review_text.resize(TAMANHO_MAX_TEXT);
         review.app_version.resize(TAMANHO_MAX_APP_VERSION);
@@ -99,9 +100,14 @@ void escreveBin(string caminhoSaida, vector<Review>& reviews)
     }
 }
 
-
 void imprimeReviewEspecifica(int reviewN, string caminhoBinario)
 {
+	if (reviewN < 0 || reviewN > reviews_totais)
+	{
+        cerr << "\n\t\tValor fora do intervalo" << endl;
+        return;
+	}
+
     ifstream arquivoBinario(caminhoBinario, ios::in | ios::binary);
     if (!arquivoBinario.is_open())
     {
@@ -257,7 +263,8 @@ enum Saidas
     console10 = 1,
     consoleN = 2,
     arquivo100 = 3,
-    arquivoN = 4
+    arquivoN = 4,
+    sair = 5
 };
 // importa N registros aleatórios do arquivo binário.
 // Para essa importação, a função deve perguntar ao usuário se ele deseja exibir a saída no console
@@ -265,11 +272,14 @@ enum Saidas
 
 void testeImportacao(string caminhoEntrada, string caminhoBinario, string caminhoTexto)
 {
-    cout << "Digite a saida preferida para exportar N registros do arquivo binario:" << endl;
-    cout << "Digite 1 para exporta 10 registros para o console," << endl;
-    cout << "Digite 2 para exporta N registros para o console," << endl;
-    cout << "Digite 3 para exportar 100 registros para arquivo texto" << endl;
-    cout << "Digite 4 para exportar N registros para arquivo texto" << endl;
+
+    cout << "\t\tAs opcoes a baixo vao tentar ler da memoria, se voce nao ja fez faca antes\n\n";
+    cout << "\t\tDigite a saida preferida para exportar N registros do arquivo binario:" << endl;
+    cout << "\t\tDigite 1 para exporta 10 registros para o console," << endl;
+    cout << "\t\tDigite 2 para exporta N registros para o console," << endl;
+    cout << "\t\tDigite 3 para exportar 100 registros para arquivo texto" << endl;
+    cout << "\t\tDigite 4 para exportar N registros para arquivo texto" << endl;
+    cout << "\t\tDigite 5 para sair " << endl;
 
     int n = -1;
     cin >> n;
@@ -301,14 +311,18 @@ void testeImportacao(string caminhoEntrada, string caminhoBinario, string caminh
     {
         vector<Review> reviews;
         fstream arquivoBinario(caminhoBinario, ios::in | ios::binary);
-        fstream arquivoTexto(caminhoTexto, ios::in | ios::binary);
+        fstream arquivoTexto(caminhoTexto, ios::in | ios::trunc | ios::out);
 
         for (size_t i = 0; i < 100; i++)
         {
             reviews.push_back(retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario));
         }
         escreveTexto(arquivoTexto, reviews);
-        cout << "\n\n\tExportacao finalizada!\n";
+        cout << "\n\n------------------------------------------";
+        cout << "------------------------------------------";
+        cout << "-------------Exportacao finalizada!-------";
+        cout << "------------------------------------------";
+        cout << "------------------------------------------\n\n";
         break;
     }
     case arquivoN:
@@ -318,8 +332,7 @@ void testeImportacao(string caminhoEntrada, string caminhoBinario, string caminh
         cin >> N;
         vector<Review> reviews;
         fstream arquivoBinario(caminhoBinario, ios::in | ios::binary);
-        fstream arquivoTexto(caminhoTexto, ios::in | ios::binary);
-
+        fstream arquivoTexto(caminhoTexto, ios::in | ios:: trunc | ios::out);
         for (size_t i = 0; i < N; i++)
         {
             if (i == 348)
@@ -329,9 +342,17 @@ void testeImportacao(string caminhoEntrada, string caminhoBinario, string caminh
             reviews[i] = (retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario));
         }
         escreveTexto(arquivoTexto, reviews);
-        cout << "\n\n\tExportacao finalizada!\n";
+        cout << "\n\n------------------------------------------";
+        cout << "------------------------------------------";
+        cout << "-------------Exportacao finalizada!-------";
+        cout << "------------------------------------------";
+        cout << "------------------------------------------\n\n";
         break;
     }
+    case sair:
+	    {
+		    return;
+	    }
 
     default:
     {
