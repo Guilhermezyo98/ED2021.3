@@ -111,6 +111,7 @@ void escreveBin(string caminhoSaida, vector<Review>& reviews)
         arqBin.write(reinterpret_cast<const char*>(reviews[i].app_version.c_str()), TAMANHO_MAX_APP_VERSION);
         arqBin.write(reinterpret_cast<const char*>(reviews[i].posted_date.c_str()), TAMANHO_MAX_DATE);
     }
+    reviews.clear(); // forcando o desalocamento previo
 }
 
 void imprimeReviewEspecifica(int reviewN, string caminhoBinario)
@@ -341,15 +342,11 @@ void testeImportacao(string caminhoEntrada, string caminhoBinario, string caminh
         cout << "\n Digite o valor para N";
         int N = -1;
         cin >> N;
-        vector<Review> reviews;
+        vector<Review> reviews(N);
         fstream arquivoBinario(caminhoBinario, ios::in | ios::binary);
         fstream arquivoTexto(caminhoTexto, ios::in | ios:: trunc | ios::out);
         for (size_t i = 0; i < N; i++)
         {
-            if (i == 348)
-            {
-                cout << " ";
-            }
             reviews[i] = (retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario));
         }
         escreveTexto(arquivoTexto, reviews);
