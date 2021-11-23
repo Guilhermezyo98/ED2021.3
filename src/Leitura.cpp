@@ -15,6 +15,13 @@ streampos tamanhoArquivo(fstream& arq)
 
 void lerArquivoCSV(string path, vector<Review>& reviews)
 {
+    reviews.reserve(tam_linhas);
+	if (reviews.size() == reviews_totais)
+	{
+        cerr << "\n\n\t\tacredito que voce tenha selecionado para ler arquivo csv 2x, cuidado!\n\n";
+        return;
+	}
+
     fstream arquivo(path, ios::in);
 
     if (!arquivo.is_open())
