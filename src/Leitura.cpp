@@ -15,12 +15,12 @@ streampos tamanhoArquivo(fstream& arq)
 
 void lerArquivoCSV(string path, vector<Review>& reviews)
 {
-    reviews.reserve(tam_linhas);
 	if (reviews.size() == reviews_totais)
 	{
         cerr << "\n\n\t\tacredito que voce tenha selecionado para ler arquivo csv 2x, cuidado!\n\n";
         return;
 	}
+    reviews.reserve(reviews_totais);
 
     fstream arquivo(path, ios::in);
 
@@ -83,22 +83,28 @@ void lerArquivoCSV(string path, vector<Review>& reviews)
         review.upvotes.resize(TAMANHO_MAX_UPVOTES);
         review.posted_date.resize(TAMANHO_MAX_DATE);
 
-        reviews.push_back(review);
+        reviews.push_back(review); // foi experimentado escrever no binario apos ler uma review, mas a chamada de funcao atrasa demais o processo
+									// apesar de economizar muita memoria, fica lento demais para valer a pena deixar
     }
 }
 
 void escreveBin(string caminhoSaida, vector<Review>& reviews)
 {
+    if (reviews.size() == 0)
+    {
+        cerr << "\n\n\t\tvoce deveria ler o arquivo antes de tentar escrever, cuidado!\n\n";
+        return;
+    }
+
    fstream arqBin(caminhoSaida, ios::binary | ios::trunc | ios::in | ios::out);
     if (!arqBin.is_open())
     {
-        cerr << "ERRO: arquivo nao pode ser aberto \n\t escreveBin()\n";
+        cerr << "ERRO: arquivo nao pode ser aberto \n\t escreveBin() \n\t provavelmente nao foi possivel criar o arquivo, peco que crie manualmente se for o caso\n";
         assert(false);
     }
 
     for (size_t i = 0; i < reviews.size(); i++)
     {
-        // cout << i << " ";
         arqBin.write(reinterpret_cast<const char*>(reviews[i].review_id.c_str()), TAMANHO_MAX_ID);
         arqBin.write(reinterpret_cast<const char*>(reviews[i].review_text.c_str()), TAMANHO_MAX_TEXT);
         arqBin.write(reinterpret_cast<const char*>(reviews[i].upvotes.c_str()), TAMANHO_MAX_UPVOTES);
@@ -118,7 +124,7 @@ void imprimeReviewEspecifica(int reviewN, string caminhoBinario)
     ifstream arquivoBinario(caminhoBinario, ios::in | ios::binary);
     if (!arquivoBinario.is_open())
     {
-        cerr << "ERRO: arquivo nao pode ser aberto \n\t imprimeReviewEspecifica()";
+        cerr << "ERRO: arquivo nao pode ser aberto \n\t imprimeReviewEspecifica() \n\t provavelmente nao foi possivel criar o arquivo, peco que crie manualmente se for o caso\n";
         assert(false);
     }
 
@@ -158,7 +164,7 @@ void imprimeReviewEspecifica(int reviewN, fstream arquivoBinario)
 {
     if (!arquivoBinario.is_open())
     {
-        cerr << "ERRO: arquivo nao pode ser aberto \n\t imprimeReviewEspecifica()\n";
+        cerr << "ERRO: arquivo nao pode ser aberto \n\t imprimeReviewEspecifica()\n  \n\t provavelmente nao foi possivel criar o arquivo, peco que crie manualmente se for o caso\n";
         assert(false);
     }
 
@@ -208,7 +214,7 @@ Review retornaReviewEspecifica(int reviewN, fstream& arquivoBinario)
 {
     if (!arquivoBinario.is_open())
     {
-        cerr << "ERRO: arquivo nao pode ser aberto \n\t retornaReviewEspecifica()";
+        cerr << "ERRO: arquivo nao pode ser aberto \n\t retornaReviewEspecifica()  \n\t provavelmente nao foi possivel criar o arquivo, peco que crie manualmente se for o caso\n";
         assert(false);
     }
     auto pos = (reviewN)*TAMANHO_MAX_STRUCT;
@@ -250,7 +256,7 @@ void escreveTexto(fstream& arquivoTexto, vector<Review>& reviews)
 {
 	if (!arquivoTexto.is_open())
 	{
-        cerr << "ERRO: arquivo nao pode ser aberto \n\t escreveTexto()";
+        cerr << "ERRO: arquivo nao pode ser aberto \n\t escreveTexto()  \n\t provavelmente nao foi possivel criar o arquivo, peco que crie manualmente se for o caso\n";
         assert(false);
 	}
 
@@ -279,8 +285,6 @@ enum Saidas
 
 void testeImportacao(string caminhoEntrada, string caminhoBinario, string caminhoTexto)
 {
-
-    cout << "\t\tAs opcoes a baixo vao tentar ler da memoria, se voce nao ja fez faca antes\n\n";
     cout << "\t\tDigite a saida preferida para exportar N registros do arquivo binario:" << endl;
     cout << "\t\tDigite 1 para exporta 10 registros para o console," << endl;
     cout << "\t\tDigite 2 para exporta N registros para o console," << endl;
@@ -326,10 +330,10 @@ void testeImportacao(string caminhoEntrada, string caminhoBinario, string caminh
         }
         escreveTexto(arquivoTexto, reviews);
         cout << "\n\n------------------------------------------";
-        cout << "------------------------------------------";
-        cout << "-------------Exportacao finalizada!-------";
-        cout << "------------------------------------------";
-        cout << "------------------------------------------\n\n";
+        cout << "\n\n------------------------------------------";
+        cout << "\n\n-------------Exportacao finalizada!-------";
+        cout << "\n\n------------------------------------------";
+        cout << "\n\n------------------------------------------\n\n";
         break;
     }
     case arquivoN:
@@ -350,10 +354,10 @@ void testeImportacao(string caminhoEntrada, string caminhoBinario, string caminh
         }
         escreveTexto(arquivoTexto, reviews);
         cout << "\n\n------------------------------------------";
-        cout << "------------------------------------------";
-        cout << "-------------Exportacao finalizada!-------";
-        cout << "------------------------------------------";
-        cout << "------------------------------------------\n\n";
+        cout << "\n\n------------------------------------------";
+        cout << "\n\n-------------Exportacao finalizada!-------";
+        cout << "\n\n------------------------------------------";
+        cout << "\n\n------------------------------------------\n\n";
         break;
     }
     case sair:
