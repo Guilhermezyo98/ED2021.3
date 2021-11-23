@@ -80,8 +80,8 @@ int main(int argc, char* argv[])
 {
     vector <Review> reviews;
 
-     menu(arquivo_path, saidaBinaria_path, saidaTexto_path,reviews);
-    // menu(argv[1],argv[2],argv[3],reviews);
+     // menu(arquivo_path, saidaBinaria_path, saidaTexto_path,reviews);
+     menu(argv[1],argv[2],argv[3],reviews);
 
     return 0;
 }
