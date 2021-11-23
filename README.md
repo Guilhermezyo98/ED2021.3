@@ -1,21 +1,26 @@
-#	BUILD
+#	BUILD 1
 >PRE REQUISITOS:
->
 >CMAKE
 ### PARA EXECUTAR
-ABRA O TERMINAL NA PASTA BUILD E EXECUTE:
+> CRIE UMA PASTA BUILD DENTRO DE ./SRC
+> 
+> ABRA O TERMINAL NA PASTA BUILD E EXECUTE:
 ```
 cmake ../.
 make && ./ED2021
 ```
-
-# BUILD ALTERNATIVA
+# BUILD ALTERNATIVA 2
 
 >colocar o arquivo de entrada na pasta "src",usar a seguinte linha via terminal na pasta para compilar:
+>```
 >	g++ -O3 *.cpp* -o main -g
+>	```
 >  e a seguinte linha para rodar:
+>  ```
 >	./main <nome do arquivo de entrada> <nome do arquivo de saida binario> <nome do arquivo de saida de texto para exportação>
->  exemplo de linha para execução: ./main t.csv saida.bin teste.txt
+>
+>  exemplo de linha para execução:
+>    ./main t.csv saida.bin teste.txt
 
 # repositorio
 > https://github.com/ArthurMonteiroPereira/ED2021.3.git
