@@ -54,7 +54,7 @@ void menu(string caminhoEntrada, vector<Review>& reviews)
 				testeImportacao();
 				break;
 			}
-		
+
 		case sair:
 			{
 				return;

@@ -280,6 +280,7 @@ void testeImportacao()
 		}
 	case sair:
 		{
+			return;
 		}
 
 	default:

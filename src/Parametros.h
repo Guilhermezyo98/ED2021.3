@@ -2,8 +2,6 @@
 #define PARAMETROS_H
 
 const auto arquivo_path = "D:/Users/DANIEL/Downloads/Tiktok/tiktok_app_reviews.csv";
-const auto saidaBinaria_path = "C:/Users/Daniel/Desktop/vs/src/saida.bin";
-const auto saidaTexto_path = "C:/Users/Daniel/Desktop/vs/src/saidaTxt.txt";
 
 const int reviews_totais = 3'646'475;
 
