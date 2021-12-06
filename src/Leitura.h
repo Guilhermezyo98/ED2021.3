@@ -1,33 +1,33 @@
 #ifndef LEITURA_H
 #define LEITURA_H
 
-#include "cabecalhos_basicos.h"
+#include <vector>
+#include <string>
 
 using namespace std;
 
 struct Review
 {
-    string review_id;
-    string review_text;
-    string upvotes;
-    string app_version;
-    string posted_date;
+	string review_id;
+	string review_text;
+	string upvotes;
+	string app_version;
+	string posted_date;
 };
 
 struct Review;
 
-void lerArquivoCSV(string path, vector<Review>& reviews);
+void lerArquivoCSV(string pathCSV, vector<Review>& reviews);
 int retonaNumeroAleatorio(int min, int max);
 
-void imprimeReviewEspecifica(int reviewN, string caminhoBinario);
-void imprimeReviewEspecifica(int reviewN, fstream arquivoBinario);
+void imprimeReviewEspecifica(int pos, fstream& entradaBinaria);
 void imprimeReviewEspecifica(Review review);
 
-Review retornaReviewEspecifica(int reviewN, fstream& arquivoBinario);
-void testeImportacao(string caminhoEntrada, string caminhoBinario, string caminhoTexto);
+Review retornaReviewEspecifica(int indice, fstream& arquivoBinario);
+void testeImportacao();
 
-void escreveBin(string caminhoSaida, vector<Review>& reviews);
-void escreveTexto(vector<Review>& reviews);
-void leBin(string caminho);
+void escreverSaidaBinaria(vector<Review>& reviews);
+void escreverSaidaTxt(vector<Review>& reviews);
+void lerBinario();
 
 #endif // !LEITURA_H
