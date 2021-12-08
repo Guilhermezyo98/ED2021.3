@@ -30,4 +30,8 @@ void escreverSaidaBinaria(vector<Review>& reviews);
 void escreverSaidaTxt(vector<Review>& reviews);
 void lerBinario();
 
+// HeapSort
+void heapSort(vector<Review>& reviews, int n);
+void heapify(vector<Review>& reviews, int n, int i);
+
 #endif // !LEITURA_H

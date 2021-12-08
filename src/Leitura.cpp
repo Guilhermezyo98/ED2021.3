@@ -5,7 +5,7 @@
 #include <strstream>
 #include <cstdlib>
 #include "Leitura.h"
-#include "parametros.h"
+#include "Parametros.h"
 #include <memory>
 
 streampos inline tamanhoArquivo(fstream& arq)
@@ -219,12 +219,45 @@ void escreverSaidaTxt(fstream& saidaTxt, vector<Review>& reviews)
 	}
 }
 
+void heapSort(vector<Review>& reviews, int n)
+{
+	for (int i = n - 1; i >= 0; i--)
+	{
+		heapify(reviews, n, i);
+	}
+
+	for (int i = n - 1; i >= 0; i--)
+	{
+		swap(reviews[0], reviews[i]);
+		heapify(reviews, i, 0);
+	}
+}
+
+void heapify(vector<Review>& reviews, int n, int i)
+{
+	int largest = i;
+	int l = 2 * i + 1;
+	int r = 2 * i + 2;
+
+	if (l < n && reviews[l].upvotes > reviews[largest].upvotes)
+		largest = l;
+
+	if (r < n && reviews[r].upvotes > reviews[largest].upvotes)
+		largest = r;
+
+	if (largest != i)
+	{
+		swap(reviews[i], reviews[largest]);
+		heapify(reviews, n, largest);
+	}
+}
+
 enum Saidas
 {
-	consoleN = 1,
-	arquivoN = 2,
-	imprime_Review_Especifica = 3,
-	sair = 4
+	consoleN = 'c',
+	arquivoN = 'a',
+	imprime_Review_Especifica = 'i',
+	sair = 's'
 };
 
 void testeImportacao()
@@ -232,12 +265,13 @@ void testeImportacao()
 	cout << "\t\ttesteImportacao()\n:" << endl;
 	cout << "\t\t\tDigite 1 para exporta N registros para o console," << endl;
 	cout << "\t\t\tDigite 2 para exportar N registros para arquivo texto" << endl;
-	cout << "\t\t\tDigite 3 para: imprimeReviewEspecifica()\n";
+	cout << "\t\t\tDigite 3 para: imprimeReviewEspecifica(i)\n";
 	cout << "\t\t\tDigite 4 para sair " << endl;
 	cout << "\t\t\t";
-	srand(static_cast<unsigned int>(time(nullptr)));
-	int input = -1;
+
+	char input = '\0';
 	cin >> input;
+
 	switch (input)
 	{
 	case consoleN:

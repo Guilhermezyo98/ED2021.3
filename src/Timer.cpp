@@ -4,9 +4,8 @@
 #include <iostream>
 
 Timer::Timer(std::string legenda)
+	: m_legenda(legenda), m_tempoInicio(std::chrono::high_resolution_clock::now()), swaps(0), comparacoes(0)
 {
-	m_legenda = legenda;
-	m_tempoInicio = std::chrono::high_resolution_clock::now();
 }
 
 Timer::~Timer()
