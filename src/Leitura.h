@@ -41,6 +41,7 @@ void heapSort(vector<Review>& reviews, int n);
 void heapify(vector<Review>& reviews, int n, int i);
 
 //quicksort
-
+void quickSort(vector<Review>& v,int inicio,int fim,desempenho *desempenho);
+int quickAux(vector<Review>& v,int inicio ,int final,desempenho *desempenho);
 
 #endif // !LEITURA_H
