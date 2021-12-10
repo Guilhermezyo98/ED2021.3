@@ -336,7 +336,7 @@ void quickSort(vector<Review>& v,int inicio,int fim,desempenho *desempenho){
 
 }
 int quickAux(vector<Review>& v,int inicio ,int final,desempenho *desempenho){
-    Review aux;                                // Artista auxiliar
+    Review aux;                                // review auxiliar
     int esq = inicio;                           // Inteiro que mostra onde inicia o vetor
     int dir = final;                            // Final que guarda a ultima posição do vetor
 
