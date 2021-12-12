@@ -1,7 +1,5 @@
 // ED2.cpp: define o ponto de entrada para o aplicativo.
 //
-#include <fstream>
-
 #include "leitura.h"
 #include "Timer.h"
 #include <iostream>

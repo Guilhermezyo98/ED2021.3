@@ -14,6 +14,13 @@ struct Review
 	string posted_date;
 };
 
+struct desempenho{
+    string nome_algoritimo;           // Nome do algoritmo (Nome)
+    int numComparacoes;               // Guarda a quantidade de comparacoes feitas em cada uma das repeticoes        
+    int numTrocas;                    // Guarda a quantidade de trocas feitas em cada uma das repeticoes    
+    double tempo;                        // Guarda o tempo de execucao            
+};
+
 struct Review;
 
 void lerArquivoCSV(string pathCSV, vector<Review>& reviews);
@@ -28,5 +35,6 @@ void testeImportacao();
 void escreverSaidaBinaria(vector<Review>& reviews);
 void escreverSaidaTxt(vector<Review>& reviews);
 void lerBinario();
+
 
 #endif // !LEITURA_H

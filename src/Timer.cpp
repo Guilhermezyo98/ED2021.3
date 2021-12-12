@@ -2,11 +2,11 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include "Timer.h"
 
 #include <cassert>
 #include <sstream>
 
+#include "Timer.h"
 #include "leitura.h"
 #include "ordenacao.h"
 #include "parametros.h"
