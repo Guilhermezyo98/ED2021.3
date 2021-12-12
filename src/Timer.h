@@ -3,6 +3,8 @@
 
 #include <chrono>
 #include <string>
+
+#include "leitura.h"
 using namespace std;
 using namespace std::chrono;
 
@@ -11,18 +13,25 @@ class Timer
 private:
 	string m_legenda;
 	time_point<high_resolution_clock> m_tempoInicio;
-	int swaps;
-	int comparacoes;
+	int m_swaps;
+	int m_comparacoes;
 
 public:
-	Timer(std::string legenda);
+	Timer(string legenda);
 	~Timer();
+
+	void acrecentaSwaps();
+	void acrecentaComparacoes();
+	void benchHeapSort(int trials);
 
 	Timer(const Timer&) = delete;
 	Timer& operator=(const Timer&) = delete;
 
 private:
 	void Stop();
+	void inicializaVetor(vector<Review>& reviews, int size);
+	void zeraMedicoes();
+
 };
 
 #endif

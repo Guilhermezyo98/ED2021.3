@@ -2,11 +2,11 @@
 //
 #include <fstream>
 
-#include "Leitura.h"
+#include "leitura.h"
 #include "Timer.h"
 #include <iostream>
 
-#include "Parametros.h"
+#include "parametros.h"
 
 using namespace std;
 
@@ -59,18 +59,8 @@ void menu(string caminhoEntrada, vector<Review>& reviews)
 			}
 		case ordenacao:
 			{
-				fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);
-				vector<Review> ordenado(retonaNumeroAleatorio(0, reviews_totais));
-				for (unsigned int i = 0; i < ordenado.size(); i++)
-				{
-					ordenado[i] = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario);
-					imprimeReviewEspecifica(ordenado[i]);
-				}
-				//* HeapSort :
-				heapSort(ordenado, ordenado.size());
-				//* QuickSort:
-				// TODO: quicksort
-				//
+				Timer timer("HeapSort");
+				timer.benchHeapSort(3);
 				break;
 			}
 		case sair:

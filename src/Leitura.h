@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-
 using namespace std;
 
 struct Review
@@ -21,7 +20,7 @@ void lerArquivoCSV(string pathCSV, vector<Review>& reviews);
 int retonaNumeroAleatorio(int min, int max);
 
 void imprimeReviewEspecifica(int pos, fstream& entradaBinaria);
-void imprimeReviewEspecifica(Review review);
+void imprimeReviewEspecifica(Review& review);
 
 Review retornaReviewEspecifica(int indice, fstream& arquivoBinario);
 void testeImportacao();
@@ -29,9 +28,5 @@ void testeImportacao();
 void escreverSaidaBinaria(vector<Review>& reviews);
 void escreverSaidaTxt(vector<Review>& reviews);
 void lerBinario();
-
-// HeapSort
-void heapSort(vector<Review>& reviews, int n);
-void heapify(vector<Review>& reviews, int n, int i);
 
 #endif // !LEITURA_H

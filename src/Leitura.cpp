@@ -4,9 +4,11 @@
 #include <memory>
 #include <strstream>
 #include <cstdlib>
-#include "Leitura.h"
-#include "Parametros.h"
+#include "leitura.h"
+#include "parametros.h"
 #include <memory>
+
+#include "Timer.h"
 
 streampos inline tamanhoArquivo(fstream& arq)
 {
@@ -23,13 +25,13 @@ void lerArquivoCSV(string pathCSV, vector<Review>& reviews)
 		cerr << "\n\n\t\tacredito que voce tenha selecionado para ler arquivo csv 2x, cuidado!\n\n";
 		return;
 	}
-	reviews.reserve(reviews_totais);
 	fstream entradaCSV(pathCSV, ios::in);
 	if (!entradaCSV.is_open())
 	{
 		cerr << "ERRO: arquivo nao pode ser aberto \n\t lerArquivoCSV";
 		assert(false);
 	}
+	reviews.reserve(reviews_totais);
 	auto bufferSize = tamanhoArquivo(entradaCSV);
 	entradaCSV.seekg(54, ios::beg);
 	unique_ptr<char[]> buffer(new char[bufferSize]);
@@ -39,10 +41,6 @@ void lerArquivoCSV(string pathCSV, vector<Review>& reviews)
 	entradaCSV.close();
 
 	Review review;
-	review.review_id.resize(TAMANHO_MAX_ID);
-	review.app_version.resize(TAMANHO_MAX_APP_VERSION);
-	review.upvotes.resize(TAMANHO_MAX_UPVOTES);
-	review.posted_date.resize(TAMANHO_MAX_DATE);
 	string linha;
 	for (unsigned long i = 0; i < reviews_totais; ++i)
 	{
@@ -77,6 +75,10 @@ void lerArquivoCSV(string pathCSV, vector<Review>& reviews)
 		getline(lines, linha);
 		review.posted_date = linha;
 
+		review.review_id.resize(TAMANHO_MAX_ID);
+		review.app_version.resize(TAMANHO_MAX_APP_VERSION);
+		review.upvotes.resize(TAMANHO_MAX_UPVOTES);
+		review.posted_date.resize(TAMANHO_MAX_DATE);
 		review.review_text.resize(TAMANHO_MAX_TEXT);
 
 		reviews.push_back(review);
@@ -147,7 +149,7 @@ void imprimeReviewEspecifica(int indice, fstream& entradaBinaria)
 	imprimeReviewEspecifica(review);
 }
 
-void imprimeReviewEspecifica(Review review)
+void imprimeReviewEspecifica(Review& review)
 {
 	cout << endl;
 	cout << "review_id: " << review.review_id << endl;
@@ -172,22 +174,27 @@ Review retornaReviewEspecifica(int indice, fstream& arquivoBinario)
 
 	char id[TAMANHO_MAX_ID];
 	arquivoBinario.read(id, TAMANHO_MAX_ID);
+	review.review_id.clear();
 	review.review_id = id;
 
 	char review_text[TAMANHO_MAX_TEXT];
 	arquivoBinario.read(review_text, TAMANHO_MAX_TEXT);
+	review.review_text.clear();
 	review.review_text = review_text;
 
 	char upvotes[TAMANHO_MAX_UPVOTES];
 	arquivoBinario.read(upvotes, TAMANHO_MAX_UPVOTES);
+	review.upvotes.clear();
 	review.upvotes = upvotes;
 
 	char app_version[TAMANHO_MAX_APP_VERSION];
 	arquivoBinario.read(app_version, TAMANHO_MAX_APP_VERSION);
+	review.app_version.clear();
 	review.app_version = app_version;
 
 	char posted_date[TAMANHO_MAX_DATE];
 	arquivoBinario.read(posted_date, TAMANHO_MAX_DATE);
+	review.posted_date.clear();
 	review.posted_date = posted_date;
 
 	return review;
@@ -219,39 +226,6 @@ void escreverSaidaTxt(fstream& saidaTxt, vector<Review>& reviews)
 	}
 }
 
-void heapSort(vector<Review>& reviews, int n)
-{
-	for (int i = n - 1; i >= 0; i--)
-	{
-		heapify(reviews, n, i);
-	}
-
-	for (int i = n - 1; i >= 0; i--)
-	{
-		swap(reviews[0], reviews[i]);
-		heapify(reviews, i, 0);
-	}
-}
-
-void heapify(vector<Review>& reviews, int n, int i)
-{
-	int largest = i;
-	int l = 2 * i + 1;
-	int r = 2 * i + 2;
-
-	if (l < n && reviews[l].upvotes > reviews[largest].upvotes)
-		largest = l;
-
-	if (r < n && reviews[r].upvotes > reviews[largest].upvotes)
-		largest = r;
-
-	if (largest != i)
-	{
-		swap(reviews[i], reviews[largest]);
-		heapify(reviews, n, largest);
-	}
-}
-
 enum Saidas
 {
 	consoleN = 'c',
@@ -263,10 +237,10 @@ enum Saidas
 void testeImportacao()
 {
 	cout << "\t\ttesteImportacao()\n:" << endl;
-	cout << "\t\t\tDigite 1 para exporta N registros para o console," << endl;
-	cout << "\t\t\tDigite 2 para exportar N registros para arquivo texto" << endl;
-	cout << "\t\t\tDigite 3 para: imprimeReviewEspecifica(i)\n";
-	cout << "\t\t\tDigite 4 para sair " << endl;
+	cout << "\t\t\tDigite 'c' para exporta N registros para o console," << endl;
+	cout << "\t\t\tDigite 'a' para exportar N registros para arquivo texto" << endl;
+	cout << "\t\t\tDigite 'i' para: imprimeReviewEspecifica(i)\n";
+	cout << "\t\t\tDigite 's' para sair " << endl;
 	cout << "\t\t\t";
 
 	char input = '\0';
