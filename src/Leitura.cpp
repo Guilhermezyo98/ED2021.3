@@ -149,7 +149,7 @@ void imprimeReviewEspecifica(int indice, fstream& entradaBinaria)
 	imprimeReviewEspecifica(review);
 }
 
-void imprimeReviewEspecifica(Review& review)
+void imprimeReviewEspecifica(Review review)
 {
 	cout << endl;
 	cout << "review_id: " << review.review_id << endl;
@@ -256,8 +256,7 @@ void testeImportacao()
 			fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);
 			for (int i = 0; i < N; i++)
 			{
-				imprimeReviewEspecifica(
-					retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario));
+				imprimeReviewEspecifica(retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario));
 			}
 			break;
 		}
@@ -271,7 +270,7 @@ void testeImportacao()
 			fstream arquivoTexto("./saidaTxt.txt", ios::in | ios::trunc | ios::out);
 			for (int i = 0; i < N; i++)
 			{
-				reviews[i] = (retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario));
+				reviews[i] = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario);
 			}
 			escreverSaidaTxt(arquivoTexto, reviews);
 			cout << "\n\n-------------Exportacao finalizada!-------------\n\n";

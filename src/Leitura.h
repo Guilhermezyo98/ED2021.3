@@ -27,7 +27,7 @@ void lerArquivoCSV(string pathCSV, vector<Review>& reviews);
 int retonaNumeroAleatorio(int min, int max);
 
 void imprimeReviewEspecifica(int pos, fstream& entradaBinaria);
-void imprimeReviewEspecifica(Review& review);
+void imprimeReviewEspecifica(Review review);
 
 Review retornaReviewEspecifica(int indice, fstream& arquivoBinario);
 void testeImportacao();
