@@ -45,5 +45,7 @@ public:
     
 
 };
-
+void quickSortHash(auxRep *v,int inicio,int fim);
+int quickSortHashAux(auxRep *v,int inicio,int final);
+void desempenhoHash(int n,int parametro,int caminho,int quantidade);
 #endif 
