@@ -58,7 +58,9 @@ void menu(string caminhoEntrada, vector<Review>& reviews)
 		case ordenacao:
 			{
 				Timer timer("HeapSort");
-				timer.benchHeapSort(3);
+				//timer.benchHeapSort(3);
+				Timer timerQuick("QuickSort");
+				timerQuick.benchQuickSort(3);
 				break;
 			}
 		case sair:

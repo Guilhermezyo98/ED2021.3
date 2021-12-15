@@ -1,7 +1,7 @@
 #ifndef PARAMETROS_H
 #define PARAMETROS_H
 
-const auto arquivo_path = "D:/Users/DANIEL/Downloads/Tiktok/tiktok_app_reviews.csv";
+const auto arquivo_path = "t.csv";
 
 const int reviews_totais = 3'646'475;
 
