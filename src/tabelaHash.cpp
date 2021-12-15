@@ -167,7 +167,7 @@ string tabelaHash::get(int index){
 long int tabelaHash::StringToInt(string x){
     long int soma=1;
     for(int i=0;i<x.size();i++){
-        soma=soma*toascii(x[i]);
+        soma=(soma*toascii(x[i])*pow(3,i));
     }
     return soma;
 }
