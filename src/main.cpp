@@ -59,10 +59,10 @@ void menu(string caminhoEntrada, vector<Review>& reviews)
 			}
 		case ordenacao:
 			{
-				Timer timer("HeapSort");
-				//timer.benchHeapSort(3);
-				Timer timerQuick("QuickSort");
-				timerQuick.benchQuickSort(3);
+				//Timer timer("HeapSort");
+				////timer.benchHeapSort(3);
+				//Timer timerQuick("QuickSort");
+				//timerQuick.benchQuickSort(3);
 				break;
 			}
 		case tabela_Hash:
@@ -96,7 +96,8 @@ void menu(string caminhoEntrada, vector<Review>& reviews)
 
 				}
 					}
-					if(escolha==2){
+					if(escolha==2)
+					{
 						int valores,quantidades;
 						cout << "Digite quantos valores deveram ser importados para a tabela Hashs: " ;
 						cin >> valores;

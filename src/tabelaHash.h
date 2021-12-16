@@ -40,8 +40,7 @@ public:
     int index(string);
     auxRep *repeticoes();
     void txtFrequentes(int m,auxRep *rep,int tamTabela);
-    void txtFrequentesTeste(int m,auxRep *rep,int tamTabela);
-   
+    void txtFrequentesTeste(int m,auxRep *rep,int tamTabela);  
     
 
 };

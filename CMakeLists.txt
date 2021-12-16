@@ -8,4 +8,4 @@ include_directories(src)
 add_executable(ED2021
         "src/main.cpp"
         "src/Timer.cpp"
-        "src/Timer.h" "src/Leitura.h" "src/Leitura.cpp"  "src/Parametros.h" "src/ordenacao.cpp" "src/ordenacao.h")
+        "src/Timer.h" "src/Leitura.h" "src/Leitura.cpp"  "src/Parametros.h" "src/ordenacao.cpp" "src/ordenacao.h" "src/tabelaHash.h" "src/tabelaHash.cpp")
