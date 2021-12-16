@@ -15,13 +15,14 @@ void desempenhoHash(int n, int parametro, int caminho);
 
 tabelaHash::tabelaHash(int tam)
 {
-	this->tamanho = tam;
-	this->vet = new string[tam];
-	atualizaM(tam);
-	this->naoAdicionados = 0;
-	this->repeticao = new auxRep[tam];
-	zera();
-	zeraRepeticao();
+    this->tamanho=tam;
+    this->vet = new string[tam];
+    atualizaM(tam);
+    this->naoAdicionados=0;
+    this->colisoes=0;
+    this->repeticao = new auxRep[tam];
+    zera();
+    zeraRepeticao();
 }
 
 tabelaHash::~tabelaHash()
@@ -33,9 +34,9 @@ tabelaHash::~tabelaHash()
 
 int tabelaHash::funcaoHash(string x, int i)
 {
-	long int chave = StringToInt(x);
-	// chave = chave * floor(sqrt(chave));
-	return ((((chave % m) % tamanho) * (i * (((chave % m) % tamanho)))) % tamanho);
+    long int chave = StringToInt(x);
+    //chave = chave * floor(sqrt(chave));
+    return ((((chave)%tamanho)+(i*(((chave)%tamanho))))%tamanho);
 }
 
 bool tabelaHash::ePrimo(int x)
@@ -88,23 +89,38 @@ void tabelaHash::atualizaM(int tam)
 	m = maiorPrimo(tam);
 }
 
-void tabelaHash::txtFrequentes(int numImpressao, auxRep* rep, int tamTabela)
+bool tabelaHash::adicionaAux(int ind,string info,int tentativa)
 {
-	cout << endl;
-	int j = 0;
-	ofstream arquivotxt("saixaTabelaHash.txt", ios::app);
-	arquivotxt << "******************************************************** " << endl;
-	arquivotxt << "*********************  Tabela Hash  ********************" << endl;
-	arquivotxt << "******************************************************** " << endl;
-	for (int i = tamTabela; i >= numImpressao; i--)
-	{
-		arquivotxt << j + 1 << ": " << vet[rep[i].indice] << "  Número de repetições: " << rep[i].frequencia << endl;
-		j++;
-		if (j == numImpressao)
-			break;
-	}
-
-	arquivotxt.close();
+    string comp;
+    comp+='0';
+    if(vet[ind] == comp || vet[ind] == info){
+        vet[ind] = info;
+        repeticao[ind].frequencia = repeticao[ind].frequencia + 1;
+        repeticao[ind].indice = ind;
+        return true;
+    }
+    else
+    {
+        if(tentativa==0 && vet[ind] != info && vet[ind]!=comp)
+            colisoes++;
+        return false;
+    }
+}
+void tabelaHash::txtFrequentes(int numImpressao,auxRep *rep, int tamTabela){
+    cout<<endl;
+    int j = 0;
+    ofstream arquivotxt("saixaTabelaHash.txt",ios::app);
+    arquivotxt << "******************************************************** "  << endl;
+    arquivotxt << "*********************  Tabela Hash  ********************" << endl;
+    arquivotxt << "******************************************************** " <<  endl;
+    for(int i = tamTabela;i >= numImpressao;i-- ){
+        arquivotxt << j + 1 <<": "<<vet[rep[i].indice]  << "  Número de repetições: " << rep[i].frequencia <<endl;
+        j++;
+        if(j == numImpressao)
+            break;
+    }
+    
+    arquivotxt.close();
 }
 
 void tabelaHash::txtFrequentesTeste(int numImpressao, auxRep* rep, int tamTabela)
@@ -128,17 +144,18 @@ void tabelaHash::txtFrequentesTeste(int numImpressao, auxRep* rep, int tamTabela
 
 void tabelaHash::adiciona(string chave)
 {
-	int controle = 0;
-
-	for (int i = 0; i < tamanho && controle == 0; i++)
-	{
-		if (adicionaAux(funcaoHash(chave, i), chave))
-			controle = 1;
-	}
-	if (controle == 0)
-	{
-		naoAdicionados++;
-	}
+    int controle=0;
+    
+    for(int i=0; i<tamanho && controle==0; i++)
+    {
+        if(adicionaAux(funcaoHash(chave,i),chave,i)){
+            controle=1;
+        }      
+    }
+    if(controle == 0)
+    {
+        naoAdicionados++;
+    }
 }
 
 bool tabelaHash::adicionaAux(int ind, string info)
@@ -192,15 +209,29 @@ string tabelaHash::get(int index)
 {
 	return this->vet[index];
 }
+long int tabelaHash::StringToInt(string x){
+    long int soma=1;
+    for(int i=0;i<x.size();i++){
+        soma+=x[i]*pow(31,i);
+    }
+    return soma;
+    
+    
+    /*long int soma = 0;
+    for (int i = 0; i<x.size(); i++)
+    {
+        soma += x[i];
+    }
+    return soma;*/
 
-long int tabelaHash::StringToInt(string x)
-{
-	long int soma = 1;
-	for (int i = 0; i < x.size(); i++)
-	{
-		soma += toascii(x[i]) * pow(3, i);
-	}
-	return soma;
+    /*
+    long int soma=0;
+    for(int i=0;i<x.length();i++){
+        soma+=37*soma+ x[i];
+    }
+    return soma;
+    */
+
 }
 
 void quickSortHash(auxRep* v, int inicio, int fim)
@@ -244,9 +275,9 @@ int quickSortHashAux(auxRep* v, int inicio, int final)
 	return dir;
 }
 
-void desempenhoHash(int n, int parametro, int caminho, int quantidade)
-{
-	int tamTabela = n * 1.5;
+
+void desempenhoHash(int n,int parametro,int caminho,int quantidade){
+    int tamTabela = n * 1.2;
 
 	tabelaHash tabela(tamTabela);
 	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);
@@ -261,24 +292,19 @@ void desempenhoHash(int n, int parametro, int caminho, int quantidade)
 		vReview.resize(quantidade);
 		vReview[j] = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario);
 	}
-	for (int i = 0; i < n; i++)
-	{
-		tabela.adiciona(vReview[i].app_version);
-	}
+    for(int i = 0;i < n;i++){
+        tabela.adiciona(vReview[i].app_version);
+    }
+    
+    auxRep *vet = new auxRep[tamTabela];
+    vet = tabela.repeticoes(); 
+    quickSortHash(vet,0,tamTabela-1);
 
-	auxRep* vet = new auxRep[tamTabela];
-	vet = tabela.repeticoes();
-
-	cout << endl;
-
-	quickSortHash(vet, 0, tamTabela - 1);
-
-	if (caminho == 0)
-	{
-		tabela.txtFrequentes(parametro, vet, tamTabela - 1);
-	}
-	else
-	{
-		tabela.txtFrequentesTeste(parametro, vet, tamTabela - 1);
-	}
+    if (caminho == 0){
+        tabela.txtFrequentes(parametro,vet,tamTabela-1);   
+    }
+    else {
+        tabela.txtFrequentesTeste(parametro,vet,tamTabela-1);
+    }
+    cout << tabela.colisoes <<endl;
 }
