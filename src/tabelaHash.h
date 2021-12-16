@@ -33,7 +33,7 @@ public:
             
     tabelaHash(int tam);
     ~tabelaHash();
-    int colisoes;
+    int naoAdicionados;
     string get(int index);
     void adiciona(string x);
     bool verificaChave(string x);
@@ -45,7 +45,9 @@ public:
     
 
 };
+
 void quickSortHash(auxRep *v,int inicio,int fim);
 int quickSortHashAux(auxRep *v,int inicio,int final);
+
 void desempenhoHash(int n,int parametro,int caminho,int quantidade);
 #endif 

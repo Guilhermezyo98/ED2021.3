@@ -16,7 +16,7 @@ tabelaHash::tabelaHash(int tam)
     this->tamanho=tam;
     this->vet = new string[tam];
     atualizaM(tam);
-    this->colisoes=0;
+    this->naoAdicionados=0;
     this->repeticao = new auxRep[tam];
     zera();
     zeraRepeticao();
@@ -28,7 +28,7 @@ tabelaHash::~tabelaHash()
 int tabelaHash::funcaoHash(string x,int i)
 {
     long int chave = StringToInt(x);
-    chave = chave * floor(sqrt(chave));
+    //chave = chave * floor(sqrt(chave));
     return ((((chave%m)%tamanho)*(i*(((chave%m)%tamanho))))%tamanho);
 }
 bool tabelaHash::ePrimo(int x)
@@ -131,7 +131,7 @@ void tabelaHash::adiciona(string chave)
     }
     if(controle == 0)
     {
-        colisoes++;
+        naoAdicionados++;
     }
 }
 bool tabelaHash::verificaChave(string chave)
@@ -167,7 +167,7 @@ string tabelaHash::get(int index){
 long int tabelaHash::StringToInt(string x){
     long int soma=1;
     for(int i=0;i<x.size();i++){
-        soma=(soma*toascii(x[i])*pow(3,i));
+        soma+=toascii(x[i])*pow(3,i);
     }
     return soma;
 }
