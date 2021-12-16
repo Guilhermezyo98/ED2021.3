@@ -9,7 +9,7 @@ struct Review
 {
 	string review_id;
 	string review_text;
-	string upvotes;
+	int upvotes;
 	string app_version;
 	string posted_date;
 };

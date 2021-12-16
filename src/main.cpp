@@ -76,8 +76,8 @@ void menu(string caminhoEntrada, vector<Review>& reviews)
 int main(int argc, char* argv[])
 {
 	srand(static_cast<unsigned int>(time(nullptr)));
-	vector<Review> reviews;
 
+	vector<Review> reviews;
 	menu(arquivo_path, reviews);
 	// menu(argv[1], reviews);
 

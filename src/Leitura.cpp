@@ -67,7 +67,7 @@ void lerArquivoCSV(string pathCSV, vector<Review>& reviews)
 		}
 
 		getline(lines, linha, ',');
-		review.upvotes = linha;
+		review.upvotes = atoi(linha.c_str());
 
 		getline(lines, linha, ',');
 		review.app_version = linha;
@@ -77,7 +77,6 @@ void lerArquivoCSV(string pathCSV, vector<Review>& reviews)
 
 		review.review_id.resize(TAMANHO_MAX_ID);
 		review.app_version.resize(TAMANHO_MAX_APP_VERSION);
-		review.upvotes.resize(TAMANHO_MAX_UPVOTES);
 		review.posted_date.resize(TAMANHO_MAX_DATE);
 		review.review_text.resize(TAMANHO_MAX_TEXT);
 
@@ -105,7 +104,7 @@ void escreverSaidaBinaria(vector<Review>& reviews)
 	{
 		saidaBinaria.write(reviews[i].review_id.c_str(), TAMANHO_MAX_ID);
 		saidaBinaria.write(reviews[i].review_text.c_str(), TAMANHO_MAX_TEXT);
-		saidaBinaria.write(reviews[i].upvotes.c_str(), TAMANHO_MAX_UPVOTES);
+		saidaBinaria.write(reinterpret_cast<char*>(&reviews[i].upvotes), sizeof(int));
 		saidaBinaria.write(reviews[i].app_version.c_str(), TAMANHO_MAX_APP_VERSION);
 		saidaBinaria.write(reviews[i].posted_date.c_str(), TAMANHO_MAX_DATE);
 	}
@@ -121,43 +120,8 @@ void imprimeReviewEspecifica(int indice, fstream& entradaBinaria)
 		assert(false);
 	}
 
-	int const pos = (indice) * TAMANHO_MAX_STRUCT;
-	entradaBinaria.seekg(pos);
-
-	Review review;
-
-	char id[TAMANHO_MAX_ID];
-	entradaBinaria.read(id, TAMANHO_MAX_ID);
-	review.review_id = id;
-
-	char review_text[TAMANHO_MAX_TEXT];
-	entradaBinaria.read(review_text, TAMANHO_MAX_TEXT);
-	review.review_text = review_text;
-
-	char upvotes[TAMANHO_MAX_UPVOTES];
-	entradaBinaria.read(upvotes, TAMANHO_MAX_UPVOTES);
-	review.upvotes = upvotes;
-
-	char app_version[TAMANHO_MAX_APP_VERSION];
-	entradaBinaria.read(app_version, TAMANHO_MAX_APP_VERSION);
-	review.app_version = app_version;
-
-	char posted_date[TAMANHO_MAX_DATE];
-	entradaBinaria.read(posted_date, TAMANHO_MAX_DATE);
-	review.posted_date = posted_date;
-
+	Review review = retornaReviewEspecifica(indice, entradaBinaria);
 	imprimeReviewEspecifica(review);
-}
-
-void imprimeReviewEspecifica(Review review)
-{
-	cout << endl;
-	cout << "review_id: " << review.review_id << endl;
-	cout << "review_text: " << review.review_text << endl;
-	cout << "upvotes: " << review.upvotes << endl;
-	cout << "app_version: " << review.app_version << endl;
-	cout << "posted_date: " << review.posted_date << endl;
-	cout << endl;
 }
 
 Review retornaReviewEspecifica(int indice, fstream& arquivoBinario)
@@ -174,30 +138,34 @@ Review retornaReviewEspecifica(int indice, fstream& arquivoBinario)
 
 	char id[TAMANHO_MAX_ID];
 	arquivoBinario.read(id, TAMANHO_MAX_ID);
-	review.review_id.clear();
 	review.review_id = id;
 
 	char review_text[TAMANHO_MAX_TEXT];
 	arquivoBinario.read(review_text, TAMANHO_MAX_TEXT);
-	review.review_text.clear();
 	review.review_text = review_text;
 
-	char upvotes[TAMANHO_MAX_UPVOTES];
-	arquivoBinario.read(upvotes, TAMANHO_MAX_UPVOTES);
-	review.upvotes.clear();
-	review.upvotes = upvotes;
+	arquivoBinario.read(reinterpret_cast<char*>(&review.upvotes), sizeof(int));
 
 	char app_version[TAMANHO_MAX_APP_VERSION];
 	arquivoBinario.read(app_version, TAMANHO_MAX_APP_VERSION);
-	review.app_version.clear();
 	review.app_version = app_version;
 
 	char posted_date[TAMANHO_MAX_DATE];
 	arquivoBinario.read(posted_date, TAMANHO_MAX_DATE);
-	review.posted_date.clear();
 	review.posted_date = posted_date;
 
 	return review;
+}
+
+void imprimeReviewEspecifica(Review review)
+{
+	cout << endl;
+	cout << "review_id: " << review.review_id << endl;
+	cout << "review_text: " << review.review_text << endl;
+	cout << "upvotes: " << review.upvotes << endl;
+	cout << "app_version: " << review.app_version << endl;
+	cout << "posted_date: " << review.posted_date << endl;
+	cout << endl;
 }
 
 int retonaNumeroAleatorio(int min, int max)
@@ -256,7 +224,8 @@ void testeImportacao()
 			fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);
 			for (int i = 0; i < N; i++)
 			{
-				imprimeReviewEspecifica(retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario));
+				imprimeReviewEspecifica(
+					retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario));
 			}
 			break;
 		}

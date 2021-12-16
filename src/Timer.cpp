@@ -28,45 +28,48 @@ void Timer::Stop()
 	auto inicio = std::chrono::time_point_cast<std::chrono::microseconds>(m_tempoInicio).time_since_epoch().count();
 	auto fim = std::chrono::time_point_cast<std::chrono::microseconds>(fimTempo).time_since_epoch().count();
 
-	auto duracao = fim - inicio;
-	double ms = duracao * 0.001;
-
-	std::cout << m_legenda << ": " << duracao << "us (" << ms << "ms)\n";
+	m_duracao = fim - inicio;
+	double ms = m_duracao * 0.001;
+	std::cout << m_legenda << ": " << m_duracao << "us (" << ms << "ms)\n";
 }
 
 void Timer::benchHeapSort(int trials)
 {
-	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary), inputFile("./input.dat", ios::in);
-	if (!(arquivoBinario.is_open() || inputFile.is_open()))
+	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary), inputFile("./input.dat", ios::in), saidaTxt
+		        ("./saida.txt", ios::trunc | ios::out);
+	if (!(arquivoBinario.is_open() || inputFile.is_open() || saidaTxt.is_open()))
 	{
 		cerr << "ERRO: arquivo nao pode ser aberto na funcao benchHeapSort()";
 		assert(false);
 	}
-
+	int montanteSwaps = 0, montanteComparacoes = 0;
 	string linha;
 	vector<Review> reviews;
 	while (getline(inputFile, linha))
 	{
-		cout << "\t *** \t" << linha << "\t *** \n";
+		saidaTxt << "\t *** \t" << linha << "\t *** \n";
 		for (int i = 0; i < trials; ++i)
 		{
-			int size = stoi(linha);
+			int size = atoi(linha.c_str());
 			inicializaVetor(reviews, size);
 			ostringstream msg;
 			msg << "HeapSort, trial " << i;
 			{
 				Timer cronometro(msg.str());
 				heapSort(reviews, reviews.size(), this);
+				cronometro.Stop();
+				saidaTxt << "\tTEMPO: "<<  cronometro.m_legenda << ": " << cronometro.m_duracao << "us (" << cronometro.m_duracao * 0.001 << "ms)\n";
 			}
-			cout << "resumo: swaps = " << this->m_swaps << "\tcomparacoes = " << this->m_comparacoes << endl;
-
-			cout << endl;
+			montanteComparacoes += this->m_comparacoes;
+			montanteSwaps += this->m_swaps;
+			saidaTxt << "pequeno resumo: swaps = " << this->m_swaps << "\tcomparacoes = " << this->m_comparacoes << endl;
+			zeraMedicoes();
 		}
-		cout << "\nresumo algoritmo HeapSort para size = " << linha << endl;
-		cout << "\tnumero de trials:" << trials << endl;
-		cout << "\tnumero de comparacoes medias:" << m_comparacoes / trials << endl;
-		cout << "\tnumero de trocas medias:" << m_swaps / trials << endl;
-		cout << endl;
+		saidaTxt << "\nresumo algoritmo HeapSort para size = " << linha << endl;
+		saidaTxt << "\tnumero de trials:" << trials << endl;
+		saidaTxt << "\tnumero de comparacoes medias:" << montanteComparacoes / trials << endl;
+		saidaTxt << "\tnumero de trocas medias:" << montanteSwaps / trials << endl;
+		saidaTxt << endl << endl << endl;
 		zeraMedicoes();
 	}
 }
