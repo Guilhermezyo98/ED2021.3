@@ -67,7 +67,7 @@ void menu(string caminhoEntrada, vector<Review>& reviews)
 			}
 		case tabela_Hash:
 			{
-				tabelaHash tabela(2);
+				tabelaHash tabela(10000);
 				while (true){
 					cout << "1-modulo de teste para desenvolverdor\n2-atividade\n3-sair\n";
 					int escolha;

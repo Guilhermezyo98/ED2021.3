@@ -23,7 +23,7 @@ private:
     void atualizaM(int tam);
     bool ePrimo(int x);
     int funcaoHash(string chave,int i);
-    bool adicionaAux(int ind,string info);
+    bool adicionaAux(int ind,string info,int tentativa);
     long int StringToInt(string x);
     auxRep *repeticao;
     void zera();
@@ -34,6 +34,7 @@ public:
     tabelaHash(int tam);
     ~tabelaHash();
     int naoAdicionados;
+    int colisoes;
     string get(int index);
     void adiciona(string x);
     bool verificaChave(string x);
