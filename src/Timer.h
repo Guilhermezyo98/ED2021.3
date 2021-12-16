@@ -13,9 +13,8 @@ class Timer
 private:
 	string m_legenda;
 	time_point<high_resolution_clock> m_tempoInicio;
-	long long m_duracao;
-	int m_swaps;
-	int m_comparacoes;
+	unsigned long m_swaps;
+	unsigned long  m_comparacoes;
 
 public:
 	Timer(string legenda);
@@ -25,6 +24,7 @@ public:
 	void acrecentaSwaps();
 	void acrecentaComparacoes();
 	void benchHeapSort(int trials);
+	void benchQuickSort(int trials);
 
 	Timer(const Timer&) = delete;
 	Timer& operator=(const Timer&) = delete;

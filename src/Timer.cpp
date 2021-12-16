@@ -74,6 +74,46 @@ void Timer::benchHeapSort(int trials)
 	}
 }
 
+void Timer::benchQuickSort(int trials)
+{
+	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary), inputFile("./input.dat", ios::in);
+	if (!(arquivoBinario.is_open() || inputFile.is_open()))
+	{
+		cerr << "ERRO: arquivo nao pode ser aberto na funcao benchHeapSort()";
+		assert(false);
+	}
+
+	string linha;
+	vector<Review> reviews;
+	unsigned int aux=0,aux2=0;
+	while (getline(inputFile, linha))
+	{
+		cout << "\t *** \t" << linha << "\t *** \n";
+		for (int i = 0; i < trials; ++i)
+		{
+			int size = stoi(linha);
+			inicializaVetor(reviews, size);
+			ostringstream msg;
+			msg << "QuickSort, trial " << i;
+			{
+				Timer cronometro(msg.str());
+				quickSort(reviews,0,reviews.size()-1, this);
+			}
+			cout << "resumo: swaps = " << this->m_swaps << "\tcomparacoes = " << this->m_comparacoes << endl;
+			aux+=this->m_swaps;
+			aux2+=this->m_comparacoes;
+			cout << endl;
+			this->zeraMedicoes();
+		}
+		cout << "\nresumo algoritmo QuickSort para size = " << linha << endl;
+		cout << "\tnumero de trials:" << trials << endl;
+		cout << "\tnumero de comparacoes medias:" << aux2 / trials << endl;
+		cout << "\tnumero de trocas medias:" << aux / trials << endl;
+		cout << endl;
+		zeraMedicoes();
+	}
+}
+
 void Timer::inicializaVetor(vector<Review>& reviews, int size)
 {
 	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);

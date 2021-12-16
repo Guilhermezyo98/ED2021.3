@@ -45,7 +45,7 @@ void heapify(vector<Review>& reviews, int n, int i, Timer* timer)
 
 
 //////////quick///////
-void quickSort(vector<Review>& v,int inicio,int fim,desempenho *desempenho){
+void quickSort(vector<Review>& v,int inicio,int fim,Timer *desempenho){
     int pivo;
 
     if(inicio < fim){
@@ -55,35 +55,40 @@ void quickSort(vector<Review>& v,int inicio,int fim,desempenho *desempenho){
     }
 
 }
-int quickAux(vector<Review>& v,int inicio ,int final,desempenho *desempenho){
+int quickAux(vector<Review>& v,int inicio ,int final,Timer *desempenho){
     Review aux;                                // review auxiliar
     int esq = inicio;                           // Inteiro que mostra onde inicia o vetor
-    int dir = final;                            // Final que guarda a ultima posição do vetor
+    int dir = final;                            // Final que guarda a ultima posiï¿½ï¿½o do vetor
 
     Review pivo = v[inicio];           // Pivo a chave que sera comparada
 
     while(esq < dir){
         while(esq <= dir && v[esq].upvotes <= pivo.upvotes){
             esq ++;
-            desempenho->numComparacoes = desempenho->numComparacoes + 1;
+            desempenho->acrecentaComparacoes();
+            //desempenho->numComparacoes = desempenho->numComparacoes + 1;
         }
-
-        desempenho->numComparacoes = desempenho->numComparacoes + 1;
+        desempenho->acrecentaComparacoes();
+        //desempenho->numComparacoes = desempenho->numComparacoes + 1;
 
         while(dir >= 0 && v[dir].upvotes > pivo.upvotes){
-            desempenho->numComparacoes = desempenho->numComparacoes + 1;
+            desempenho->acrecentaComparacoes();
+            //desempenho->numComparacoes = desempenho->numComparacoes + 1;
             dir --;
         }
-        desempenho->numComparacoes = desempenho->numComparacoes + 1;
+        desempenho->acrecentaComparacoes();
+        //desempenho->numComparacoes = desempenho->numComparacoes + 1;
         if(esq < dir){
             aux = v[esq];
             v[esq] = v[dir];
             v[dir] = aux;
-            desempenho->numTrocas = desempenho->numTrocas + 1;
+            desempenho->acrecentaSwaps();
+            //desempenho->numTrocas = desempenho->numTrocas + 1;
         }
     }
     v[inicio] = v[dir];
     v[dir] = pivo;
-    desempenho->numTrocas = desempenho->numTrocas + 1;
+    desempenho->acrecentaSwaps();
+    //desempenho->numTrocas = desempenho->numTrocas + 1;
     return dir;
 }
