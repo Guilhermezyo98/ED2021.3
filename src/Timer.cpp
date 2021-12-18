@@ -51,7 +51,7 @@ void Timer::benchHeapSort(int trials)
 		for (int i = 0; i < trials; ++i)
 		{
 			int size = atoi(linha.c_str());
-			inicializaVetor(reviews, size);
+			inicializaVetorAleatorio(reviews, size);
 			ostringstream msg;
 			msg << "HeapSort, trial " << i;
 			{
@@ -92,7 +92,7 @@ void Timer::benchQuickSort(int trials)
 		for (int i = 0; i < trials; ++i)
 		{
 			int size = stoi(linha);
-			inicializaVetor(reviews, size);
+			inicializaVetorAleatorio(reviews, size);
 			ostringstream msg;
 			msg << "QuickSort, trial " << i;
 			{
@@ -114,20 +114,6 @@ void Timer::benchQuickSort(int trials)
 	}
 }
 
-void Timer::inicializaVetor(vector<Review>& reviews, int size)
-{
-	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);
-	if (!arquivoBinario.is_open())
-	{
-		cerr << "ERRO: arquivo nao pode ser aberto na funcao inicializaVetor()";
-		assert(false);
-	}
-	for (int j = 0; j < size; j++)
-	{
-		reviews.resize(size);
-		reviews[j] = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario);
-	}
-}
 
 void Timer::acrecentaSwaps()
 {

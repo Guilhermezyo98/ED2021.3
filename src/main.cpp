@@ -68,49 +68,55 @@ void menu(string caminhoEntrada, vector<Review>& reviews)
 		case tabela_Hash:
 			{
 				tabelaHash tabela(10000);
-				while (true){
-					cout << "1-modulo de teste para desenvolverdor\n2-atividade\n3-sair\n";
-					int escolha;
-					cin>>escolha;
-					if(escolha==1){
-						while (true){
-						cout << "1-Adicionar string\n2-ver se uma string esta na lista\n3-sair\n";
-						int escolha2;
-						cin>>escolha2;
-						string aux;
-						if(escolha2==1){
-							cin>>aux;
-							tabela.adiciona(aux);
-						}
-						if(escolha2==2){
-							cin>>aux;
-							if(tabela.verificaChave(aux))
-								cout << "chave presente\n";
-							else{
-								cout << "chave não presente\n";
+				while (true)
+				{
+					cout << "1-modulo de teste para desenvolverdor \n2-atividade \n3-sair \n";
+					int escolha = 0;
+					cin >> escolha;
+					if (escolha == 1)
+					{
+						while (true)
+						{
+							cout << "1-Adicionar string\n2-ver se uma string esta na lista\n3-sair\n";
+							escolha = 0;
+							cin >> escolha;
+							string aux;
+							if (escolha == 1)
+							{
+								cin >> aux;
+								tabela.insertion(aux);
+							}
+							if (escolha == 2)
+							{
+								//cin >> aux;
+								//if (tabela.verificaChave(aux))
+								//	cout << "chave presente\n";
+								//else
+								//{
+								//	cout << "chave não presente\n";
+								//}
+							}
+							if (escolha == 3)
+							{
+								return;
 							}
 						}
-						if(escolha2==3){
-							return;
 					}
-
-				}
-					}
-					if(escolha==2)
+					if (escolha == 2)
 					{
-						int valores,quantidades;
-						cout << "Digite quantos valores deveram ser importados para a tabela Hashs: " ;
-						cin >> valores;
-						cout << "Digite a quantidade de mais frequentes: " ;
-						cin >> quantidades;
+						int hashSize = 0, numFrequentes = 0;
+						cout << "Digite quantos valores deveram ser importados para a tabela Hashs: ";
+						cin >> hashSize;
+						cout << "Digite a quantidade de mais frequentes: ";
+						cin >> numFrequentes;
 						cout << "Executando o desempenho da tabela Hash! " << endl;
-						desempenhoHash(valores,quantidades,0,valores);
+						desempenhoHash(hashSize, numFrequentes);
 						break;
 					}
-					if(escolha==3){
+					if (escolha == 3)
+					{
 						return;
 					}
-
 				}
 				break;
 			}

@@ -194,6 +194,22 @@ void escreverSaidaTxt(fstream& saidaTxt, vector<Review>& reviews)
 	}
 }
 
+void inicializaVetorAleatorio(vector<Review>& reviews, int size)
+{
+	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);
+	if (!arquivoBinario.is_open())
+	{
+		cerr << "ERRO: arquivo nao pode ser aberto na funcao inicializaVetor()";
+		assert(false);
+	}
+
+	for (int j = 0; j < size; j++)
+	{
+		reviews.resize(size);
+		reviews[j] = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario);
+	}
+}
+
 enum Saidas
 {
 	consoleN = 'c',

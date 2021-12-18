@@ -1,310 +1,178 @@
 #include <iostream>
-#include <stdio.h>
 #include <cmath>
-#include <string.h>
+#include "tabelaHash.h"
+#include "leitura.h"
+#include "parametros.h"
 #include <fstream>
 #include <cassert>
 
-#include "tabelaHash.h"
-#include "parametros.h"
-
 using namespace std;
-void quickSortHash(auxRep* v, int inicio, int fim);
-int quickSortHashAux(auxRep* v, int inicio, int final);
-void desempenhoHash(int n, int parametro, int caminho);
+
+int const PRIME1 = 151;
+int const PRIME2 = 157;
 
 tabelaHash::tabelaHash(int tam)
+	: tam(tam), insertionsFails(0), colisoes(0)
 {
-    this->tamanho=tam;
-    this->vet = new string[tam];
-    atualizaM(tam);
-    this->naoAdicionados=0;
-    this->colisoes=0;
-    this->repeticao = new auxRep[tam];
-    zera();
-    zeraRepeticao();
-}
+	vetor.resize(tam);
 
-tabelaHash::~tabelaHash()
-{
-	delete []vet;
-}
-
-
-
-int tabelaHash::funcaoHash(string x, int i)
-{
-    long int chave = StringToInt(x);
-    //chave = chave * floor(sqrt(chave));
-    return ((((chave)%tamanho)+(i*(((chave)%tamanho))))%tamanho);
-}
-
-bool tabelaHash::ePrimo(int x)
-{
-	int aux, div = 0;
-	for (aux = 2; aux <= sqrt(x); aux++)
-		if (x % aux == 0)
-			div++;
-	if (div == 0)
-		return true;
-	else
-		return false;
-}
-
-void tabelaHash::zera()
-{
-	for (int i = 0; i < tamanho; i++)
+	for (int i = 0; i < tam; i++)
 	{
-		vet[i] = "0";
+		vetor[i].first = "";
+		vetor[i].second = 0;
 	}
 }
 
-void tabelaHash::zeraRepeticao()
+tabelaHash::~tabelaHash() = default;
+
+int tabelaHash::ht_hash(string str, int prime, int tam)
 {
-	for (int i = 0; i < tamanho; i++)
+	long hash = 0;
+	const int lengthStr = str.length();
+
+	for (int i = 0; i < lengthStr; i++)
 	{
-		repeticao[i].frequencia = 0;
-		repeticao[i].indice = i;
+		hash += (long)pow(prime, lengthStr - (i + 1)) * str[i];
+		hash = ((((hash) % tam) + (i * (((hash) % tam)))) % tam);
 	}
+	return (int)hash;
 }
 
-auxRep* tabelaHash::repeticoes()
+int tabelaHash::hash(string s, int i)
 {
-	return this->repeticao;
+	const int hash_a = ht_hash(s, PRIME1, tam);
+	const int hash_b = ht_hash(s, PRIME2, tam);
+	return (hash_a + (i * (hash_b + 1))) % tam;
 }
 
-int tabelaHash::maiorPrimo(int x)
+void tabelaHash::insertion(string key)
 {
-	int parada = 0;
-	x = x / 2; // MAGICA
-	for (int i = 0; parada == 0; i++, x++)
+	for (int i = 0; i < tam; i++)
 	{
-		if (ePrimo(x))
-			return x;
+		unsigned long index = hash(key, i);
+
+		if (vetor[index].first.empty() || vetor[index].first == key) // ou espaco esta disponivel ou a chave eh identica
+		{
+			vetor[index].first = key;
+			vetor[index].second ++;
+			return;
+		}
+		else
+		{
+			colisoes++;
+		}
 	}
+	cerr << "\n[WARNING] fail in insertion element\n";
+	insertionsFails++;
 }
 
-void tabelaHash::atualizaM(int tam)
+void tabelaHash::txtFrequentes(int numImpressao, vector<pair<string, int>>& vetor, int tamTabela)
 {
-	m = maiorPrimo(tam);
-}
+	ofstream arquivotxt("saixaTabelaHash.txt", ios::app);
+	arquivotxt << "*** Tabela Hash ***" << endl;
 
-bool tabelaHash::adicionaAux(int ind,string info,int tentativa)
-{
-    string comp;
-    comp+='0';
-    if(vet[ind] == comp || vet[ind] == info){
-        vet[ind] = info;
-        repeticao[ind].frequencia = repeticao[ind].frequencia + 1;
-        repeticao[ind].indice = ind;
-        return true;
-    }
-    else
-    {
-        if(tentativa==0 && vet[ind] != info && vet[ind]!=comp)
-            colisoes++;
-        return false;
-    }
-}
-void tabelaHash::txtFrequentes(int numImpressao,auxRep *rep, int tamTabela){
-    cout<<endl;
-    int j = 0;
-    ofstream arquivotxt("saixaTabelaHash.txt",ios::app);
-    arquivotxt << "******************************************************** "  << endl;
-    arquivotxt << "*********************  Tabela Hash  ********************" << endl;
-    arquivotxt << "******************************************************** " <<  endl;
-    for(int i = tamTabela;i >= numImpressao;i-- ){
-        arquivotxt << j + 1 <<": "<<vet[rep[i].indice]  << "  Número de repetições: " << rep[i].frequencia <<endl;
-        j++;
-        if(j == numImpressao)
-            break;
-    }
-    
-    arquivotxt.close();
-}
-
-void tabelaHash::txtFrequentesTeste(int numImpressao, auxRep* rep, int tamTabela)
-{
-	cout << endl;
-	int j = 0;
-	ofstream arquivotxt("teste.txt", ios::app);
-	arquivotxt << "******************************************************** " << endl;
-	arquivotxt << "*********************  Tabela Hash  ********************" << endl;
-	arquivotxt << "******************************************************** " << endl;
 	for (int i = tamTabela; i >= numImpressao; i--)
 	{
-		arquivotxt << j + 1 << ": " << vet[rep[i].indice] << "  Número de repetições: " << rep[i].frequencia << endl;
-		j++;
-		if (j == numImpressao)
-			break;
-	}
-
-	arquivotxt.close();
-}
-
-void tabelaHash::adiciona(string chave)
-{
-    int controle=0;
-    
-    for(int i=0; i<tamanho && controle==0; i++)
-    {
-        if(adicionaAux(funcaoHash(chave,i),chave,i)){
-            controle=1;
-        }      
-    }
-    if(controle == 0)
-    {
-        naoAdicionados++;
-    }
-}
-
-bool tabelaHash::adicionaAux(int ind, string info)
-{
-	string comp;
-	comp += '0';
-	if (vet[ind] == "0" || vet[ind] == info)
-	{
-		vet[ind] = info;
-		repeticao[ind].frequencia++;
-		repeticao[ind].indice = ind;
-		return true;
-	}
-	else
-	{
-		return false;
+		arquivotxt << i + 1 << ": " << vetor[i].first << "  Número de repetições: " << vetor[i].second << endl;
 	}
 }
 
-bool tabelaHash::verificaChave(string chave)
+void quickSortHash(vector<pair<string, int>>& vetor, int inicio, int fim)
 {
-	for (int i = 0; i < tamanho; i++)
+	if (inicio < fim)
 	{
-		if (vet[funcaoHash(chave, i)] == chave)
+		int pivo = quickSortHashAux(vetor, inicio, fim);
+		quickSortHash(vetor, inicio, pivo - 1);
+		quickSortHash(vetor, pivo + 1, fim);
+	}
+}
+
+int quickSortHashAux(vector<pair<string, int>>& vet, int inicio, int final)
+{
+	int pivot = vet[final].second; // pivot
+	int i = (inicio - 1); // Index of smaller element
+
+	for (int j = inicio; j <= final - 1; j++)
+	{
+		// If current element is smaller than or
+		// equal to pivot
+		if (vet[j].second >= pivot)
 		{
-			return true;
+			i++; // increment index of smaller element
+			std::swap(vet[i], vet[j]);
 		}
 	}
-	return false;
+	std::swap(vet[i + 1], vet[final]);
+	return (i + 1);
 }
 
-int tabelaHash::index(string chave)
+vector<pair<string, int>> tabelaHash::retornaApenasElementosPreenchidosVetor()
 {
-	if (verificaChave(chave))
+	vector<pair<string, int>> temp;
+	for (int i = 0; i < vetor.size(); ++i)
 	{
-		for (int i = 0; i < tamanho; i++)
+		if (!vetor[i].first.empty())
 		{
-			if (vet[funcaoHash(chave, i)] == chave)
-			{
-				return funcaoHash(chave, i);
-			}
+			temp.push_back(vetor[i]);
 		}
 	}
-	else
-	{
-		return -1;
-	}
+	return temp;
 }
 
-string tabelaHash::get(int index)
+void tabelaHash::imprimeVetor() // util para visualizar distribuicao
 {
-	return this->vet[index];
-}
-long int tabelaHash::StringToInt(string x){
-    long int soma=1;
-    for(int i=0;i<x.size();i++){
-        soma+=x[i]*pow(31,i);
-    }
-    return soma;
-    
-    
-    /*long int soma = 0;
-    for (int i = 0; i<x.size(); i++)
-    {
-        soma += x[i];
-    }
-    return soma;*/
-
-    /*
-    long int soma=0;
-    for(int i=0;i<x.length();i++){
-        soma+=37*soma+ x[i];
-    }
-    return soma;
-    */
-
-}
-
-void quickSortHash(auxRep* v, int inicio, int fim)
-{
-	int pivo;
-	if (fim > inicio)
+	for (int i = 0; i < vetor.size(); ++i)
 	{
-		pivo = quickSortHashAux(v, inicio, fim);
-		quickSortHash(v, inicio, pivo - 1);
-		quickSortHash(v, pivo + 1, fim);
-	}
-}
-
-int quickSortHashAux(auxRep* v, int inicio, int final)
-{
-	int esq, dir;
-	auxRep pivo;
-	auxRep aux;
-	esq = inicio;
-	dir = final;
-	pivo = v[inicio];
-	while (esq < dir)
-	{
-		while (esq <= final && v[esq].frequencia <= pivo.frequencia)
+		cout << vetor[i].first << " : " << vetor[i].second << ",\t";
+		if ((i + 1) % 10 == 0)
 		{
-			esq++;
-		}
-		while (dir >= 0 && v[dir].frequencia > pivo.frequencia)
-		{
-			dir--;
-		}
-		if (esq < dir)
-		{
-			aux = v[esq];
-			v[esq] = v[dir];
-			v[dir] = aux;
+			cout << endl;
 		}
 	}
-	v[inicio] = v[dir];
-	v[dir] = pivo;
-	return dir;
 }
 
+void imprimeVetor(vector<pair<string, int>>& vetor) // util para visualizar distribuicao
+{
+	for (int i = 0; i < vetor.size(); ++i)
+	{
+		cout << vetor[i].first << " : " << vetor[i].second << ",\t";
+		if ((i + 1) % 10 == 0)
+		{
+			cout << endl;
+		}
+	}
+}
 
-void desempenhoHash(int n,int parametro,int caminho,int quantidade){
-    int tamTabela = n * 1.2;
-
-	tabelaHash tabela(tamTabela);
+void desempenhoHash(int hashSize, int parametro)
+{
 	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);
 	if (!arquivoBinario.is_open())
 	{
-		cerr << "ERRO: arquivo nao pode ser aberto na funcao inicializaVetor()";
+		cerr << "ERRO: arquivo nao pode ser aberto na funcao desempenhoHash()";
 		assert(false);
 	}
-	vector<Review> vReview;
-	for (int j = 0; j < quantidade; j++)
-	{
-		vReview.resize(quantidade);
-		vReview[j] = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario);
-	}
-    for(int i = 0;i < n;i++){
-        tabela.adiciona(vReview[i].app_version);
-    }
-    
-    auxRep *vet = new auxRep[tamTabela];
-    vet = tabela.repeticoes(); 
-    quickSortHash(vet,0,tamTabela-1);
 
-    if (caminho == 0){
-        tabela.txtFrequentes(parametro,vet,tamTabela-1);   
-    }
-    else {
-        tabela.txtFrequentesTeste(parametro,vet,tamTabela-1);
-    }
-    cout << tabela.colisoes <<endl;
+	tabelaHash tabela(hashSize * 1.3f);
+	string app_version;
+	for (int i = 0; i < hashSize; i++)
+	{
+		app_version = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario).app_version;
+		if (app_version.empty())
+		{
+			--i;
+			continue;
+		}
+		tabela.insertion(app_version);
+	}
+	vector<pair<string, int>> ordenados = tabela.retornaApenasElementosPreenchidosVetor();
+
+	cout << "\nvetor original:\n";
+	imprimeVetor(ordenados);
+
+	quickSortHash(ordenados, 0, ordenados.size() - 1);
+
+	// tabela.txtFrequentes(parametro, tabela.retornaApenasElementosPreenchidosVetor(), hashSize - 1);
+
+	cout << "\nvetor ordenado:\n";
+	imprimeVetor(ordenados);
 }

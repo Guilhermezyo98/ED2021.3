@@ -31,7 +31,6 @@ public:
 	Timer& operator=(const Timer&) = delete;
 
 private:
-	void inicializaVetor(vector<Review>& reviews, int size);
 	void zeraMedicoes();
 };
 

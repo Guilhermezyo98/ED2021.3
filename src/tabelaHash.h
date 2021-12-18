@@ -1,53 +1,39 @@
-#include <iostream>
-#include <stdio.h>
-#include <string.h>
-#include <cmath>
-//
+#ifndef TABELAHASH_H_INCLUDED
+#define TABELAHASH_H_INCLUDED
+
 #include "leitura.h"
 
 using namespace std;
 
-
-#ifndef TABELAHASH_H_INCLUDED
-#define TABELAHASH_H_INCLUDED
-struct auxRep{
-    int frequencia;
-    int indice;
-};
-class tabelaHash{    
+class tabelaHash
+{
 private:
-    string *vet; 
-    int tamanho;
-    int m;
-    int maiorPrimo(int x);
-    void atualizaM(int tam);
-    bool ePrimo(int x);
-    int funcaoHash(string chave,int i);
-    bool adicionaAux(int ind,string info,int tentativa);
-    long int StringToInt(string x);
-    auxRep *repeticao;
-    void zera();
-    void zeraRepeticao();
+	vector<pair<string, int>> vetor;
+	int tam;
+
+	int hash(string chave, int i);
+	bool adicionaAux(int ind, string info, int tentativa);
+	long int StringToInt(string x);
+	int ht_hash(string str, int prime, int tam);
 
 public:
-            
-    tabelaHash(int tam);
-    ~tabelaHash();
-    int naoAdicionados;
-    int colisoes;
-    string get(int index);
-    void adiciona(string x);
-    bool verificaChave(string x);
-    int index(string);
-    auxRep *repeticoes();
-    void txtFrequentes(int m,auxRep *rep,int tamTabela);
-    void txtFrequentesTeste(int m,auxRep *rep,int tamTabela);  
-    
+	int insertionsFails;
+	int colisoes;
 
+	tabelaHash(int tam);
+	~tabelaHash();
+
+	vector<pair<string, int>> retornaApenasElementosPreenchidosVetor();
+
+	void imprimeVetor();
+	string get(int index);
+	void insertion(string x);
+	int index(string);
+	void txtFrequentes(int numImpressao, vector<pair<string, int>>& vetor, int tamTabela);
 };
 
-void quickSortHash(auxRep *v,int inicio,int fim);
-int quickSortHashAux(auxRep *v,int inicio,int final);
+void quickSortHash(vector<pair<string, int>>& vetor, int inicio, int fim);
+int quickSortHashAux(vector<pair<string, int>>& vet, int inicio, int final);
+void desempenhoHash(int hashSize, int parametro);
 
-void desempenhoHash(int n,int parametro,int caminho,int quantidade);
-#endif 
+#endif

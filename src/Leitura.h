@@ -36,5 +36,6 @@ void escreverSaidaBinaria(vector<Review>& reviews);
 void escreverSaidaTxt(vector<Review>& reviews);
 void lerBinario();
 
+void inicializaVetorAleatorio(vector<Review>& reviews, int size);
 
 #endif // !LEITURA_H
