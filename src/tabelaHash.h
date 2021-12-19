@@ -5,35 +5,30 @@
 
 using namespace std;
 
+void imprimeNMaisFrequentes(vector<pair<string, int>>& vetor, int nPrimeiros);
+void escreveNMaisFrequentes(vector<pair<string, int>>& vetor, int nPrimeiros, string saidaPath = "teste.txt");
+
+vector<pair<string, int>> desempenhoHash(int hashSize);
+
 class tabelaHash
 {
 private:
 	vector<pair<string, int>> vetor;
 	int tam;
-
-	int hash(string chave, int i);
-	bool adicionaAux(int ind, string info, int tentativa);
-	long int StringToInt(string x);
-	int ht_hash(string str, int prime, int tam);
-
-public:
 	int insertionsFails;
 	int colisoes;
 
+private:
+	int hash(string chave, int i);
+	int ht_hash(string str, int prime, int tam);
+
+public:
 	tabelaHash(int tam);
 	~tabelaHash();
 
-	vector<pair<string, int>> retornaApenasElementosPreenchidosVetor();
-
-	void imprimeVetor();
-	string get(int index);
 	void insertion(string x);
-	int index(string);
-	void txtFrequentes(int numImpressao, vector<pair<string, int>>& vetor, int tamTabela);
+	vector<pair<string, int>> retornaApenasElementosPreenchidosVetor();
+	void imprimeVetor();
 };
-
-void quickSortHash(vector<pair<string, int>>& vetor, int inicio, int fim);
-int quickSortHashAux(vector<pair<string, int>>& vet, int inicio, int final);
-void desempenhoHash(int hashSize, int parametro);
 
 #endif

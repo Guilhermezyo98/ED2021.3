@@ -15,7 +15,7 @@ private:
 	time_point<high_resolution_clock> m_tempoInicio;
 	long long m_duracao;
 	unsigned long m_swaps;
-	unsigned long  m_comparacoes;
+	unsigned long m_comparacoes;
 
 public:
 	Timer(string legenda);
@@ -24,8 +24,9 @@ public:
 
 	void acrecentaSwaps();
 	void acrecentaComparacoes();
-	void benchHeapSort(int trials);
-	void benchQuickSort(int trials);
+	void benchHeapSort(int trials, string saidaPath = "saidaBinaria.bin");
+	void benchQuickSort(int trials, string saidaPath = "saidaBinaria.bin");
+	void benchCombSort(int trials, string saidaPath = "saidaBinaria.bin");
 
 	Timer(const Timer&) = delete;
 	Timer& operator=(const Timer&) = delete;

@@ -1,10 +1,12 @@
 #include <iostream>
 #include <cmath>
+#include <fstream>
+#include <cassert>
+
 #include "tabelaHash.h"
 #include "leitura.h"
 #include "parametros.h"
-#include <fstream>
-#include <cassert>
+#include "ordenacao.h"
 
 using namespace std;
 
@@ -66,44 +68,28 @@ void tabelaHash::insertion(string key)
 	insertionsFails++;
 }
 
-void tabelaHash::txtFrequentes(int numImpressao, vector<pair<string, int>>& vetor, int tamTabela)
+void imprimeNMaisFrequentes(vector<pair<string, int>>& vetor, int nPrimeiros)
 {
-	ofstream arquivotxt("saixaTabelaHash.txt", ios::app);
-	arquivotxt << "*** Tabela Hash ***" << endl;
-
-	for (int i = tamTabela; i >= numImpressao; i--)
+	cout << endl;
+	for (int i = 0; i < nPrimeiros && vetor.size(); ++i)
 	{
-		arquivotxt << i + 1 << ": " << vetor[i].first << "  Número de repetições: " << vetor[i].second << endl;
+		cout << vetor[i].first << " - frequencia: " << vetor[i].second << endl;
 	}
 }
 
-void quickSortHash(vector<pair<string, int>>& vetor, int inicio, int fim)
+void escreveNMaisFrequentes(vector<pair<string, int>>& vetor, int nPrimeiros, string saidaPath)
 {
-	if (inicio < fim)
+	fstream saida(saidaPath, ios::in | ios::binary);
+	if (!saida.is_open())
 	{
-		int pivo = quickSortHashAux(vetor, inicio, fim);
-		quickSortHash(vetor, inicio, pivo - 1);
-		quickSortHash(vetor, pivo + 1, fim);
+		cerr << "ERRO: arquivo nao pode ser aberto na funcao escreveMaisFrequentes()";
+		assert(false);
 	}
-}
-
-int quickSortHashAux(vector<pair<string, int>>& vet, int inicio, int final)
-{
-	int pivot = vet[final].second; // pivot
-	int i = (inicio - 1); // Index of smaller element
-
-	for (int j = inicio; j <= final - 1; j++)
+	cout << endl;
+	for (int i = 0; i < nPrimeiros && vetor.size(); ++i)
 	{
-		// If current element is smaller than or
-		// equal to pivot
-		if (vet[j].second >= pivot)
-		{
-			i++; // increment index of smaller element
-			std::swap(vet[i], vet[j]);
-		}
+		saida << vetor[i].first << " - frequencia: " << vetor[i].second << endl;
 	}
-	std::swap(vet[i + 1], vet[final]);
-	return (i + 1);
 }
 
 vector<pair<string, int>> tabelaHash::retornaApenasElementosPreenchidosVetor()
@@ -124,26 +110,14 @@ void tabelaHash::imprimeVetor() // util para visualizar distribuicao
 	for (int i = 0; i < vetor.size(); ++i)
 	{
 		cout << vetor[i].first << " : " << vetor[i].second << ",\t";
-		if ((i + 1) % 10 == 0)
+		if (!((i + 1) % 10))
 		{
 			cout << endl;
 		}
 	}
 }
 
-void imprimeVetor(vector<pair<string, int>>& vetor) // util para visualizar distribuicao
-{
-	for (int i = 0; i < vetor.size(); ++i)
-	{
-		cout << vetor[i].first << " : " << vetor[i].second << ",\t";
-		if ((i + 1) % 10 == 0)
-		{
-			cout << endl;
-		}
-	}
-}
-
-void desempenhoHash(int hashSize, int parametro)
+vector<pair<string, int>> desempenhoHash(int hashSize)
 {
 	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);
 	if (!arquivoBinario.is_open())
@@ -151,7 +125,6 @@ void desempenhoHash(int hashSize, int parametro)
 		cerr << "ERRO: arquivo nao pode ser aberto na funcao desempenhoHash()";
 		assert(false);
 	}
-
 	tabelaHash tabela(hashSize * 1.3f);
 	string app_version;
 	for (int i = 0; i < hashSize; i++)
@@ -164,15 +137,7 @@ void desempenhoHash(int hashSize, int parametro)
 		}
 		tabela.insertion(app_version);
 	}
-	vector<pair<string, int>> ordenados = tabela.retornaApenasElementosPreenchidosVetor();
-
-	cout << "\nvetor original:\n";
-	imprimeVetor(ordenados);
-
-	quickSortHash(ordenados, 0, ordenados.size() - 1);
-
-	// tabela.txtFrequentes(parametro, tabela.retornaApenasElementosPreenchidosVetor(), hashSize - 1);
-
-	cout << "\nvetor ordenado:\n";
-	imprimeVetor(ordenados);
+	vector<pair<string, int>> populares = tabela.retornaApenasElementosPreenchidosVetor();
+	quickSortHash(populares, 0, populares.size() - 1);
+	return populares;
 }

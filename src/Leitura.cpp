@@ -8,6 +8,7 @@
 #include "parametros.h"
 #include <memory>
 
+#include "tabelaHash.h"
 #include "Timer.h"
 
 streampos inline tamanhoArquivo(fstream& arq)
@@ -209,21 +210,44 @@ void inicializaVetorAleatorio(vector<Review>& reviews, int size)
 		reviews[j] = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario);
 	}
 }
+void inicializaVetorAleatorio(vector<Review>* reviews, int size)
+{
+	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);
+	if (!arquivoBinario.is_open())
+	{
+		cerr << "ERRO: arquivo nao pode ser aberto na funcao inicializaVetor()";
+		assert(false);
+	}
+
+	for (int j = 0; j < size; j++)
+	{
+		reviews->resize(size);
+		(*reviews)[j] = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario);
+	}
+}
 
 enum Saidas
 {
 	consoleN = 'c',
 	arquivoN = 'a',
 	imprime_Review_Especifica = 'i',
+	heapSort = 'h',
+	quickSort = 'q',
+	combSort = 'b',
+	hashTable = 't',
 	sair = 's'
 };
 
-void testeImportacao()
+void moduloTeste()
 {
-	cout << "\t\ttesteImportacao()\n:" << endl;
+	cout << "\t\ttesteImportacao():\n" << endl;
 	cout << "\t\t\tDigite 'c' para exporta N registros para o console," << endl;
 	cout << "\t\t\tDigite 'a' para exportar N registros para arquivo texto" << endl;
 	cout << "\t\t\tDigite 'i' para: imprimeReviewEspecifica(i)\n";
+	cout << "\t\t\tDigite 'h' para: heapsort()\n";
+	cout << "\t\t\tDigite 'q' para: quicksort()\n";
+	cout << "\t\t\tDigite 'b' para: combsort()\n";
+	cout << "\t\t\tDigite 't' para: hashTable()\n";
 	cout << "\t\t\tDigite 's' para sair " << endl;
 	cout << "\t\t\t";
 
@@ -269,6 +293,32 @@ void testeImportacao()
 			fstream saidaBinaria("./saidaBinaria.bin", ios::in | ios::binary);
 			imprimeReviewEspecifica(nReview, saidaBinaria);
 			break;
+		}
+	case heapSort:
+		{
+			Timer timer("HeapSort");
+			timer.benchHeapSort(3, "teste.txt");
+		}
+	case quickSort:
+		{
+			Timer timerQuick("QuickSort");
+			timerQuick.benchQuickSort(3, "teste.txt");
+		}
+
+	case combSort:
+		{
+			Timer timer("CombSort");
+			timer.benchCombSort(3, "teste.txt");
+		}
+	case hashTable:
+		{
+			cout << "Digite quantos reviews aleatorios devem ser importados: ";
+			int input = 0; // nao representa tamanho real da tabela, tam = N * 1.x
+			cin >> input;
+			vector<pair<string, int>> populares = desempenhoHash(input);
+			cout << "Digite um valor de N, para imprimir o TOP N versoes mais populares: ";
+			cin >> input;
+			escreveNMaisFrequentes(populares, input, "teste.txt");
 		}
 	case sair:
 		{

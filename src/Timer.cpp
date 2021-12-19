@@ -33,9 +33,9 @@ void Timer::Stop()
 	std::cout << m_legenda << ": " << m_duracao << "us (" << ms << "ms)\n";
 }
 
-void Timer::benchHeapSort(int trials)
+void Timer::benchHeapSort(int trials, string saidaPath)
 {
-	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary), inputFile("./input.dat", ios::in), saidaTxt
+	fstream arquivoBinario(saidaPath, ios::in | ios::binary), inputFile("./input.dat", ios::in), saidaTxt
 		        ("./saida.txt", ios::trunc | ios::out);
 	if (!(arquivoBinario.is_open() || inputFile.is_open() || saidaTxt.is_open()))
 	{
@@ -58,11 +58,13 @@ void Timer::benchHeapSort(int trials)
 				Timer cronometro(msg.str());
 				heapSort(reviews, reviews.size(), this);
 				cronometro.Stop();
-				saidaTxt << "\tTEMPO: "<<  cronometro.m_legenda << ": " << cronometro.m_duracao << "us (" << cronometro.m_duracao * 0.001 << "ms)\n";
+				saidaTxt << "\tTEMPO: " << cronometro.m_legenda << ": " << cronometro.m_duracao << "us (" << cronometro.
+					m_duracao * 0.001 << "ms)\n";
 			}
 			montanteComparacoes += this->m_comparacoes;
 			montanteSwaps += this->m_swaps;
-			saidaTxt << "pequeno resumo: swaps = " << this->m_swaps << "\tcomparacoes = " << this->m_comparacoes << endl;
+			saidaTxt << "pequeno resumo: swaps = " << this->m_swaps << "\tcomparacoes = " << this->m_comparacoes <<
+				endl;
 			zeraMedicoes();
 		}
 		saidaTxt << "\nresumo algoritmo HeapSort para size = " << linha << endl;
@@ -74,46 +76,93 @@ void Timer::benchHeapSort(int trials)
 	}
 }
 
-void Timer::benchQuickSort(int trials)
+void Timer::benchQuickSort(int trials, string saidaPath)
 {
-	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary), inputFile("./input.dat", ios::in);
-	if (!(arquivoBinario.is_open() || inputFile.is_open()))
+	fstream arquivoBinario(saidaPath, ios::in | ios::binary), inputFile("./input.dat", ios::in), saidaTxt
+		        ("./saida.txt", ios::trunc | ios::out);
+	if (!(arquivoBinario.is_open() || inputFile.is_open() || saidaTxt.is_open()))
 	{
 		cerr << "ERRO: arquivo nao pode ser aberto na funcao benchHeapSort()";
 		assert(false);
 	}
 
+	int montanteSwaps = 0, montanteComparacoes = 0;
 	string linha;
 	vector<Review> reviews;
-	unsigned int aux=0,aux2=0;
 	while (getline(inputFile, linha))
 	{
 		cout << "\t *** \t" << linha << "\t *** \n";
 		for (int i = 0; i < trials; ++i)
 		{
-			int size = stoi(linha);
-			inicializaVetorAleatorio(reviews, size);
+			int newSize = atoi(linha.c_str());
+			inicializaVetorAleatorio(reviews, newSize);
 			ostringstream msg;
 			msg << "QuickSort, trial " << i;
 			{
 				Timer cronometro(msg.str());
-				quickSort(reviews,0,reviews.size()-1, this);
+				QuickSort(reviews, 0, reviews.size() - 1,this);
+				cronometro.Stop();
+				saidaTxt << "\tTEMPO: " << cronometro.m_legenda << ": " << cronometro.m_duracao << "us (" << cronometro.m_duracao * 0.001 << "ms)\n";
 			}
-			cout << "resumo: swaps = " << this->m_swaps << "\tcomparacoes = " << this->m_comparacoes << endl;
-			aux+=this->m_swaps;
-			aux2+=this->m_comparacoes;
-			cout << endl;
-			this->zeraMedicoes();
+			montanteComparacoes += this->m_comparacoes;
+			montanteSwaps += this->m_swaps;
+			saidaTxt << "pequeno resumo: swaps = " << this->m_swaps << "\tcomparacoes = " << this->m_comparacoes <<
+				endl;
+			zeraMedicoes();
 		}
-		cout << "\nresumo algoritmo QuickSort para size = " << linha << endl;
-		cout << "\tnumero de trials:" << trials << endl;
-		cout << "\tnumero de comparacoes medias:" << aux2 / trials << endl;
-		cout << "\tnumero de trocas medias:" << aux / trials << endl;
-		cout << endl;
+		saidaTxt << "\nresumo algoritmo HeapSort para size = " << linha << endl;
+		saidaTxt << "\tnumero de trials:" << trials << endl;
+		saidaTxt << "\tnumero de comparacoes medias:" << montanteComparacoes / trials << endl;
+		saidaTxt << "\tnumero de trocas medias:" << montanteSwaps / trials << endl;
+		saidaTxt << endl << endl << endl;
+		zeraMedicoes();
+	}
+
+}
+
+void Timer::benchCombSort(int trials, string saidaPath)
+{
+	fstream arquivoBinario(saidaPath, ios::in | ios::binary), inputFile("./input.dat", ios::in), saidaTxt
+		        ("./saida.txt", ios::trunc | ios::out);
+	if (!(arquivoBinario.is_open() || inputFile.is_open() || saidaTxt.is_open()))
+	{
+		cerr << "ERRO: arquivo nao pode ser aberto na funcao benchHeapSort()";
+		assert(false);
+	}
+
+	int montanteSwaps = 0, montanteComparacoes = 0;
+	string linha;
+	vector<Review> reviews;
+	while (getline(inputFile, linha))
+	{
+		saidaTxt << "\t *** \t" << linha << "\t *** \n";
+		for (int i = 0; i < trials; ++i)
+		{
+			int size = atoi(linha.c_str());
+			inicializaVetorAleatorio(reviews, size);
+			ostringstream msg;
+			msg << "CombSort, trial " << i;
+			{
+				Timer cronometro(msg.str());
+				combSort(reviews, reviews.size(), this);
+				cronometro.Stop();
+				saidaTxt << "\tTEMPO: " << cronometro.m_legenda << ": " << cronometro.m_duracao << "us (" << cronometro.
+					m_duracao * 0.001 << "ms)\n";
+			}
+			montanteComparacoes += this->m_comparacoes;
+			montanteSwaps += this->m_swaps;
+			saidaTxt << "pequeno resumo: swaps = " << this->m_swaps << "\tcomparacoes = " << this->m_comparacoes <<
+				endl;
+			zeraMedicoes();
+		}
+		saidaTxt << "\nresumo algoritmo HeapSort para size = " << linha << endl;
+		saidaTxt << "\tnumero de trials:" << trials << endl;
+		saidaTxt << "\tnumero de comparacoes medias:" << montanteComparacoes / trials << endl;
+		saidaTxt << "\tnumero de trocas medias:" << montanteSwaps / trials << endl;
+		saidaTxt << endl << endl << endl;
 		zeraMedicoes();
 	}
 }
-
 
 void Timer::acrecentaSwaps()
 {
