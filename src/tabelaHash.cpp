@@ -79,14 +79,14 @@ void imprimeNMaisFrequentes(vector<pair<string, int>>& vetor, int nPrimeiros)
 
 void escreveNMaisFrequentes(vector<pair<string, int>>& vetor, int nPrimeiros, string saidaPath)
 {
-	fstream saida(saidaPath, ios::in | ios::binary);
+	fstream saida("./" + saidaPath, ios::out | ios::app);
 	if (!saida.is_open())
 	{
-		cerr << "ERRO: arquivo nao pode ser aberto na funcao escreveMaisFrequentes()";
+		cerr << "ERRO: arquivo nao pode ser aberto na funcao escreveNMaisFrequentes()";
 		assert(false);
 	}
-	cout << endl;
-	for (int i = 0; i < nPrimeiros && vetor.size(); ++i)
+	saida << "Impressao dos versions mais frequentes\n";
+	for (int i = 0; i < nPrimeiros && i < vetor.size(); ++i)
 	{
 		saida << vetor[i].first << " - frequencia: " << vetor[i].second << endl;
 	}

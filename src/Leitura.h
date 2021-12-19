@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 using namespace std;
 
 struct Review
@@ -33,7 +34,7 @@ Review retornaReviewEspecifica(int indice, fstream& arquivoBinario);
 void moduloTeste();
 
 void escreverSaidaBinaria(vector<Review>& reviews);
-void escreverSaidaTxt(vector<Review>& reviews);
+void escreverSaidaTxt(fstream& saidaTxt, vector<Review>& reviews);
 void lerBinario();
 
 void inicializaVetorAleatorio(vector<Review>& reviews, int size);

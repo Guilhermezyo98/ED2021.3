@@ -59,14 +59,14 @@ void menu(string caminhoEntrada, vector<Review>& reviews)
 			}
 		case ordenacao:
 			{
-			 	Timer timer("HeapSort");
-			 	timer.benchHeapSort(3);
+				Timer timer("HeapSort");
+				timer.benchHeapSort(3);
 
-				//Timer timerQuick("QuickSort");
-				//timerQuick.benchQuickSort(3);
+				Timer timerQuick("QuickSort");
+				timerQuick.benchQuickSort(3);
 
-				// Timer timerComb("CombSort");
-				// timerComb.benchCombSort(3);
+				Timer timerComb("CombSort");
+				timerComb.benchCombSort(3);
 
 				break;
 			}

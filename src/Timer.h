@@ -24,9 +24,13 @@ public:
 
 	void acrecentaSwaps();
 	void acrecentaComparacoes();
-	void benchHeapSort(int trials, string saidaPath = "saidaBinaria.bin");
-	void benchQuickSort(int trials, string saidaPath = "saidaBinaria.bin");
-	void benchCombSort(int trials, string saidaPath = "saidaBinaria.bin");
+	void benchHeapSort(int trials, string saidaPath = "saida.txt");
+	void benchQuickSort(int trials, string saidaPath = "saida.txt");
+	void benchCombSort(int trials, string saidaPath = "saida.txt");
+
+	void Timer::ModuloTesteHeapSort(int trials, string saidaPath = "teste.txt");
+	void Timer::ModuloTesteQuickSort(int trials, string saidaPath  = "teste.txt");
+	void Timer::ModuloTesteCombSort(int trials, string saidaPath  = "teste.txt");
 
 	Timer(const Timer&) = delete;
 	Timer& operator=(const Timer&) = delete;

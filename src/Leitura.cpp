@@ -4,10 +4,11 @@
 #include <memory>
 #include <strstream>
 #include <cstdlib>
-#include "leitura.h"
-#include "parametros.h"
 #include <memory>
 
+#include "ordenacao.h"
+#include "leitura.h"
+#include "parametros.h"
 #include "tabelaHash.h"
 #include "Timer.h"
 
@@ -210,6 +211,7 @@ void inicializaVetorAleatorio(vector<Review>& reviews, int size)
 		reviews[j] = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario);
 	}
 }
+
 void inicializaVetorAleatorio(vector<Review>* reviews, int size)
 {
 	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);
@@ -226,17 +228,20 @@ void inicializaVetorAleatorio(vector<Review>* reviews, int size)
 	}
 }
 
-enum Saidas
+namespace options
 {
-	consoleN = 'c',
-	arquivoN = 'a',
-	imprime_Review_Especifica = 'i',
-	heapSort = 'h',
-	quickSort = 'q',
-	combSort = 'b',
-	hashTable = 't',
-	sair = 's'
-};
+	enum Saidas
+	{
+		consoleN = 'c',
+		arquivoN = 'a',
+		imprime_Review_Especifica = 'i',
+		heapSort = 'h',
+		quickSort = 'q',
+		combSort = 'b',
+		hashTable = 't',
+		sair = 's'
+	};
+}
 
 void moduloTeste()
 {
@@ -256,7 +261,7 @@ void moduloTeste()
 
 	switch (input)
 	{
-	case consoleN:
+	case options::consoleN:
 		{
 			cout << "\n Digite o valor para N";
 			int N = -1;
@@ -269,7 +274,7 @@ void moduloTeste()
 			}
 			break;
 		}
-	case arquivoN:
+	case options::arquivoN:
 		{
 			cout << "\n Digite o valor para N";
 			int N = -1;
@@ -285,7 +290,7 @@ void moduloTeste()
 			cout << "\n\n-------------Exportacao finalizada!-------------\n\n";
 			break;
 		}
-	case imprime_Review_Especifica:
+	case options::imprime_Review_Especifica:
 		{
 			cout << "\nDigite o numero da review a ser impressa: ";
 			int nReview = -1;
@@ -294,33 +299,33 @@ void moduloTeste()
 			imprimeReviewEspecifica(nReview, saidaBinaria);
 			break;
 		}
-	case heapSort:
+	case options::heapSort:
 		{
-			Timer timer("HeapSort");
-			timer.benchHeapSort(3, "teste.txt");
+			Timer timer("[Modulo teste] HeapSort");
+			timer.ModuloTesteHeapSort(3, "teste.txt");
 		}
-	case quickSort:
+	case options::quickSort:
 		{
-			Timer timerQuick("QuickSort");
-			timerQuick.benchQuickSort(3, "teste.txt");
+			Timer timerQuick("[Modulo teste] QuickSort");
+			timerQuick.ModuloTesteQuickSort(3, "teste.txt");
 		}
 
-	case combSort:
+	case options::combSort:
 		{
-			Timer timer("CombSort");
-			timer.benchCombSort(3, "teste.txt");
+			Timer timer("[Modulo teste] CombSort");
+			timer.ModuloTesteCombSort(3, "teste.txt");
 		}
-	case hashTable:
+	case options::hashTable:
 		{
 			cout << "Digite quantos reviews aleatorios devem ser importados: ";
-			int input = 0; // nao representa tamanho real da tabela, tam = N * 1.x
+			int input = 0; // nao representa tamanho real da tabela, tam real = N * 1.x
 			cin >> input;
 			vector<pair<string, int>> populares = desempenhoHash(input);
 			cout << "Digite um valor de N, para imprimir o TOP N versoes mais populares: ";
 			cin >> input;
 			escreveNMaisFrequentes(populares, input, "teste.txt");
 		}
-	case sair:
+	case options::sair:
 		{
 			return;
 		}

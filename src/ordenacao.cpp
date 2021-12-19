@@ -76,7 +76,7 @@ void QuickSort(vector<Review>& vet, size_t lo, size_t hi, Timer* timer)
 	if (lo >= hi)
 		return;
 	timer->acrecentaComparacoes();
-	if ((hi - lo) < 32)
+	if ((hi - lo) < 100)
 	{
 		InsertionSort(vet, lo, hi, timer);
 		return;
