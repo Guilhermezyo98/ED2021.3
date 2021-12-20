@@ -14,7 +14,7 @@ int const PRIME1 = 151;
 int const PRIME2 = 157;
 
 tabelaHash::tabelaHash(int tam)
-	: tam(tam), insertionsFails(0), colisoes(0)
+	: m_tam(tam), m_insertionsFails(0), m_colisoes(0)
 {
 	vetor.resize(tam);
 
@@ -42,30 +42,30 @@ int tabelaHash::ht_hash(string str, int prime, int tam)
 
 int tabelaHash::hash(string s, int i)
 {
-	const int hash_a = ht_hash(s, PRIME1, tam);
-	const int hash_b = ht_hash(s, PRIME2, tam);
-	return (hash_a + (i * (hash_b + 1))) % tam;
+	const int hash_a = ht_hash(s, PRIME1, m_tam);
+	const int hash_b = ht_hash(s, PRIME2, m_tam);
+	return (hash_a + (i * (hash_b + 1))) % m_tam;
 }
 
 void tabelaHash::insertion(string key)
 {
-	for (int i = 0; i < tam; i++)
+	for (int i = 0; i < m_tam; i++)
 	{
 		unsigned long index = hash(key, i);
 
 		if (vetor[index].first.empty() || vetor[index].first == key) // ou espaco esta disponivel ou a chave eh identica
 		{
 			vetor[index].first = key;
-			vetor[index].second ++;
+			vetor[index].second++;
 			return;
 		}
 		else
 		{
-			colisoes++;
+			m_colisoes++;
 		}
 	}
 	cerr << "\n[WARNING] fail in insertion element\n";
-	insertionsFails++;
+	m_insertionsFails++;
 }
 
 void imprimeNMaisFrequentes(vector<pair<string, int>>& vetor, int nPrimeiros)
@@ -105,19 +105,25 @@ vector<pair<string, int>> tabelaHash::retornaApenasElementosPreenchidosVetor()
 	return temp;
 }
 
-void tabelaHash::imprimeVetor() // util para visualizar distribuicao
+void tabelaHash::escreveTabelaHash() // util para visualizar distribuicao
 {
+	fstream saidaTxt("./teste.txt", ios::app | ios::out);
+	if (!saidaTxt.is_open())
+	{
+		cerr << "ERRO: arquivo nao pode ser aberto na funcao escreveTabelaHash()";
+		assert(false);
+	}
 	for (int i = 0; i < vetor.size(); ++i)
 	{
-		cout << vetor[i].first << " : " << vetor[i].second << ",\t";
+		saidaTxt << vetor[i].first << " : " << vetor[i].second << ",\t";
 		if (!((i + 1) % 10))
 		{
-			cout << endl;
+			saidaTxt << endl;
 		}
 	}
 }
 
-vector<pair<string, int>> desempenhoHash(int hashSize)
+vector<pair<string, int>> testaTabelaHash(int hashSize)
 {
 	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);
 	if (!arquivoBinario.is_open())
@@ -130,14 +136,30 @@ vector<pair<string, int>> desempenhoHash(int hashSize)
 	for (int i = 0; i < hashSize; i++)
 	{
 		app_version = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario).app_version;
-		if (app_version.empty())
+		if (app_version.empty()) // nenhuma review sem app version sera adicionada
 		{
 			--i;
 			continue;
 		}
 		tabela.insertion(app_version);
 	}
+
+	cout << "\nDeseja escrever a distribuicao da tabela no arquivo teste.txt ? [s/n] ";
+	char input = '\0';
+	cin >> input;
+	switch (input)
+	{
+	case 's':
+		{
+			tabela.escreveTabelaHash();
+			break;
+		}
+	default:
+		break;
+	}
+
 	vector<pair<string, int>> populares = tabela.retornaApenasElementosPreenchidosVetor();
 	quickSortHash(populares, 0, populares.size() - 1);
+
 	return populares;
 }

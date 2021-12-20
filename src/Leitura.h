@@ -4,18 +4,20 @@
 #include <vector>
 #include <string>
 #include <fstream>
+
 using namespace std;
 
 struct Review
 {
-	string review_id;
-	string review_text;
-	int upvotes;
-	string app_version;
-	string posted_date;
+    string review_id;
+    string review_text;
+    int upvotes;
+    string app_version;
+    string posted_date;
 };
 
-struct desempenho{
+struct desempenho
+{
     string nome_algoritimo;           // Nome do algoritmo (Nome)
     int numComparacoes;               // Guarda a quantidade de comparacoes feitas em cada uma das repeticoes        
     int numTrocas;                    // Guarda a quantidade de trocas feitas em cada uma das repeticoes    
@@ -24,19 +26,26 @@ struct desempenho{
 
 struct Review;
 
-void lerArquivoCSV(string pathCSV, vector<Review>& reviews);
+void lerArquivoCSV(string pathCSV, vector<Review> &reviews);
+
 int retonaNumeroAleatorio(int min, int max);
 
-void imprimeReviewEspecifica(int pos, fstream& entradaBinaria);
+void imprimeReviewEspecifica(int pos, fstream &entradaBinaria);
+
 void imprimeReviewEspecifica(Review review);
 
-Review retornaReviewEspecifica(int indice, fstream& arquivoBinario);
+Review retornaReviewEspecifica(int indice, fstream &arquivoBinario);
+
 void moduloTeste();
 
-void escreverSaidaBinaria(vector<Review>& reviews);
-void escreverSaidaTxt(fstream& saidaTxt, vector<Review>& reviews);
+void escreverSaidaBinaria(vector<Review> &reviews);
+
+void escreverSaidaTxt(fstream &saidaTxt, vector<Review> &reviews);
+
 void lerBinario();
 
-void inicializaVetorAleatorio(vector<Review>& reviews, int size);
-void inicializaVetorAleatorio(vector<Review>* reviews, int size);
+void inicializaVetorAleatorio(vector<Review> &reviews, int size);
+
+void inicializaVetorAleatorio(vector<Review> *reviews, int size);
+
 #endif // !LEITURA_H
