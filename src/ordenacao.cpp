@@ -110,7 +110,7 @@ void quickSortHash(vector<pair<string, int>> &vetor, int inicio, int fim)
 
 int quickSortHashAux(vector<pair<string, int>> &vet, int inicio, int final)
 {
-    int pivo = vet[final].second;
+    int pivo = inicio + rand() % (final - inicio);
     int i = (inicio - 1);
 
     for (int j = inicio; j <= final - 1; j++)
