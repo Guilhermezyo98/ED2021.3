@@ -131,7 +131,7 @@ void Timer::ModuloTesteQuickSort(int trials, string saidaPath)
         msg << "QuickSort, trial " << i;
         {
             Timer cronometro(msg.str());
-            QuickSort(reviews, 0, reviews.size() - 1, this);
+            partition(reviews, 0, reviews.size() - 1, this);
             cronometro.Stop();
             saidaTxt << "\tTEMPO: " << cronometro.m_legenda << ": " << cronometro.m_duracao << "us (" << cronometro.
                     m_duracao * 0.001 << "ms)\n";
@@ -214,7 +214,7 @@ void Timer::benchQuickSort(int trials, string saidaPath)
             msg << "QuickSort, trial " << i;
             {
                 Timer cronometro(msg.str());
-                QuickSort(reviews, 0, reviews.size() - 1, this);
+                partition(reviews, 0, reviews.size() - 1, this);
                 cronometro.Stop();
                 saidaTxt << "\tTEMPO: " << cronometro.m_legenda << ": " << cronometro.m_duracao << "us (" << cronometro.
                         m_duracao * 0.001 << "ms)\n";

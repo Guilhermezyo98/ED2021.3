@@ -7,152 +7,166 @@
 #include "leitura.h"
 #include "Timer.h"
 
-void heapSort(std::vector<Review> &reviews, int n, Timer *timer)
+void heapSort(std::vector<Review>& reviews, int n, Timer* timer)
 {
-    for (int i = n - 1; i >= 0; i--)
-    {
-        swap(reviews[0], reviews[i]);
-        timer->acrecentaSwaps();
-        heapify(reviews, i, 0, timer);
-    }
+	for (int i = n - 1; i >= 0; i--)
+	{
+		swap(reviews[0], reviews[i]);
+		timer->acrecentaSwaps();
+		heapify(reviews, i, 0, timer);
+	}
 }
 
-void heapify(vector<Review> &reviews, int n, int i, Timer *timer)
+void heapify(vector<Review>& reviews, int n, int i, Timer* timer)
 {
-    int largest = i;
-    int l = 2 * i + 1;
-    int r = 2 * i + 2;
+	int largest = i;
+	int l = 2 * i + 1;
+	int r = 2 * i + 2;
 
-    timer->acrecentaComparacoes();
-    if (l < n && reviews[l].upvotes > reviews[largest].upvotes)
-    {
-        largest = l;
-    }
-    timer->acrecentaComparacoes();
-    if (r < n && reviews[r].upvotes > reviews[largest].upvotes)
-    {
-        largest = r;
-    }
-    timer->acrecentaComparacoes();
-    if (largest != i)
-    {
-        swap(reviews[i], reviews[largest]);
-        timer->acrecentaSwaps();
-        heapify(reviews, n, largest, timer);
-    }
+	timer->acrecentaComparacoes();
+	if (l < n && reviews[l].upvotes > reviews[largest].upvotes)
+	{
+		largest = l;
+	}
+	timer->acrecentaComparacoes();
+	if (r < n && reviews[r].upvotes > reviews[largest].upvotes)
+	{
+		largest = r;
+	}
+	timer->acrecentaComparacoes();
+	if (largest != i)
+	{
+		swap(reviews[i], reviews[largest]);
+		timer->acrecentaSwaps();
+		heapify(reviews, n, largest, timer);
+	}
 }
 
-void InsertionSort(vector<Review> &vet, size_t lo, size_t hi, Timer *timer)
+void InsertionSort(vector<Review>& vet, size_t inicio, size_t fim, Timer* timer)
 {
-    size_t i = lo + 1;
-    size_t j;
-    Review t;
-    while (i <= hi)
-    {
-        t = vet[i];
-        j = i;
-        timer->acrecentaComparacoes();
-        while ((j > lo) && vet[j - 1].upvotes > t.upvotes)
-        {
-            timer->acrecentaComparacoes();
-            timer->acrecentaSwaps();
-            vet[j] = vet[j - 1];
-            j--;
-        }
-        timer->acrecentaSwaps();
-        vet[j] = t;
-        i++;
-    }
+	for (int i = inicio + 1; i < fim + 1; i++)
+	{
+		Review val = vet[i];
+		int j = i;
+		while (j > inicio && vet[j - 1].upvotes > val.upvotes)
+		{
+			vet[j] = vet[j - 1];
+			j -= 1;
+		}
+		vet[j] = val;
+	}
 }
 
-void QuickSort(vector<Review> &vet, size_t lo, size_t hi, Timer *timer)
+int partition(vector<Review>& vet, size_t inicio, size_t fim, Timer* timer)
 {
-    timer->acrecentaComparacoes();
-    if (lo >= hi)
-        return;
-    timer->acrecentaComparacoes();
-    if ((hi - lo) < 100)
-    {
-        InsertionSort(vet, lo, hi, timer);
-        return;
+  int pivot = vet[fim].upvotes ;
+  int i ,j;
+  i = inicio;
+  j = inicio;
+ 
+  for (int i = inicio; i < fim; i++)
+     {
+      if(vet[i].upvotes <pivot)
+      {
+        Review temp = vet[i];
+      vet[i] = vet[j];
+      vet[j] = temp;
+      j += 1;
+      }
     }
-    int pivot = vet[lo + (hi - lo) / 2].upvotes;
-    Review t;
-    size_t i = lo - 1;
-    size_t j = hi + 1;
-    while (1)
-    {
-        timer->acrecentaComparacoes();
-        while (vet[++i].upvotes < pivot);
-        timer->acrecentaComparacoes();
-        while (vet[--j].upvotes > pivot);
-        timer->acrecentaComparacoes();
-        if (i >= j)
-            break;
-        timer->acrecentaSwaps();
-        t = vet[i];
-        vet[i] = vet[j];
-        vet[j] = t;
-    }
-    QuickSort(vet, lo, j, timer);
-    QuickSort(vet, j + 1, hi, timer);
+   
+    Review temp = vet[j];
+    vet[j] = vet[fim];
+    vet[fim] = temp;
+ 
+  return j;
 }
 
-void quickSortHash(vector<pair<string, int>> &vetor, int inicio, int fim)
+void quickSort(vector<Review>& vet, size_t inicio, size_t fim, Timer* timer)
 {
-    if (inicio < fim)
-    {
-        int pivo = quickSortHashAux(vetor, inicio, fim);
-        quickSortHash(vetor, inicio, pivo - 1);
-        quickSortHash(vetor, pivo + 1, fim);
-    }
+	while (inicio < fim)
+	{
+		if (fim - inicio + 1 < 10)
+		{
+			InsertionSort(vet, inicio, fim, timer);
+			break;
+		}
+
+		else
+
+		{
+			int pivot = partition(vet, inicio, fim, timer);
+
+			if (pivot - inicio < fim - pivot)
+			{
+				quickSort(vet, inicio, pivot - 1, timer);
+				inicio = pivot + 1;
+			}
+			else
+			{
+				quickSort(vet, pivot + 1, fim, timer);
+				fim = pivot - 1;
+			}
+		}
+	}
 }
 
-int quickSortHashAux(vector<pair<string, int>> &vet, int inicio, int final)
+void quickSortHash(vector<pair<string, int>>& vetor, int inicio, int fim)
 {
-    int pivo = inicio + rand() % (final - inicio);
-    int i = (inicio - 1);
+	if (inicio < fim)
+	{
+		int pivo = quickSortHashAux(vetor, inicio, fim);
+		quickSortHash(vetor, inicio, pivo - 1);
+		quickSortHash(vetor, pivo + 1, fim);
+	}
+}
 
-    for (int j = inicio; j <= final - 1; j++)
-    {
-        if (vet[j].second >= pivo)
-        {
-            i++;
-            swap(vet[i], vet[j]);
-        }
-    }
-    swap(vet[i + 1], vet[final]);
-    return (i + 1);
+int quickSortHashAux(vector<pair<string, int>>& vet, int inicio, int fim)
+{
+	int pivo = vet[fim].second;
+
+	int i = (inicio - 1);
+
+	for (int j = inicio; j <= fim - 1; j++)
+	{
+		if (vet[j].second >= pivo)
+		{
+			i++;
+			swap(vet[i], vet[j]);
+		}
+	}
+	swap(vet[i + 1], vet[fim]);
+	return (i + 1);
 }
 
 int nextGap(int gap)
 {
-    gap = int(gap / 1.3);
+	gap = int(gap / 1.3);
 
-    if (gap < 1)
-    {
-        return 1;
-    }
+	if (gap < 1)
+	{
+		return 1;
+	}
 
-    return gap;
+	return gap;
 }
 
-void combSort(std::vector<Review> &reviews, int n, Timer *timer)
+void combSort(std::vector<Review>& reviews, int n, Timer* timer)
 {
-    int gap = n;
+	int gap = n;
 
-    while (gap != 1)
-    {
-        gap = nextGap(gap);
+	while (gap != 1)
+	{
+		gap = nextGap(gap);
 
-        for (int i = 0; i < n - gap; i++)
-        {
-            timer->acrecentaComparacoes();
-            if (reviews[i].upvotes > reviews[i + gap].upvotes)
-            {
-                swap(reviews[i], reviews[i + gap]);
-                timer->acrecentaSwaps();
-            }
-        }
-    }
+		for (int i = 0; i < n - gap; i++)
+		{
+			timer->acrecentaComparacoes();
+			if (reviews[i].upvotes > reviews[i + gap].upvotes)
+			{
+				swap(reviews[i], reviews[i + gap]);
+				timer->acrecentaSwaps();
+			}
+		}
+	}
 }
