@@ -33,13 +33,13 @@ void Timer::Stop()
     m_duracao = fim - inicio;
 }
 
-void Timer::benchHeapSort(int trials, string saidaPath)
+void Timer::benchHeapSort(int trials, const string &saidaPath)
 {
     fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary), inputFile("./input.dat", ios::in), saidaTxt
             (saidaPath, ios::app | ios::out);
-    if (!(arquivoBinario.is_open() || inputFile.is_open() || saidaTxt.is_open()))
+    if ((arquivoBinario.fail() || inputFile.fail() || saidaTxt.fail()))
     {
-        cerr << "ERRO: arquivo nao pode ser aberto na funcao benchHeapSort()";
+        cerr << "[ERROR] arquivo nao pode ser aberto na funcao benchHeapSort()\n";
         assert(false);
     }
     int montanteSwaps = 0, montanteComparacoes = 0;
@@ -76,10 +76,10 @@ void Timer::benchHeapSort(int trials, string saidaPath)
     }
 }
 
-void Timer::ModuloTesteHeapSort(int trials, string saidaPath)
+void Timer::ModuloTesteHeapSort(int trials, const string &saidaPath)
 {
     fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary), saidaTxt(saidaPath, ios::app | ios::out);
-    if (!(arquivoBinario.is_open() || saidaTxt.is_open()))
+    if ((arquivoBinario.fail() || saidaTxt.fail()))
     {
         cerr << "ERRO: arquivo nao pode ser aberto na funcao benchHeapSort()";
         assert(false);
@@ -114,10 +114,10 @@ void Timer::ModuloTesteHeapSort(int trials, string saidaPath)
     zeraMedicoes();
 }
 
-void Timer::ModuloTesteQuickSort(int trials, string saidaPath)
+void Timer::ModuloTesteQuickSort(int trials, const string &saidaPath)
 {
     fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary), saidaTxt(saidaPath, ios::app | ios::out);
-    if (!(arquivoBinario.is_open() || saidaTxt.is_open()))
+    if ((arquivoBinario.fail() || saidaTxt.fail()))
     {
         cerr << "ERRO: arquivo nao pode ser aberto na funcao benchHeapSort()";
         assert(false);
@@ -152,10 +152,10 @@ void Timer::ModuloTesteQuickSort(int trials, string saidaPath)
     zeraMedicoes();
 }
 
-void Timer::ModuloTesteCombSort(int trials, string saidaPath)
+void Timer::ModuloTesteCombSort(int trials, const string &saidaPath)
 {
     fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary), saidaTxt(saidaPath, ios::app | ios::out);
-    if (!(arquivoBinario.is_open() || saidaTxt.is_open()))
+    if ((arquivoBinario.fail() || saidaTxt.fail()))
     {
         cerr << "ERRO: arquivo nao pode ser aberto na funcao benchHeapSort()";
         assert(false);
@@ -190,11 +190,11 @@ void Timer::ModuloTesteCombSort(int trials, string saidaPath)
     zeraMedicoes();
 }
 
-void Timer::benchQuickSort(int trials, string saidaPath)
+void Timer::benchQuickSort(int trials, const string &saidaPath)
 {
     fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary), inputFile("./input.dat", ios::in), saidaTxt
             (saidaPath, ios::app | ios::out);
-    if (!(arquivoBinario.is_open() || inputFile.is_open() || saidaTxt.is_open()))
+    if ((arquivoBinario.fail() || inputFile.fail() || saidaTxt.fail()))
     {
         cerr << "ERRO: arquivo nao pode ser aberto na funcao benchHeapSort()";
         assert(false);
@@ -234,11 +234,11 @@ void Timer::benchQuickSort(int trials, string saidaPath)
     }
 }
 
-void Timer::benchCombSort(int trials, string saidaPath)
+void Timer::benchCombSort(int trials, const string &saidaPath)
 {
     fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary), inputFile("./input.dat", ios::in), saidaTxt
             (saidaPath, ios::app | ios::out);
-    if (!(arquivoBinario.is_open() || inputFile.is_open() || saidaTxt.is_open()))
+    if ((arquivoBinario.fail() || inputFile.fail() || saidaTxt.fail()))
     {
         cerr << "ERRO: arquivo nao pode ser aberto na funcao benchHeapSort()";
         assert(false);

@@ -29,17 +29,17 @@ public:
 
     void acrecentaComparacoes();
 
-    void benchHeapSort(int trials, string saidaPath = "saida.txt");
+    void benchHeapSort(int trials, const string &saidaPath = "saida.txt");
 
-    void benchQuickSort(int trials, string saidaPath = "saida.txt");
+    void benchQuickSort(int trials, const string &saidaPath = "saida.txt");
 
-    void benchCombSort(int trials, string saidaPath = "saida.txt");
+    void benchCombSort(int trials, const string &saidaPath = "saida.txt");
 
-    void ModuloTesteHeapSort(int trials, string saidaPath = "teste.txt");
+    void ModuloTesteHeapSort(int trials, const string &saidaPath = "teste.txt");
 
-    void ModuloTesteQuickSort(int trials, string saidaPath = "teste.txt");
+    void ModuloTesteQuickSort(int trials, const string &saidaPath = "teste.txt");
 
-    void ModuloTesteCombSort(int trials, string saidaPath = "teste.txt");
+    void ModuloTesteCombSort(int trials, const string &saidaPath = "teste.txt");
 
     Timer(const Timer &) = delete;
 

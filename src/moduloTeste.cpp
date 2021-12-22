@@ -7,7 +7,7 @@
 using namespace std;
 
 
-    enum Saidas
+    enum saidas
     {
         consoleN = 'c',
         arquivoN = 'a',

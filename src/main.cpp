@@ -22,7 +22,7 @@ void menu(const string& caminhoEntrada, vector<Review> &reviews)
 {
     while (true)
     {
-        cout << "**************\tMENU\t**************";
+        cout << "\n**************\tMENU\t**************";
         cout << "\nEscolhe entre usar as funcoes:\n";
         cout << "\tDigite 'l' para: lerCSV() \n";
         cout << "\tDigite 'e' para: escreverBinario()\n";
@@ -58,7 +58,7 @@ void menu(const string& caminhoEntrada, vector<Review> &reviews)
                 break;
             }
             case ordenacao:
-            {
+            {   // os algoritmos de sorting estao todos em ordenacao.cpp, mas os de benchmark foi realizado em Timer para aproveitamento da classe
                 {
                     Timer timer("HeapSort");
                     timer.benchHeapSort(3);
@@ -82,7 +82,6 @@ void menu(const string& caminhoEntrada, vector<Review> &reviews)
                 cout << "Digite um valor de N, para imprimir o TOP N versoes mais populares: ";
                 cin >> input;
                 imprimeNMaisFrequentes(populares, input);
-
                 break;
             }
             case sair:
@@ -102,8 +101,9 @@ int main(int argc, char *argv[])
     srand(static_cast<unsigned int>(time(nullptr)));
 
     vector<Review> reviews;
-    menu(arquivo_path, reviews);
-    // menu(argv[1], reviews);
+
+    menu(argv[1], reviews);
+//     menu(arquivo_path, reviews);
 
     return 0;
 }

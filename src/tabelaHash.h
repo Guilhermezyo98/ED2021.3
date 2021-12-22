@@ -7,7 +7,7 @@ using namespace std;
 
 void imprimeNMaisFrequentes(vector<pair<string, int>> &vetor, int nPrimeiros);
 
-void escreveNMaisFrequentes(vector<pair<string, int>> &vetor, int nPrimeiros, string saidaPath = "teste.txt");
+void escreveNMaisFrequentes(vector<pair<string, int>> &vetor, int nPrimeiros, const string &saidaPath = "teste.txt");
 
 vector<pair<string, int>> testaTabelaHash(int hashSize);
 
@@ -20,16 +20,16 @@ private:
     int m_colisoes;
 
 private:
-    int hash(string chave, int i);
+    int hash(const string &chave, int i);
 
-    int ht_hash(string str, int prime, int tam);
+    int hashfunction(string str, int prime, int tam);
 
 public:
     tabelaHash(int tam);
 
     ~tabelaHash();
 
-    void insertion(string x);
+    void insertion(const string &x);
 
     vector<pair<string, int>> retornaApenasElementosPreenchidosVetor();
 

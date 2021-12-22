@@ -10,62 +10,61 @@
 
 using namespace std;
 
-int const PRIME1 = 151;
-int const PRIME2 = 157;
+int constexpr PRIME1 = 151;
+int constexpr PRIME2 = 157;
 
 tabelaHash::tabelaHash(int tam)
-	: m_tam(tam), m_insertionsFails(0), m_colisoes(0)
+        : m_tam{tam}, m_insertionsFails{}, m_colisoes{}
 {
-	vetor.resize(tam);
+    vetor.resize(tam);
 
-	for (int i = 0; i < tam; i++)
-	{
-		vetor[i].first = "";
-		vetor[i].second = 0;
-	}
+    for (int i = 0; i < tam; i++)
+    {
+        vetor[i].first = {};
+        vetor[i].second = {};
+    }
 }
 
 tabelaHash::~tabelaHash() = default;
 
-int tabelaHash::ht_hash(string str, int prime, int tam)
+int tabelaHash::hashfunction(string str, int prime, int tam)
 {
-	long hash = 0;
-	const int lengthStr = str.length();
+    long hash = 0;
+    const int lengthStr = str.length();
 
-	for (int i = 0; i < lengthStr; i++)
-	{
-		hash += (long)pow(prime, lengthStr - (i + 1)) * str[i];
-		hash = ((((hash) % tam) + (i * (((hash) % tam)))) % tam);
-	}
-	return (int)hash;
+    for (int i = 0; i < lengthStr; i++)
+    {
+        hash += (long) pow(prime, lengthStr - (i + 1)) * str[i];
+        hash = ((((hash) % tam) + (i * (((hash) % tam)))) % tam);
+    }
+    return (int) hash;
 }
 
-int tabelaHash::hash(string s, int i)
+int tabelaHash::hash(const string &s, int i)
 {
-	const int hash_a = ht_hash(s, PRIME1, m_tam);
-	const int hash_b = ht_hash(s, PRIME2, m_tam);
-	return (hash_a + (i * (hash_b + 1))) % m_tam;
+    const int hash_a = hashfunction(s, PRIME1, m_tam);
+    const int hash_b = hashfunction(s, PRIME2, m_tam);
+    return (hash_a + (i * (hash_b + 1))) % m_tam;
 }
 
-void tabelaHash::insertion(string key)
+void tabelaHash::insertion(const string &key)
 {
-	for (int i = 0; i < m_tam; i++)
-	{
-		unsigned long index = hash(key, i);
+    for (int i = 0; i < m_tam; i++)
+    {
+        unsigned long index = hash(key, i);
 
-		if (vetor[index].first.empty() || vetor[index].first == key) // ou espaco esta disponivel ou a chave eh identica
-		{
-			vetor[index].first = key;
-			vetor[index].second++;
-			return;
-		}
-		else
-		{
-			m_colisoes++;
-		}
+        if (vetor[index].first.empty() || vetor[index].first == key) // ou a vaga esta disponivel ou a chave eh identica
+        {
+            vetor[index].first = key;
+            vetor[index].second++;
+            return;
+        } else
+        {
+            m_colisoes++;
+        }
 	}
-	cerr << "\n[WARNING] fail in insertion element\n";
-	m_insertionsFails++;
+    cerr << "\n[WARNING] fail in insertion one element, key: " << key << "\n";
+    m_insertionsFails++;
 }
 
 void imprimeNMaisFrequentes(vector<pair<string, int>>& vetor, int nPrimeiros)
@@ -77,17 +76,17 @@ void imprimeNMaisFrequentes(vector<pair<string, int>>& vetor, int nPrimeiros)
 	}
 }
 
-void escreveNMaisFrequentes(vector<pair<string, int>>& vetor, int nPrimeiros, string saidaPath)
+void escreveNMaisFrequentes(vector<pair<string, int>> &vetor, int nPrimeiros, const string &saidaPath)
 {
-	fstream saida("./" + saidaPath, ios::out | ios::app);
-	if (!saida.is_open())
-	{
-		cerr << "ERRO: arquivo nao pode ser aberto na funcao escreveNMaisFrequentes()";
-		assert(false);
-	}
-	saida << "Impressao dos versions mais frequentes\n";
-	for (int i = 0; i < nPrimeiros && i < vetor.size(); ++i)
-	{
+    fstream saida("./" + saidaPath, ios::out | ios::app);
+    if (!saida.is_open())
+    {
+        cerr << "ERRO: arquivo nao pode ser aberto na funcao escreveNMaisFrequentes()";
+        assert(false);
+    }
+    saida << "Impressao dos versions mais frequentes\n";
+    for (int i = 0; i < nPrimeiros && i < vetor.size(); ++i)
+    {
 		saida << vetor[i].first << " - frequencia: " << vetor[i].second << endl;
 	}
 }
@@ -123,6 +122,9 @@ void tabelaHash::escreveTabelaHash() // util para visualizar distribuicao
 	}
 }
 
+/*
+ * A funcao cria uma tabela e retorna um vetor dos elementos adicionados para ordenacao
+ */
 vector<pair<string, int>> testaTabelaHash(int hashSize)
 {
 	fstream arquivoBinario("./saidaBinaria.bin", ios::in | ios::binary);
@@ -134,15 +136,16 @@ vector<pair<string, int>> testaTabelaHash(int hashSize)
 	tabelaHash tabela(hashSize * 1.3f);
 	string app_version;
 	for (int i = 0; i < hashSize; i++)
-	{
-		app_version = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario).app_version;
-		if (app_version.empty()) // nenhuma review sem app version sera adicionada
-		{
-			--i;
-			continue;
-		}
-		tabela.insertion(app_version);
-	}
+    {
+        app_version = retornaReviewEspecifica(retonaNumeroAleatorio(0, reviews_totais), arquivoBinario).app_version;
+        // nenhuma review sem app version sera adicionada
+        if (app_version.empty())
+        {
+            --i;
+            continue;
+        }
+        tabela.insertion(app_version);
+    }
 
 	cout << "\nDeseja escrever a distribuicao da tabela no arquivo teste.txt ? [s/n] ";
 	char input = '\0';

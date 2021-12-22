@@ -9,7 +9,6 @@
 #include "ordenacao.h"
 #include "leitura.h"
 #include "parametros.h"
-#include "tabelaHash.h"
 #include "Timer.h"
 
 streampos inline tamanhoArquivo(fstream &arq)
@@ -20,7 +19,7 @@ streampos inline tamanhoArquivo(fstream &arq)
     return tam;
 }
 
-void lerArquivoCSV(string pathCSV, vector<Review> &reviews)
+void lerArquivoCSV(const string &pathCSV, vector<Review> &reviews)
 {
     if (reviews.size() == reviews_totais)
     {
@@ -87,7 +86,7 @@ void lerArquivoCSV(string pathCSV, vector<Review> &reviews)
 
 void escreverSaidaBinaria(vector<Review> &reviews)
 {
-    if (reviews.size() == 0)
+    if (reviews.empty())
     {
         cerr << "\n\n\t\tvoce deveria ler o arquivo antes de tentar escrever, cuidado!\n\n";
         return;
@@ -158,7 +157,7 @@ Review retornaReviewEspecifica(int indice, fstream &arquivoBinario)
     return review;
 }
 
-void imprimeReviewEspecifica(Review review)
+void imprimeReviewEspecifica(const Review &review)
 {
     cout << endl;
     cout << "review_id: " << review.review_id << endl;
@@ -184,13 +183,13 @@ void escreverSaidaTxt(fstream &saidaTxt, vector<Review> &reviews)
         assert(false);
     }
 
-    for (unsigned long i = 0; i < reviews.size(); i++)
+    for (auto &review: reviews)
     {
-        saidaTxt << reviews[i].review_id << ',';
-        saidaTxt << reviews[i].review_text << ',';
-        saidaTxt << reviews[i].upvotes << ',';
-        saidaTxt << reviews[i].app_version << ',';
-        saidaTxt << reviews[i].posted_date << ',';
+        saidaTxt << review.review_id << ',';
+        saidaTxt << review.review_text << ',';
+        saidaTxt << review.upvotes << ',';
+        saidaTxt << review.app_version << ',';
+        saidaTxt << review.posted_date << ',';
         saidaTxt << "\n";
     }
 }

@@ -26,13 +26,13 @@ struct desempenho
 
 struct Review;
 
-void lerArquivoCSV(string pathCSV, vector<Review> &reviews);
+void lerArquivoCSV(const string &pathCSV, vector<Review> &reviews);
 
 int retonaNumeroAleatorio(int min, int max);
 
 void imprimeReviewEspecifica(int pos, fstream &entradaBinaria);
 
-void imprimeReviewEspecifica(Review review);
+void imprimeReviewEspecifica(const Review &review);
 
 Review retornaReviewEspecifica(int indice, fstream &arquivoBinario);
 
@@ -41,8 +41,6 @@ void moduloTeste();
 void escreverSaidaBinaria(vector<Review> &reviews);
 
 void escreverSaidaTxt(fstream &saidaTxt, vector<Review> &reviews);
-
-void lerBinario();
 
 void inicializaVetorAleatorio(vector<Review> &reviews, int size);
 
