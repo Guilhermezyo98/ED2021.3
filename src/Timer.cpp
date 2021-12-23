@@ -144,7 +144,7 @@ void Timer::ModuloTesteQuickSort(int trials, const string &saidaPath)
         escreverSaidaTxt(saidaTxt, reviews);
     }
 
-    saidaTxt << "\nresumo algoritmo HeapSort para size = " << reviews.size() << endl;
+    saidaTxt << "\nresumo algoritmo QuickSort para size = " << reviews.size() << endl;
     saidaTxt << "\tnumero de trials:" << trials << endl;
     saidaTxt << "\tnumero de comparacoes medias:" << montanteComparacoes / trials << endl;
     saidaTxt << "\tnumero de trocas medias:" << montanteSwaps / trials << endl;
@@ -182,7 +182,7 @@ void Timer::ModuloTesteCombSort(int trials, const string &saidaPath)
         escreverSaidaTxt(saidaTxt, reviews);
     }
 
-    saidaTxt << "\nresumo algoritmo HeapSort para size = " << reviews.size() << endl;
+    saidaTxt << "\nresumo algoritmo CombSort para size = " << reviews.size() << endl;
     saidaTxt << "\tnumero de trials:" << trials << endl;
     saidaTxt << "\tnumero de comparacoes medias:" << montanteComparacoes / trials << endl;
     saidaTxt << "\tnumero de trocas medias:" << montanteSwaps / trials << endl;
@@ -225,7 +225,7 @@ void Timer::benchQuickSort(int trials, const string &saidaPath)
                      endl;
             zeraMedicoes();
         }
-        saidaTxt << "\nresumo algoritmo HeapSort para size = " << linha << endl;
+        saidaTxt << "\nresumo algoritmo QuickSort para size = " << linha << endl;
         saidaTxt << "\tnumero de trials:" << trials << endl;
         saidaTxt << "\tnumero de comparacoes medias:" << montanteComparacoes / trials << endl;
         saidaTxt << "\tnumero de trocas medias:" << montanteSwaps / trials << endl;
@@ -269,7 +269,7 @@ void Timer::benchCombSort(int trials, const string &saidaPath)
                      endl;
             zeraMedicoes();
         }
-        saidaTxt << "\nresumo algoritmo HeapSort para size = " << linha << endl;
+        saidaTxt << "\nresumo algoritmo CombSort para size = " << linha << endl;
         saidaTxt << "\tnumero de trials:" << trials << endl;
         saidaTxt << "\tnumero de comparacoes medias:" << montanteComparacoes / trials << endl;
         saidaTxt << "\tnumero de trocas medias:" << montanteSwaps / trials << endl;
