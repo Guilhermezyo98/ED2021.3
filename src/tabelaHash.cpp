@@ -29,22 +29,29 @@ tabelaHash::~tabelaHash() = default;
 
 int tabelaHash::hashfunction(string str, int prime, int tam)
 {
-    long hash = 0;
-    const int lengthStr = str.length();
+	long hash = 0;
+	const int lengthStr = str.length();
 
-    for (int i = 0; i < lengthStr; i++)
-    {
-        hash += (long) pow(prime, lengthStr - (i + 1)) * str[i];
-        hash = ((((hash) % tam) + (i * (((hash) % tam)))) % tam);
-    }
-    return (int) hash;
+	for (int i = 0; i < lengthStr; i++)
+	{
+		hash += (long)pow(prime, lengthStr - (i + 1)) * str[i];
+		if (prime == PRIME1)
+		{
+			hash = hash % tam;
+		}
+		else
+		{
+			hash = 1 + (hash % tam);
+		}
+	}
+	return (int)hash;
 }
 
-int tabelaHash::hash(const string &s, int i)
+int tabelaHash::hash(const string &str, int i)
 {
-    const int hash_a = hashfunction(s, PRIME1, m_tam);
-    const int hash_b = hashfunction(s, PRIME2, m_tam);
-    return (hash_a + (i * (hash_b + 1))) % m_tam;
+	const int hash_a = hashfunction(str, PRIME1, m_tam);
+	const int hash_b = hashfunction(str, PRIME2, m_tam - 3);
+	return (hash_a + (i * (hash_b))) % m_tam;
 }
 
 void tabelaHash::insertion(const string &key)
@@ -120,6 +127,7 @@ void tabelaHash::escreveTabelaHash() // util para visualizar distribuicao
 			saidaTxt << endl;
 		}
 	}
+	saidaTxt << "\nNUMERO DE COLISOES TOTAIS: " << m_colisoes << "\n";
 }
 
 /*
@@ -147,7 +155,7 @@ vector<pair<string, int>> testaTabelaHash(int hashSize)
         tabela.insertion(app_version);
     }
 
-	cout << "\nDeseja escrever a distribuicao da tabela no arquivo teste.txt ? [s/n] ";
+	cout << "\nDeseja escrever a distribuicao da tabela e apps mais frequentes no arquivo teste.txt ? [s/n] ";
 	char input = '\0';
 	cin >> input;
 	switch (input)
