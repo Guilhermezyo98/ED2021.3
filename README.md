@@ -18,11 +18,11 @@
 
 ### PARA EXECUTAR
 
-> ABRA O TERMINAL NA PASTA BUILD E EXECUTE:
+> ABRA O TERMINAL NA PASTA SRC E EXECUTE:
 
 ```
-cmake ./
-make && ./ED2021
+cmake ../.
+make && ./ED2021 t.csv
 ```
 
 # repositorio
